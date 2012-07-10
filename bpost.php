@@ -108,24 +108,20 @@ class bPost
 	 *
 	 * @param mixed $input			The value.
 	 * @param string $key string	The key.
-	 * @param array $data			Some data.
+	 * @param DOMDocument $xml		Some data.
 	 */
-	private static function arrayToXML(&$input, $key, $data)
+	private static function arrayToXML(&$input, $key, $xml)
 	{
-		$XML = $data[0];
-		$removeNullKeys = (bool) $data[1];
-		$sort = (bool) $data[2];
-
 		// skip attributes
 		if($key == '@attributes') return;
 
-		if($removeNullKeys && is_null($input)) return;
+		if(is_null($input)) return;
 
 		// create element
 		$element = new DOMElement($key);
 
 		// append
-		$XML->appendChild($element);
+		$xml->appendChild($element);
 
 		// no value? just stop here
 		if($input === null) return;
@@ -206,8 +202,6 @@ class bPost
 		// the value is an array
 		else
 		{
-			if(!empty($input) && $sort) ksort($input);
-
 			// init var
 			$isNonNumeric = false;
 
@@ -226,7 +220,7 @@ class bPost
 			}
 
 			// is there are named keys they should be handles as elements
-			if($isNonNumeric) array_walk($input, array('bPost', 'arrayToXML'), array($element, $removeNullKeys, $sort));
+			if($isNonNumeric) array_walk($input, array('bPost', 'arrayToXML'), $element);
 
 			// numeric elements means this a list of items
 			else
@@ -234,7 +228,7 @@ class bPost
 				// handle the value as an element
 				foreach($input as $value)
 				{
-					if(is_array($value)) array_walk($value, array('bPost', 'arrayToXML'), array($element, $removeNullKeys, $sort));
+					if(is_array($value)) array_walk($value, array('bPost', 'arrayToXML'), $element);
 				}
 			}
 		}
@@ -314,26 +308,25 @@ class bPost
 	 * @param bool[optional] $sort				Should the passed data be sorted?
 	 * @return mixed
 	 */
-	private function doCall($url, $data = null, $method = 'GET')
+	private function doCall($url, $data = null, $headers = array(), $method = 'GET', $expectXML = true)
 	{
-//		// init XML
-//		$XML = new DOMDocument('1.0', 'utf-8');
-//
-//		// set some properties
-//		$XML->preserveWhiteSpace = false;
-//		$XML->formatOutput = true;
-//
-//		// create root element
-//		$root = $XML->createElement('soap:Envelope');
-//		$root->setAttribute('xmlns:soap', 'http://schemas.xmlsoap.org/soap/envelope/');
-//		$root->setAttribute('xmlns:xsi', 'http://www.w3.org/2001/XMLSchema-instance');
-//		$root->setAttribute('xmlns:xsd', 'http://www.w3.org/2001/XMLSchema');
-//		$root->setAttribute('xmlns', 'http://www.bpost.be/webshop/v1.3/');
-//		$XML->appendChild($root);
-//
-//		// create body
-//		$body = $XML->createElement('soap:Body');
-//		$root->appendChild($body);
+		// any data?
+		if($data !== null)
+		{
+			// init XML
+			$xml = new DOMDocument('1.0', 'utf-8');
+
+			// set some properties
+			$xml->preserveWhiteSpace = false;
+			$xml->formatOutput = true;
+
+			// build data
+			array_walk($data, array(__CLASS__, 'arrayToXML'), $xml);
+
+			// store body
+			$body = $xml->saveXML();
+		}
+		else $body = null;
 
 		// build Authorization header
 		$headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
@@ -346,8 +339,13 @@ class bPost
 		$options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
 		$options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
 		$options[CURLOPT_HTTPHEADER] = $headers;
-//		$options[CURLOPT_POST] = true;
-//		$options[CURLOPT_POSTFIELDS] = $body;
+
+		// PUT
+		if($method == 'PUT')
+		{
+			$options[CURLOPT_CUSTOMREQUEST] = 'PUT';
+			if($body != null) $options[CURLOPT_POSTFIELDS] = $body;
+		}
 
 		// init
 		$this->curl = curl_init();
@@ -378,13 +376,15 @@ class bPost
 			throw new bPostException($errorMessage, $errorNumber);
 		}
 
+		// valid HTTP-code
 		if(!in_array($headers['http_code'], array(0, 200)))
 		{
 			// internal debugging enabled
 			if(self::DEBUG)
 			{
 				echo '<pre>';
-				var_dump(htmlentities($response));
+				var_dump($response);
+				var_dump($headers);
 				var_dump($this);
 				echo '</pre>';
 			}
@@ -392,6 +392,10 @@ class bPost
 			throw new bPostException('invalid response', $headers['http_code']);
 		}
 
+		// if we don't expect XML we can return the content here
+		if(!$expectXML) return $response;
+
+		// convert into XML
 		$xml = simplexml_load_string($response);
 
 		// validate
@@ -401,7 +405,6 @@ class bPost
 			if(self::DEBUG)
 			{
 				echo '<pre>';
-				var_dump(htmlentities($body));
 				var_dump($response);
 				var_dump($headers);
 				var_dump($this);
@@ -501,10 +504,44 @@ class bPost
 		// build url
 		$url = '/orders/' . (string) $reference;
 
-		$response = self::decodeResponse($this->doCall($url));
+		// make the call
+		return self::decodeResponse($this->doCall($url));
+	}
 
-		Spoon::dump($response);
+	/**
+	 * Modify the status for an order.
+	 *
+	 * @param string $reference		The reference for an order
+	 * @param string $status		The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED or ON-HOLD
+	 * @return bool
+	 */
+	public function modifyOrderStatus($reference, $status)
+	{
+		$allowedStatuses = array('OPEN', 'PENDING', 'CANCELLED', 'COMPLETED', 'ON-HOLD');
+		$status = mb_strtoupper((string) $status);
 
+		// validate
+		if(!in_array($status, $allowedStatuses))
+		{
+			throw new bPostException('Invalid status (' . $status . '), allowed values are: ' . implode(', ', $allowedStatuses) . '.');
+		}
+
+		// build url
+		$url = '/orders/status';
+
+		// build data
+		$data['orderStatusMap']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+		$data['orderStatusMap']['entry']['orderReference'] = (string) $reference;
+		$data['orderStatusMap']['entry']['status'] = $status;
+
+		// build headers
+		$headers = array(
+			'X-HTTP-Method-Override: PATCH',
+			'Content-type: application/vnd.bpost.shm-order-status-v2+XML'
+		);
+
+		// make the call
+		return ($this->doCall($url, $data, $headers, 'PUT', false) == '');
 	}
 }
 
