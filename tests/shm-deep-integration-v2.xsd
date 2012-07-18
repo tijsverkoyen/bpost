@@ -1,0 +1,457 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- edited with XMLSPY v2004 rel. 2 U (http://www.xmlspy.com) by Jan Wilmaers (Belgian Post Group) -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified"
+		   attributeFormDefault="unqualified" targetNamespace="http://schema.post.be/shm/deepintegration/v2/" xmlns="http://schema.post.be/shm/deepintegration/v2/" xmlns:exception="http://schema.post.be/common/exception/v1/">
+	<xs:simpleType name="labelFormatType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="A4"/>
+			<xs:enumeration value="A5"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="parcelReturnInstructionsType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="ABANDONED"/>
+			<xs:enumeration value="RTA"/>
+			<xs:enumeration value="RTS"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="shipmentType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="SAMPLE"/>
+			<xs:enumeration value="GIFT"/>
+			<xs:enumeration value="OTHER"/>
+			<xs:enumeration value="DOCUMENTS"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="orderStatusType">
+		<xs:restriction base="xs:string">
+			<xs:enumeration value="OPEN"/>
+			<xs:enumeration value="PENDING"/>
+			<xs:enumeration value="CANCELLED"/>
+			<xs:enumeration value="COMPLETED"/>
+			<xs:enumeration value="ON-HOLD"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="emailAddressType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="50"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="phoneNumberType">
+		<xs:restriction base="xs:string">
+			<xs:maxLength value="20"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:simpleType name="pdfType">
+		<xs:restriction base="xs:base64Binary"/>
+	</xs:simpleType>
+	<xs:simpleType name="barcodeType">
+		<xs:restriction base="xs:string"/>
+	</xs:simpleType>
+	<xs:complexType name="addressType">
+		<xs:sequence>
+			<xs:element name="streetName">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="number">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="8"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="box" minOccurs="0">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="8"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="postalCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="8"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="locality">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:maxLength value="40"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="countryCode">
+				<xs:simpleType>
+					<xs:restriction base="xs:string">
+						<xs:pattern value="[A-Z]{2}"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="notificationType">
+		<xs:choice>
+			<xs:element name="emailAddress" type="emailAddressType"/>
+			<xs:element name="mobilePhone" type="phoneNumberType"/>
+			<xs:element name="fixedPhone" type="phoneNumberType"/>
+		</xs:choice>
+		<xs:attribute name="language" use="required">
+			<xs:simpleType>
+				<xs:restriction base="xs:string">
+					<xs:enumeration value="EN"/>
+					<xs:enumeration value="NL"/>
+					<xs:enumeration value="FR"/>
+					<xs:enumeration value="DE"/>
+				</xs:restriction>
+			</xs:simpleType>
+		</xs:attribute>
+	</xs:complexType>
+	<xs:complexType name="insuranceType">
+		<xs:choice>
+			<xs:element name="basicInsurance">
+				<xs:complexType/>
+			</xs:element>
+			<xs:element name="additionalInsurance">
+				<xs:complexType>
+					<xs:attribute name="value" use="required">
+						<xs:simpleType>
+							<xs:restriction base="xs:integer">
+								<xs:enumeration value="1"/>
+								<xs:enumeration value="2"/>
+								<xs:enumeration value="3"/>
+								<xs:enumeration value="4"/>
+								<xs:enumeration value="5"/>
+								<xs:enumeration value="6"/>
+								<xs:enumeration value="7"/>
+								<xs:enumeration value="8"/>
+								<xs:enumeration value="9"/>
+								<xs:enumeration value="10"/>
+								<xs:enumeration value="11"/>
+							</xs:restriction>
+						</xs:simpleType>
+					</xs:attribute>
+				</xs:complexType>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="signatureType">
+		<xs:choice>
+			<xs:element name="signature">
+				<xs:complexType/>
+			</xs:element>
+			<xs:element name="signaturePlus">
+				<xs:complexType/>
+			</xs:element>
+		</xs:choice>
+	</xs:complexType>
+	<xs:complexType name="optionsType">
+		<xs:sequence>
+			<xs:element name="infoDistributed" type="notificationType" minOccurs="0"/>
+			<xs:element name="infoNextDay" type="notificationType" minOccurs="0"/>
+			<xs:element name="infoReminder" type="notificationType" minOccurs="0"/>
+			<xs:element name="automaticSecondPresentation" minOccurs="0">
+				<xs:complexType/>
+			</xs:element>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="orderLineType">
+		<xs:sequence>
+			<xs:element name="text" type="xs:string"/>
+			<xs:element name="nbOfItems" type="xs:int" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="labelsType">
+		<xs:sequence>
+			<xs:element name="barcodes" type="barcodeType"/>
+			<xs:element ref="pdf"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="orderRefBarcodeMapEntry">
+		<xs:sequence>
+			<xs:element name="orderReference" type="xs:string" minOccurs="1"
+						maxOccurs="1"/>
+			<xs:element name="barcode" type="barcodeType" minOccurs="1"
+						maxOccurs="unbounded"/>
+			<xs:element ref="pdf" minOccurs="0"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="orderStatusMapEntry">
+		<xs:sequence>
+			<xs:element name="orderReference" type="xs:string" minOccurs="1"
+						maxOccurs="1"/>
+			<xs:element name="status" type="orderStatusType" minOccurs="1"
+						maxOccurs="1"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:complexType name="orderRefLabelAmountMapEntry">
+		<xs:sequence>
+			<xs:element name="orderReference" type="xs:string" minOccurs="1"
+						maxOccurs="1"/>
+			<xs:element name="labelAmount" minOccurs="1" maxOccurs="1">
+				<xs:simpleType>
+					<xs:restriction base="xs:int">
+						<xs:minExclusive value="0"/>
+					</xs:restriction>
+				</xs:simpleType>
+			</xs:element>
+			<xs:element name="withRetour" minOccurs="0" type="xs:boolean"/>
+			<xs:element name="returnLabels" minOccurs="0" type="xs:boolean"/>
+		</xs:sequence>
+	</xs:complexType>
+	<xs:element name="order">
+		<xs:annotation>
+			<xs:documentation>Comment describing your root element</xs:documentation>
+		</xs:annotation>
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="accountId" type="xs:string"/>
+				<xs:element name="orderReference" type="xs:string"/>
+				<xs:element name="status" type="orderStatusType"/>
+				<xs:element name="costCenter" minOccurs="0" type="xs:string"/>
+				<xs:element name="orderLine" minOccurs="0" maxOccurs="unbounded" type="orderLineType"/>
+				<xs:element name="customer">
+					<xs:complexType>
+						<xs:sequence>
+							<xs:element name="firstName">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="lastName">
+								<xs:simpleType>
+									<xs:restriction base="xs:string">
+										<xs:maxLength value="40"/>
+									</xs:restriction>
+								</xs:simpleType>
+							</xs:element>
+							<xs:element name="deliveryAddress" type="addressType"/>
+							<xs:element name="email" minOccurs="0"
+										type="emailAddressType"/>
+							<xs:element name="phoneNumber" minOccurs="0"
+										type="phoneNumberType"/>
+						</xs:sequence>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="deliveryMethod">
+					<xs:complexType>
+						<xs:choice>
+							<xs:element name="atHome">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:choice>
+											<xs:element name="normal">
+												<xs:complexType>
+													<xs:sequence>
+														<xs:element name="options" type="optionsType" minOccurs="0"/>
+													</xs:sequence>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="signed">
+												<xs:complexType>
+													<xs:complexContent>
+														<xs:extension base="signatureType">
+															<xs:sequence>
+																<xs:element name="options" type="optionsType" minOccurs="0"/>
+															</xs:sequence>
+														</xs:extension>
+													</xs:complexContent>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="insured">
+												<xs:complexType>
+													<xs:complexContent>
+														<xs:extension base="insuranceType">
+															<xs:sequence>
+																<xs:element name="options" type="optionsType" minOccurs="0"/>
+															</xs:sequence>
+														</xs:extension>
+													</xs:complexContent>
+												</xs:complexType>
+											</xs:element>
+											<xs:element name="dropAtTheDoor">
+												<xs:complexType/>
+											</xs:element>
+										</xs:choice>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="atShop">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="infoPugo">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="notificationType">
+														<xs:sequence>
+															<xs:element name="pugoId" type="xs:string"/>
+															<xs:element name="pugoName" type="xs:string"/>
+														</xs:sequence>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="insurance" type="insuranceType"
+													minOccurs="0"/>
+										<xs:element name="infoDistributed" type="notificationType"
+													minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="at24-7">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="infoParcelsDepot">
+											<xs:complexType>
+												<xs:sequence>
+													<xs:element name="parcelsDepotId" type="xs:string"/>
+												</xs:sequence>
+											</xs:complexType>
+										</xs:element>
+										<xs:element name="memberId" type="xs:string"/>
+										<xs:element name="signature" minOccurs="0">
+											<xs:complexType/>
+										</xs:element>
+										<xs:element name="insurance" type="insuranceType"
+													minOccurs="0"/>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="intExpress">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="insured" minOccurs="0">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="insuranceType">
+														<xs:sequence>
+															<xs:element name="options" type="optionsType" minOccurs="0"/>
+														</xs:sequence>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+							<xs:element name="intBusiness">
+								<xs:complexType>
+									<xs:sequence>
+										<xs:element name="insured" minOccurs="0">
+											<xs:complexType>
+												<xs:complexContent>
+													<xs:extension base="insuranceType">
+														<xs:sequence>
+															<xs:element name="options" type="optionsType" minOccurs="0"/>
+														</xs:sequence>
+													</xs:extension>
+												</xs:complexContent>
+											</xs:complexType>
+										</xs:element>
+									</xs:sequence>
+								</xs:complexType>
+							</xs:element>
+						</xs:choice>
+					</xs:complexType>
+				</xs:element>
+				<xs:element name="totalPrice">
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minInclusive value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orders">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="order" maxOccurs="unbounded"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderRefBarcodeMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="entry" type="orderRefBarcodeMapEntry" minOccurs="1" maxOccurs="1"
+					/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderStatusMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="entry" type="orderStatusMapEntry" minOccurs="1" maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderRefLabelAmountMap">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="entry" type="orderRefLabelAmountMapEntry" minOccurs="1"
+							maxOccurs="1"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderWithLabelAmount">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="order" minOccurs="1" maxOccurs="1"/>
+				<xs:element name="labelAmount" minOccurs="1" maxOccurs="1">
+					<xs:simpleType>
+						<xs:restriction base="xs:int">
+							<xs:minExclusive value="0"/>
+						</xs:restriction>
+					</xs:simpleType>
+				</xs:element>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="labels" type="labelsType"/>
+	<xs:element name="pdf" type="pdfType"/>
+	<xs:element name="internationalLabelInfo">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element name="parcelValue" type="xs:int"/>
+				<xs:element name="parcelWeight" type="xs:int"/>
+				<xs:element name="contentDescription" type="xs:string"/>
+				<xs:element name="shipmentType" type="shipmentType"/>
+				<xs:element name="parcelReturnInstructions"
+							type="parcelReturnInstructionsType"/>
+				<xs:element name="privateAddress" type="xs:boolean"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="internationalLabelInfos">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="internationalLabelInfo"/>
+				<xs:element name="orderReference" type="xs:string"/>
+				<xs:element name="returnLabels" type="xs:boolean"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderInternationalLabelInfos">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element maxOccurs="unbounded" ref="internationalLabelInfo"/>
+				<xs:element ref="order"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+	<xs:element name="orderWithBarcodes">
+		<xs:complexType>
+			<xs:sequence>
+				<xs:element ref="order"/>
+				<xs:element maxOccurs="unbounded" minOccurs="0" name="barcode" type="barcodeType"/>
+			</xs:sequence>
+		</xs:complexType>
+	</xs:element>
+</xs:schema>
