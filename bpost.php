@@ -752,9 +752,35 @@ class bPost
 		throw new bPostException('Not implemented');
 	}
 
-	public function retrievePDFLabelsForBox()
+	/**
+	 * Retrieve a PDF-label for a box
+	 *
+	 * @param string $barcode					The barcode to retrieve
+	 * @param string[optional] $labelFormat		Possible values are: A_4, A_5
+	 * @return string
+	 */
+	public function retrievePDFLabelsForBox($barcode, $labelFormat = null)
 	{
-		throw new bPostException('Not implemented');
+		$allowedLabelFormats = array('A_4', 'A_5');
+
+		// validate
+		if($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats))
+		{
+			throw new bPostException('Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' . implode(', ', $allowedLabelFormats));
+		}
+
+		// build url
+		$url = '/labels/' . (string) $barcode .'/pdf';
+
+		if($labelFormat !== null) $url .= '?labelFormat=' . $labelFormat;
+
+		// build headers
+		$headers = array(
+			'Accept: application/vnd.bpost.shm-pdf-v2+XML'
+		);
+
+		// make the call
+		return (string) $this->doCall($url, null, $headers);
 	}
 
 	public function retrievePDFLabelsForOrder()

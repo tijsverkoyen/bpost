@@ -44,8 +44,14 @@ $order->setTotal(100);
 //$response = $bpost->createOrReplaceOrder($order);
 //$response = $bpost->fetchOrder($var);
 //$response = $bpost->modifyOrderStatus(660, 'OPEN');
-//$response = $bpost->createNationalLabel(660, 8, true, true);
+//$response = $bpost->createNationalLabel($var, 1);
 //$response = $bpost->createOrderAndNationalLabel($order, 5);
+//$response = $bpost->retrievePDFLabelsForBox($response['barcode'][0]);
+
+// output pdf
+//header('Content-Type: application/pdf');
+//echo base64_decode($response);
+//exit;
 
 // output (Spoon::dump())
 ob_start();
