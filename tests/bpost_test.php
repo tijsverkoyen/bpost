@@ -50,5 +50,17 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$this->bpost->setUserAgent('testing/1.0.0');
 		$this->assertEquals('PHP bPost/' . bPost::VERSION . ' testing/1.0.0', $this->bpost->getUserAgent());
 	}
+
+	/**
+	 * Tests bpost->createNationalLabel
+	 */
+	public function testCreateNationalLabel()
+	{
+		$var = $this->bpost->createNationalLabel(660, 1, null, true);
+
+		$this->assertArrayHasKey('orderReference', $var);
+		$this->assertArrayHasKey('barcode', $var);
+		$this->assertArrayHasKey('pdf', $var);
+	}
 }
 

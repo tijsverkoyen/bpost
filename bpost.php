@@ -545,8 +545,51 @@ class bPost
 	}
 
 // labels
+	/**
+	 * Create a national label
+	 *
+	 * @param string $reference					Order reference: unique ID used in your web shop to assign to an order.
+	 * @param int $amount						Amount of labels.
+	 * @param bool[optional] $withRetour		Should the return labeks be included?
+	 * @param bool[optional] $returnLabels		Should the labels be included?
+	 * @param string[optional] $labelFormat		Format of the labels, possible values are: A_4, A_5.
+	 * @return array
+	 */
 	public function createNationalLabel($reference, $amount, $withRetour = null, $returnLabels = null, $labelFormat = null)
 	{
+		$allowedLabelFormats = array('A_4', 'A_5');
+
+		// validate
+		if($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats))
+		{
+			throw new bPostException('Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' . implode(', ', $allowedLabelFormats));
+		}
+
+		// build url
+		$url = '/labels';
+
+		if($labelFormat !== null) $url .= '?labelFormat=' . $labelFormat;
+
+		// build data
+		$data['orderRefLabelAmountMap']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+		$data['orderRefLabelAmountMap']['entry']['orderReference'] = (string) $reference;
+		$data['orderRefLabelAmountMap']['entry']['labelAmount'] = (int) $amount;
+		if($withRetour !== null) $data['orderRefLabelAmountMap']['entry']['withRetour'] = (bool) $withRetour;
+		if($returnLabels !== null) $data['orderRefLabelAmountMap']['entry']['returnLabels'] = ($returnLabels) ? '1' : '0';
+
+		// build headers
+		$headers = array(
+			'Content-type: application/vnd.bpost.shm-nat-label-v2+XML'
+		);
+
+		// make the call
+		$return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
+
+		// validate
+		if(!isset($return['entry'])) throw new bPostException('Invalid response');
+
+		// return
+		return $return['entry'];
 	}
 
 	public function createInternationalLabel()
