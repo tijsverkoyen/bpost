@@ -488,9 +488,10 @@ class bPost
 	}
 
 	// webservice methods
+// orders
 	public function createOrReplaceOrder()
 	{
-
+		throw new bPostException('Not implemented');
 	}
 
 	/**
@@ -542,6 +543,36 @@ class bPost
 
 		// make the call
 		return ($this->doCall($url, $data, $headers, 'PUT', false) == '');
+	}
+
+// labels
+	public function createNationalLabel($reference, $amount, $withRetour = null, $returnLabels = null, $labelFormat = null)
+	{
+	}
+
+	public function createInternationalLabel()
+	{
+		throw new bPostException('Not implemented');
+	}
+
+	public function createOrderAndNationalLabel()
+	{
+		throw new bPostException('Not implemented');
+	}
+
+	public function createOrderAndInternationalLabel()
+	{
+		throw new bPostException('Not implemented');
+	}
+
+	public function retrievePDFLabelsForBox()
+	{
+		throw new bPostException('Not implemented');
+	}
+
+	public function retrievePDFLabelsForOrder()
+	{
+		throw new bPostException('Not implemented');
 	}
 }
 
