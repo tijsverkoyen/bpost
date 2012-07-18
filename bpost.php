@@ -503,9 +503,28 @@ class bPost
 
 	// webservice methods
 // orders
-	public function createOrReplaceOrder()
+	/**
+	 * Creates a new order. If an order with the same orderReference already exists
+	 *
+	 * @param bPostOrder $order
+	 * @return bool
+	 */
+	public function createOrReplaceOrder(bPostOrder $order)
 	{
-		throw new bPostException('Not implemented');
+		// build url
+		$url = '/orders';
+
+		// build data
+		$data['order']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+		$data['order']['value'] = $order->toXMLArray($this->accountId);
+
+		// build headers
+		$headers = array(
+			'Content-type: application/vnd.bpost.shm-order-v2+XML'
+		);
+
+		// make the call
+		return ($this->doCall($url, $data, $headers, 'POST', false) == '');
 	}
 
 	/**

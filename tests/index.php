@@ -20,7 +20,7 @@ $deliveryMethod->setNormal(
 		'automaticSecondPresentation' => '',
 	)
 );
-$deliveryMethod->setInsurance(10);
+//$deliveryMethod->setInsurance(10);
 
 // create address
 $deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
@@ -39,6 +39,7 @@ $order->setCustomer($customer);
 $order->setDeliveryMethod($deliveryMethod);
 $order->setTotal(100);
 
+//$response = $bpost->createOrReplaceOrder($order);
 //$response = $bpost->fetchOrder(660);
 //$response = $bpost->modifyOrderStatus(660, 'OPEN');
 //$response = $bpost->createNationalLabel(660, 8, true, true);
