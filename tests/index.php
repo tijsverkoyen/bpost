@@ -29,8 +29,10 @@ $deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
 $customer = new bPostCustomer('Tijs', 'Verkoyen');
 $customer->setDeliveryAddress($deliveryAddress);
 
+$var = time();
+
 // create order
-$order = new bPostOrder(time(), 'OPEN');
+$order = new bPostOrder($var, 'OPEN');
 $order->setStatus('OPEN');
 $order->setCostCenter('Vitashop');
 $order->addOrderLine('Item 1', 10);
@@ -40,7 +42,7 @@ $order->setDeliveryMethod($deliveryMethod);
 $order->setTotal(100);
 
 //$response = $bpost->createOrReplaceOrder($order);
-//$response = $bpost->fetchOrder(660);
+//$response = $bpost->fetchOrder($var);
 //$response = $bpost->modifyOrderStatus(660, 'OPEN');
 //$response = $bpost->createNationalLabel(660, 8, true, true);
 //$response = $bpost->createOrderAndNationalLabel($order, 5);

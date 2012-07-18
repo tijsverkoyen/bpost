@@ -56,10 +56,12 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateOrReplaceOrder()
 	{
+		$orderId = time();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder(time(), 'OPEN');
+		$order = new bPostOrder($orderId, 'OPEN');
 
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
@@ -75,11 +77,84 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests bpost->fetchOrder
+	 */
+	public function testFetchOrder()
+	{
+		$orderId = time();
+
+		$customer = new bPostCustomer('Tijs', 'Verkoyen');
+		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+
+		$order = new bPostOrder($orderId, 'OPEN');
+
+		$order->setStatus('OPEN');
+		$order->setCostCenter('CostCenter1');
+		$order->addOrderLine('Item 1', 10);
+		$order->addOrderLine('Item 2', 20);
+		$order->setCustomer($customer);
+		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setTotal(100);
+
+		$this->bpost->createOrReplaceOrder($order);
+
+		$var = $this->bpost->fetchOrder($orderId);
+
+		$this->assertInstanceOf('bPostOrder', $var);
+		$this->assertEquals($orderId, $var->getReference());
+	}
+
+	/**
+	 * Tests bpost->modifyOrderStatus
+	 */
+	public function testModifyOrderStatus()
+	{
+		$orderId = time();
+
+		$customer = new bPostCustomer('Tijs', 'Verkoyen');
+		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+
+		$order = new bPostOrder($orderId, 'OPEN');
+
+		$order->setStatus('OPEN');
+		$order->setCostCenter('CostCenter1');
+		$order->addOrderLine('Item 1', 10);
+		$order->addOrderLine('Item 2', 20);
+		$order->setCustomer($customer);
+		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setTotal(100);
+
+		$this->bpost->createOrReplaceOrder($order);
+
+		$var = $this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
+
+		$this->assertTrue($var);
+	}
+
+
+	/**
 	 * Tests bpost->createNationalLabel
 	 */
 	public function testCreateNationalLabel()
 	{
-		$var = $this->bpost->createNationalLabel(660, 1, null, true);
+		$orderId = time();
+
+		$customer = new bPostCustomer('Tijs', 'Verkoyen');
+		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+
+		$order = new bPostOrder($orderId, 'OPEN');
+
+		$order->setStatus('OPEN');
+		$order->setCostCenter('CostCenter1');
+		$order->addOrderLine('Item 1', 10);
+		$order->addOrderLine('Item 2', 20);
+		$order->setCustomer($customer);
+		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setTotal(100);
+
+		$this->bpost->createOrReplaceOrder($order);
+
+		$var = $this->bpost->createNationalLabel($orderId, 1, null, true);
 
 		$this->assertArrayHasKey('orderReference', $var);
 		$this->assertArrayHasKey('barcode', $var);
@@ -91,10 +166,12 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	 */
 	public function testCreateOrderAndNationalLabel()
 	{
+		$orderId = time();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder(time(), 'OPEN');
+		$order = new bPostOrder($orderId, 'OPEN');
 
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');

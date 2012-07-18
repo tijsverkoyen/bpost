@@ -259,7 +259,7 @@ class bPost
 	 */
 	private static function decodeResponse($item, $return = null, $i = 0)
 	{
-		$arrayKeys = array('barcode');
+		$arrayKeys = array('barcode', 'orderLine');
 		$integerKeys = array('totalPrice');
 
 		if($item instanceof SimpleXMLElement)
@@ -274,10 +274,7 @@ class bPost
 				{
 					if(in_array($key, $arrayKeys))
 					{
-						foreach($value as $row)
-						{
-							$return[$key][] = self::decodeResponse($row);
-						}
+						$return[$key][] = self::decodeResponse($value);
 					}
 
 					else $return[$key] = self::decodeResponse($value, null, 1);
@@ -286,7 +283,10 @@ class bPost
 				else
 				{
 					// arrays
-					if(in_array($key, $arrayKeys)) $return[$key][] = (string) $value;
+					if(in_array($key, $arrayKeys))
+					{
+						$return[$key][] = (string) $value;
+					}
 
 					// booleans
 					elseif((string) $value == 'true') $return[$key] = true;
@@ -539,7 +539,91 @@ class bPost
 		$url = '/orders/' . (string) $reference;
 
 		// make the call
-		return self::decodeResponse($this->doCall($url));
+		$return = self::decodeResponse($this->doCall($url));
+
+		// for some reason the order-data is wrapped in an order tag sometimes.
+		if(isset($return['order'])) $return = $return['order'];
+
+		$order = new bPostOrder($return['orderReference']);
+
+		if(isset($return['status'])) $order->setStatus($return['status']);
+		if(isset($return['costCenter'])) $order->setCostCenter($return['costCenter']);
+
+		// order lines
+		if(isset($return['orderLine']) && !empty($return['orderLine']))
+		{
+			foreach($return['orderLine'] as $row)
+			{
+				$order->addOrderLine($row['text'], $row['nbOfItems']);
+			}
+		}
+
+		// customer
+		if(isset($return['customer']))
+		{
+			// create customer
+			$customer = new bPostCustomer($return['customer']['firstName'], $return['customer']['lastName']);
+			if(isset($return['customer']['deliveryAddress']))
+			{
+				$address = new bPostAddress(
+					$return['customer']['deliveryAddress']['streetName'],
+					$return['customer']['deliveryAddress']['number'],
+					$return['customer']['deliveryAddress']['postalCode'],
+					$return['customer']['deliveryAddress']['locality'],
+					$return['customer']['deliveryAddress']['countryCode']
+				);
+				if(isset($return['customer']['deliveryAddress']['box']))
+				{
+					$address->setBox($return['customer']['deliveryAddress']['box']);
+				}
+				$customer->setDeliveryAddress($address);
+			}
+			if(isset($return['customer']['email'])) $customer->setEmail($return['customer']['email']);
+			if(isset($return['customer']['phoneNumber'])) $customer->setPhoneNumber($return['customer']['phoneNumber']);
+
+			$order->setCustomer($customer);
+		}
+
+		// delivery method
+		if(isset($return['deliveryMethod']))
+		{
+			// atHome?
+			if(isset($return['deliveryMethod']['atHome']))
+			{
+				$deliveryMethod = new bPostDeliveryMethodAtHome();
+
+				// options
+				if(isset($return['deliveryMethod']['atHome']['normal']['options']) && !empty($return['deliveryMethod']['atHome']['normal']['options']))
+				{
+					$options = array();
+
+					foreach($return['deliveryMethod']['atHome']['normal']['options'] as $key => $row)
+					{
+						$language = 'NL';	// @todo fix me
+						$emailAddress = null;
+						$mobilePhone = null;
+						$fixedPhone = null;
+
+						if(isset($row['emailAddress'])) $emailAddress = $row['emailAddress'];
+						if(isset($row['mobilePhone'])) $mobilePhone = $row['mobilePhone'];
+						if(isset($row['fixedPhone'])) $fixedPhone = $row['fixedPhone'];
+
+						if($emailAddress === null && $mobilePhone === null && $fixedPhone === null) continue;
+
+						$options[$key] = new bPostNotification($language, $emailAddress, $mobilePhone, $fixedPhone);
+					}
+
+					$deliveryMethod->setNormal($options);
+				}
+
+				$order->setDeliveryMethod($deliveryMethod);
+			}
+
+			// @todo	implemented other types
+		}
+		if(isset($return['totalPrice'])) $order->setTotal($return['totalPrice']);
+
+		return $order;
 	}
 
 	/**
