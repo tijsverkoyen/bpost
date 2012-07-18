@@ -340,6 +340,11 @@ class bPost
 			$options[CURLOPT_CUSTOMREQUEST] = 'PUT';
 			if($body != null) $options[CURLOPT_POSTFIELDS] = $body;
 		}
+		if($method == 'POST')
+		{
+			$options[CURLOPT_POST] = true;
+			$options[CURLOPT_POSTFIELDS] = $body;
+		}
 
 		// init
 		$this->curl = curl_init();
