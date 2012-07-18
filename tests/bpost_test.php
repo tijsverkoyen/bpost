@@ -34,7 +34,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests Factr->getTimeOut()
+	 * Tests bPost->getTimeOut()
 	 */
 	public function testGetTimeOut()
 	{
@@ -43,7 +43,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
-	 * Tests Factr->getUserAgent()
+	 * Tests bPost->getUserAgent()
 	 */
 	public function testGetUserAgent()
 	{
