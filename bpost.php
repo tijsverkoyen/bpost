@@ -112,6 +112,25 @@ class bPost
 	 */
 	private static function arrayToXML(&$input, $key, $xml)
 	{
+		// wierd stuff
+		if($key == 'orderLine')
+		{
+			foreach($input as $row)
+			{
+				$element = new DOMElement($key);
+				$xml->appendChild($element);
+
+				// loop properties
+				foreach($row as $name => $value)
+				{
+					$node = new DOMElement($name, $value);
+					$element->appendChild($node);
+				}
+			}
+
+			return;
+		}
+
 		// skip attributes
 		if($key == '@attributes') return;
 
@@ -132,15 +151,11 @@ class bPost
 			// loop attributes
 			foreach((array) $input['@attributes'] as $name => $value) $element->setAttribute($name, $value);
 
-			// reset the input if it is a single value
-			if(count($input) == 1)
-			{
-				// get keys
-				$keys = array_keys($input);
+			// reset value
+			if(count($input) == 2 && isset($input['value'])) $input = $input['value'];
 
-				// reset
-				$input = $input[$keys[0]];
-			}
+			// reset the input if it is a single value
+			elseif(count($input) == 1) return;
 		}
 
 		// the input isn't an array
@@ -597,9 +612,36 @@ class bPost
 		throw new bPostException('Not implemented');
 	}
 
-	public function createOrderAndNationalLabel()
+	/**
+	 * Create an order and the labels
+	 *
+	 * @param bPostOrder $order
+	 * @param $amount
+	 * @return array
+	 */
+	public function createOrderAndNationalLabel(bPostOrder $order, $amount)
 	{
-		throw new bPostException('Not implemented');
+		// build url
+		$url = '/orderAndLabels';
+
+		// build data
+		$data['orderWithLabelAmount']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+		$data['orderWithLabelAmount']['order'] = $order->toXMLArray($this->accountId);
+		$data['orderWithLabelAmount']['labelAmount'] = (int) $amount;
+
+		// build headers
+		$headers = array(
+			'Content-type: application/vnd.bpost.shm-orderAndNatLabels-v2+XML'
+		);
+
+		// make the call
+		$return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
+
+		// validate
+		if(!isset($return['entry'])) throw new bPostException('Invalid response');
+
+		// return
+		return $return['entry'];
 	}
 
 	public function createOrderAndInternationalLabel()
@@ -615,6 +657,811 @@ class bPost
 	public function retrievePDFLabelsForOrder()
 	{
 		throw new bPostException('Not implemented');
+	}
+}
+
+/**
+ * bPost Order class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
+class bPostOrder
+{
+	/**
+	 * Generic info
+	 *
+	 * @var string
+	 */
+	private $costCenter, $status, $reference;
+
+	/**
+	 * The order lines
+	 * @var array
+	 */
+	private $lines;
+
+	/**
+	 * The customer
+	 *
+	 * @var bPostCustomer
+	 */
+	private $customer;
+
+	/**
+	 * The delivery method
+	 *
+	 * @var bPostDeliveryMethod
+	 */
+	private $deliveryMethod;
+
+	/**
+	 * The order total
+	 *
+	 * @var int
+	 */
+	private $total;
+
+	/**
+	 * Create an order
+	 *
+	 * @param $reference
+	 */
+	public function __construct($reference)
+	{
+		$this->setReference($reference);
+	}
+
+	/**
+	 * Add an order line
+	 *
+	 * @param string $text			Text describing the ordered item.
+	 * @param int $numberOfItems	Number of items.
+	 */
+	public function addOrderLine($text, $numberOfItems)
+	{
+		$this->lines[] = array(
+			'text' => (string) $text,
+			'nbOfItems' => (int) $numberOfItems
+		);
+	}
+
+	/**
+	 * Get the cost center
+	 * @return string
+	 */
+	public function getCostCenter()
+	{
+		return $this->costCenter;
+	}
+
+	/**
+	 * Get the customer
+	 *
+	 * @return bPostCustomer
+	 */
+	public function getCustomer()
+	{
+		return $this->customer;
+	}
+
+	/**
+	 * Get the delivery method
+	 *
+	 * @return bPostDeliveryMethod
+	 */
+	public function getDeliveryMethod()
+	{
+		return $this->deliveryMethod;
+	}
+
+	/**
+	 * Get the order lines
+	 *
+	 * @return array
+	 */
+	public function getOrderLines()
+	{
+		return $this->lines;
+	}
+
+	/**
+	 * Get the reference
+	 *
+	 * @return string
+	 */
+	public function getReference()
+	{
+		return $this->reference;
+	}
+
+	/**
+	 * Get the total price of the order.
+	 *
+	 * @return int
+	 */
+	public function getTotal()
+	{
+		return $this->total;
+	}
+
+	/**
+	 * Get the status
+	 *
+	 * @return string
+	 */
+	public function getStatus()
+	{
+		return $this->status;
+	}
+
+	/**
+	 * Set teh cost center, will be used on your invoice and allows you to attribute different cost centers
+	 *
+	 * @param $value
+	 */
+	public function setCostCenter($costCenter)
+	{
+		$this->costCenter = (string) $costCenter;
+	}
+
+	/**
+	 * Set the customer
+	 *
+	 * @param bPostCustomer $value
+	 */
+	public function setCustomer(bPostCustomer $customer)
+	{
+		$this->customer = $customer;
+	}
+
+	/**
+	 * Set the delivery method
+	 *
+	 * @param bPostDeliveryMethod $value
+	 */
+	public function setDeliveryMethod(bPostDeliveryMethod $deliveryMethod)
+	{
+		$this->deliveryMethod = $deliveryMethod;
+	}
+
+	/**
+	 * Set the order reference, a unique id used in your web-shop.
+	 * If the value already exists it will overwrite the current info.
+	 *
+	 * @param $value
+	 */
+	public function setReference($reference)
+	{
+		$this->reference = (string) $reference;
+	}
+
+	/**
+	 * The total price of the order in euro-cents (excluding shipping)
+	 *
+	 * @param $value
+	 */
+	public function setTotal($total)
+	{
+		$this->total = (int) $total;
+	}
+
+	/**
+	 * Set the order status
+	 *
+	 * @param string $value		Possible values are OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD.
+	 */
+	public function setStatus($status)
+	{
+		$allowedStatuses = array('OPEN', 'PENDING', 'CANCELLED', 'COMPLETED', 'ON-HOLD');
+
+		// validate
+		if(!in_array($status, $allowedStatuses))
+		{
+			throw new bPostException('Invalid status (' . $status . '), possible values are: ' . implode(', ', $allowedStatuses));
+		}
+
+		$this->status = $status;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray($accountId)
+	{
+		$data = array();
+		$data['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+		$data['accountId'] = (string) $accountId;
+		if($this->reference !== null) $data['orderReference'] = $this->reference;
+		if($this->status !== null) $data['status'] = $this->status;
+		if($this->costCenter !== null) $data['costCenter'] = $this->costCenter;
+
+		if(!empty($this->lines))
+		{
+			foreach($this->lines as $line)
+			{
+				$data['orderLine'][] = $line;
+			}
+		}
+
+		if($this->customer !== null) $data['customer'] = $this->customer->toXMLArray();
+		if($this->deliveryMethod !== null) $data['deliveryMethod'] = $this->deliveryMethod->toXMLArray();
+		if($this->total !== null) $data['totalPrice'] = $this->total;
+
+		return $data;
+	}
+}
+
+/**
+ * bPost Customer class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
+class bPostCustomer
+{
+	/**
+	 * Generic info
+	 *
+	 * @var string
+	 */
+	private $firstName, $lastName, $email, $phoneNumber;
+
+	/**
+	 * The address
+	 *
+	 * @var bPostAddress
+	 */
+	private $deliveryAddress;
+
+	/**
+	 * Create a customer
+	 *
+	 * @param $firstName
+	 * @param $lastName
+	 */
+	public function __construct($firstName, $lastName)
+	{
+		$this->setFirstName($firstName);
+		$this->setLastName($lastName);
+	}
+
+	/**
+	 * Get the delivery address
+	 *
+	 * @return bPostAddress
+	 */
+	public function getDeliveryAddress()
+	{
+		return $this->deliveryAddress;
+	}
+
+	/**
+	 * Get the email
+	 *
+	 * @return string
+	 */
+	public function getEmail()
+	{
+		return $this->email;
+	}
+
+	/**
+	 * Get the first name
+	 *
+	 * @return string
+	 */
+	public function getFirstName()
+	{
+		return $this->firstName;
+	}
+
+	/**
+	 * Get the last name
+	 *
+	 * @return string
+	 */
+	public function getLastName()
+	{
+		return $this->lastName;
+	}
+
+	/**
+	 * Get the phone number
+	 *
+	 * @return string
+	 */
+	public function getPhoneNumber()
+	{
+		return $this->phoneNumber;
+	}
+
+	/**
+	 * Set the delivery address
+	 *
+	 * @param bPostAddress $deliveryAddress
+	 */
+	public function setDeliveryAddress($deliveryAddress)
+	{
+		$this->deliveryAddress = $deliveryAddress;
+	}
+
+	/**
+	 * Set the email
+	 *
+	 * @param string $email
+	 */
+	public function setEmail($email)
+	{
+		if(mb_strlen($email) > 50) throw new bPostException('Invalid length for email, maximum is 50');
+		$this->email = $email;
+	}
+
+	/**
+	 * Set the first name
+	 *
+	 * @param string $firstName
+	 */
+	public function setFirstName($firstName)
+	{
+		if(mb_strlen($firstName) > 40) throw new bPostException('Invalid length for firstName, maximum is 40');
+		$this->firstName = $firstName;
+	}
+
+	/**
+	 * Set the last name
+	 *
+	 * @param string $lastName
+	 */
+	public function setLastName($lastName)
+	{
+		if(mb_strlen($lastName) > 40) throw new bPostException('Invalid length for lastName, maximum is 40');
+		$this->lastName = $lastName;
+	}
+
+	/**
+	 * Set the phone number
+	 *
+	 * @param string $phoneNumber
+	 */
+	public function setPhoneNumber($phoneNumber)
+	{
+		if(mb_strlen($phoneNumber) > 20) throw new bPostException('Invalid length for phone number, maximum is 20');
+		$this->phoneNumber = $phoneNumber;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		if($this->firstName !== null) $data['firstName'] = $this->firstName;
+		if($this->lastName !== null) $data['lastName'] = $this->lastName;
+		if($this->deliveryAddress !== null) $data['deliveryAddress'] = $this->deliveryAddress->toXMLArray();
+		if($this->email !== null) $data['email'] = $this->email;
+		if($this->phoneNumber !== null) $data['phoneNumber'] = $this->phoneNumber;
+
+		return $data;
+	}
+}
+
+/**
+ * bPost Address class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
+class bPostAddress
+{
+	/**
+	 * Generic info
+	 *
+	 * @var string
+	 */
+	private $streetName, $number, $box, $postcalCode, $locality, $countryCode;
+
+	/**
+	 * Create a Address object
+	 *
+	 * @param $streetName
+	 * @param $number
+	 * @param $postalCode
+	 * @param $locality
+	 * @param string $countryCode
+	 */
+	public function __construct($streetName, $number, $postalCode, $locality, $countryCode = 'BE')
+	{
+		$this->setStreetName($streetName);
+		$this->setNumber($number);
+		$this->setPostcalCode($postalCode);
+		$this->setLocality($locality);
+		$this->setCountryCode($countryCode);
+	}
+
+	/**
+	 * Get the box
+	 *
+	 * @return string
+	 */
+	public function getBox()
+	{
+		return $this->box;
+	}
+
+	/**
+	 * Get the country code
+	 *
+	 * @return string
+	 */
+	public function getCountryCode()
+	{
+		return $this->countryCode;
+	}
+
+	/**
+	 * Get the locality
+	 *
+	 * @return string
+	 */
+	public function getLocality()
+	{
+		return $this->locality;
+	}
+
+	/**
+	 * Get the number
+	 *
+	 * @return string
+	 */
+	public function getNumber()
+	{
+		return $this->number;
+	}
+
+	/**
+	 * Get the postal code
+	 *
+	 * @return string
+	 */
+	public function getPostcalCode()
+	{
+		return $this->postcalCode;
+	}
+
+	/**
+	 * Get the street name
+	 *
+	 * @return string
+	 */
+	public function getStreetName()
+	{
+		return $this->streetName;
+	}
+
+	/**
+	 * Set the box
+	 *
+	 * @param string $box
+	 */
+	public function setBox($box)
+	{
+		if(mb_strlen($box) > 8) throw new bPostException('Invalid length for box, maximum is 8');
+		$this->box = $box;
+	}
+
+	/**
+	 * Set the country code
+	 *
+	 * @param string $countryCode
+	 */
+	public function setCountryCode($countryCode)
+	{
+		$this->countryCode = $countryCode;
+	}
+
+	/**
+	 * Set the locality
+	 *
+	 * @param string $locality
+	 */
+	public function setLocality($locality)
+	{
+		if(mb_strlen($locality) > 40) throw new bPostException('Invalid length for locality, maximum is 40');
+		$this->locality = $locality;
+	}
+
+	/**
+	 * Set the number
+	 *
+	 * @param string $number
+	 */
+	public function setNumber($number)
+	{
+		if(mb_strlen($number) > 8) throw new bPostException('Invalid length for number, maximum is 8');
+		$this->number = $number;
+	}
+
+	/**
+	 * Set the postal code
+	 *
+	 * @param string $postcalCode
+	 */
+	public function setPostcalCode($postcalCode)
+	{
+		if(mb_strlen($postcalCode) > 8) throw new bPostException('Invalid length for postalCode, maximum is 8');
+		$this->postcalCode = $postcalCode;
+	}
+
+	/**
+	 * Set the street name
+	 * @param string $streetName
+	 */
+	public function setStreetName($streetName)
+	{
+		if(mb_strlen($streetName) > 40) throw new bPostException('Invalid length for streetName, maximum is 40');
+		$this->streetName = $streetName;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		if($this->streetName !== null) $data['streetName'] = $this->streetName;
+		if($this->number !== null) $data['number'] = $this->number;
+		if($this->box !== null) $data['box'] = $this->box;
+		if($this->postcalCode !== null) $data['postalCode'] = $this->postcalCode;
+		if($this->locality !== null) $data['locality'] = $this->locality;
+		if($this->countryCode !== null) $data['countryCode'] = $this->countryCode;
+
+		return $data;
+	}
+}
+
+class bPostDeliveryMethod
+{
+	private $insurance;
+
+	/**
+	 * Set the insurance level
+	 *
+	 * @param int $level	Level from 0 to 11.
+	 */
+	public function setInsurance($level = 0)
+	{
+		if((int) $level > 11) throw new bPostException('Invalid value () for level.');
+		$this->insurance = $level;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		// build data
+		$data = array();
+		if($this->insurance !== null)
+		{
+			if($this->insurance == 0) $data['insurance']['basicInsurance'] = '';
+			else $data['insurance']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+		}
+
+		return $data;
+	}
+}
+
+class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
+{
+	private $normal, $signed, $insured, $dropAtTheDoor;
+
+	public function __construct()
+	{
+		$this->setNormal();
+	}
+
+	public function setNormal(array $options = null)
+	{
+		if($options !== null)
+		{
+			foreach($options as $key => $value) $this->normal[$key] = $value;
+		}
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		$data['atHome'] = parent::toXMLArray();
+		if($this->normal === null) $data['atHome']['normal'] = '';
+		else
+		{
+			foreach($this->normal as $key => $value)
+			{
+				if($key == 'automaticSecondPresentation') $data['atHome']['normal']['options']['automaticSecondPresentation'] = $value;
+				else $data['atHome']['normal']['options'][$key] = $value->toXMLArray();
+			}
+		}
+
+		return $data;
+	}
+}
+
+class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
+{
+	private $infoPugo, $insurance, $infoDistributed;
+}
+
+class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
+{
+	private $infoParcelsDepot, $signature, $insurance, $memberId;
+}
+
+class bPostDeliveryMethodIntExpress extends bPostDeliveryMethod
+{
+	private $insured;
+}
+
+class bPostDeliveryMethodIntBusiness extends bPostDeliveryMethod
+{
+	private $insured;
+}
+
+/**
+ * bPost Notification class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
+class bPostNotification
+{
+	/**
+	 * Generic info
+	 *
+	 * @var strings
+	 */
+	private $emailAddress, $mobilePhone, $fixedPhone, $language;
+
+	/**
+	 * Create a notification
+	 *
+	 * @param $language
+	 * @param string[otpional] $emailAddress
+	 * @param string[otpional] $mobilePhone
+	 * @param string[otpional] $fixedPhone
+	 */
+	public function __construct($language, $emailAddress = null, $mobilePhone = null, $fixedPhone = null)
+	{
+		if(
+			$emailAddress !== null && $mobilePhone !== null ||
+			$emailAddress !== null && $fixedPhone !== null ||
+			$mobilePhone !== null && $fixedPhone !== null ||
+			$fixedPhone !== null && $mobilePhone !== null
+		)
+		{
+			throw new bPostException('You can\'t specify multiple notifications');
+		}
+
+		$this->setLanguage($language);
+		if($emailAddress !== null) $this->setEmailAddress($emailAddress);
+		if($mobilePhone !== null) $this->setMobilePhone($mobilePhone);
+		if($fixedPhone !== null) $this->setFixedPhone($fixedPhone);
+	}
+
+	/**
+	 * Get the email address
+	 *
+	 * @return strings
+	 */
+	public function getEmailAddress()
+	{
+		return $this->emailAddress;
+	}
+
+	/**
+	 * Get the fixed phone
+	 *
+	 * @return strings
+	 */
+	public function getFixedPhone()
+	{
+		return $this->fixedPhone;
+	}
+
+	/**
+	 * Get the language
+	 *
+	 * @return strings
+	 */
+	public function getLanguage()
+	{
+		return $this->language;
+	}
+
+	/**
+	 * Get the mobile phone
+	 *
+	 * @return strings
+	 */
+	public function getMobilePhone()
+	{
+		return $this->mobilePhone;
+	}
+
+	/**
+	 * Set the email address
+	 *
+	 * @param strings $emailAddress
+	 */
+	public function setEmailAddress($emailAddress)
+	{
+		if(mb_strlen($emailAddress) > 50) throw new bPostException('Invalid length for emailAddress, maximum is 50');
+		$this->emailAddress = $emailAddress;
+	}
+
+	/**
+	 * Set the fixed phone
+	 *
+	 * @param strings $fixedPhone
+	 */
+	public function setFixedPhone($fixedPhone)
+	{
+		if(mb_strlen($fixedPhone) > 20) throw new bPostException('Invalid length for fixedPhone, maximum is 20');
+		$this->fixedPhone = $fixedPhone;
+	}
+
+	/**
+	 * Set the language
+	 *
+	 * @param strings $language		Allowed values are EN, NL, FR, DE.
+	 */
+	public function setLanguage($language)
+	{
+		$allowedLanguages = array('EN', 'NL', 'FR', 'DE');
+
+		// validate
+		if(!in_array($language, $allowedLanguages))
+		{
+			throw new bPostException('Invalid value for language (' . $language . '), allowed values are: '. implode(',  ', $allowedLanguages));
+		}
+		$this->language = $language;
+	}
+
+	/**
+	 * Set the mobile phone
+	 *
+	 * @param strings $mobilePhone
+	 */
+	public function setMobilePhone($mobilePhone)
+	{
+		if(mb_strlen($mobilePhone) > 20) throw new bPostException('Invalid length for mobilePhone, maximum is 20');
+		$this->mobilePhone = $mobilePhone;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		$data['@attributes']['language'] = $this->language;
+
+		if(isset($this->emailAddress)) $data['emailAddress'] = $this->emailAddress;
+		if(isset($this->mobilePhone)) $data['mobilePhone'] = $this->mobilePhone;
+		if(isset($this->fixedPhone)) $data['fixedPhone'] = $this->fixedPhone;
+
+		return $data;
 	}
 }
 

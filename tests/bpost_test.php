@@ -62,5 +62,28 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('barcode', $var);
 		$this->assertArrayHasKey('pdf', $var);
 	}
+
+	/**
+	 * Tests bpost->createOrderAndNationalLabel
+	 */
+	public function testCreateOrderAndNationalLabel()
+	{
+		$customer = new bPostCustomer('Tijs', 'Verkoyen');
+		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+
+		$order = new bPostOrder(time(), 'OPEN');
+
+		$order->setStatus('OPEN');
+		$order->setCostCenter('CostCenter1');
+		$order->addOrderLine('Item 1', 10);
+		$order->addOrderLine('Item 2', 20);
+		$order->setCustomer($customer);
+		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setTotal(100);
+		$var = $this->bpost->createOrderAndNationalLabel($order, 1);
+
+		$this->assertArrayHasKey('orderReference', $var);
+		$this->assertArrayHasKey('barcode', $var);
+	}
 }
 
