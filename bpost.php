@@ -244,8 +244,8 @@ class bPost
 	 */
 	private static function decodeResponse($item, $return = null, $i = 0)
 	{
+		$arrayKeys = array('barcode');
 		$integerKeys = array('totalPrice');
-		$arrayKeys = array();
 
 		if($item instanceof SimpleXMLElement)
 		{
@@ -271,13 +271,7 @@ class bPost
 				else
 				{
 					// arrays
-					if(in_array($key, $arrayKeys))
-					{
-						foreach($value as $row)
-						{
-							$return[$key][] = self::decodeResponse($row);
-						}
-					}
+					if(in_array($key, $arrayKeys)) $return[$key][] = (string) $value;
 
 					// booleans
 					elseif((string) $value == 'true') $return[$key] = true;
