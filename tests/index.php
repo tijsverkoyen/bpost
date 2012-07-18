@@ -29,10 +29,10 @@ $deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
 $customer = new bPostCustomer('Tijs', 'Verkoyen');
 $customer->setDeliveryAddress($deliveryAddress);
 
-$var = time();
+$orderId = time();
 
 // create order
-$order = new bPostOrder($var, 'OPEN');
+$order = new bPostOrder($orderId, 'OPEN');
 $order->setStatus('OPEN');
 $order->setCostCenter('Vitashop');
 $order->addOrderLine('Item 1', 10);
@@ -42,11 +42,12 @@ $order->setDeliveryMethod($deliveryMethod);
 $order->setTotal(100);
 
 //$response = $bpost->createOrReplaceOrder($order);
-//$response = $bpost->fetchOrder($var);
+//$response = $bpost->fetchOrder($orderId);
 //$response = $bpost->modifyOrderStatus(660, 'OPEN');
-//$response = $bpost->createNationalLabel($var, 1);
+//$response = $bpost->createrNationalLabel($orderId, 1);
 //$response = $bpost->createOrderAndNationalLabel($order, 5);
 //$response = $bpost->retrievePDFLabelsForBox($response['barcode'][0]);
+//$response = $bpost->retrievePDFLabelsForOrder($orderId);
 
 // output pdf
 //header('Content-Type: application/pdf');

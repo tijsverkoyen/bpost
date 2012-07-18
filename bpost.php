@@ -783,9 +783,35 @@ class bPost
 		return (string) $this->doCall($url, null, $headers);
 	}
 
-	public function retrievePDFLabelsForOrder()
+	/**
+	 * Retrieve a PDF-label for an order
+	 *
+	 * @param string $reference
+	 * @param string[optional] $labelFormat		Possible values are: A_4, A_5
+	 * @return string
+	 */
+	public function retrievePDFLabelsForOrder($reference, $labelFormat = null)
 	{
-		throw new bPostException('Not implemented');
+		$allowedLabelFormats = array('A_4', 'A_5');
+
+		// validate
+		if($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats))
+		{
+			throw new bPostException('Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' . implode(', ', $allowedLabelFormats));
+		}
+
+		// build url
+		$url = '/orders/' . (string) $reference .'/pdf';
+
+		if($labelFormat !== null) $url .= '?labelFormat=' . $labelFormat;
+
+		// build headers
+		$headers = array(
+			'Accept: application/vnd.bpost.shm-pdf-v2+XML'
+		);
+
+		// make the call
+		return (string) $this->doCall($url, null, $headers);
 	}
 }
 

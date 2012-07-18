@@ -214,5 +214,33 @@ class bPostTest extends PHPUnit_Framework_TestCase
 
 		$this->assertTrue((strpos(base64_decode($var), 'PDF-1.4') !== false));
 	}
+
+	/**
+	 * Tests bpost->retrievePDFLabelsForOrder
+	 */
+	public function testRetrievePDFLabelsForOrder()
+	{
+		$orderId = time();
+
+		$customer = new bPostCustomer('Tijs', 'Verkoyen');
+		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+
+		$order = new bPostOrder($orderId, 'OPEN');
+
+		$order->setStatus('OPEN');
+		$order->setCostCenter('CostCenter1');
+		$order->addOrderLine('Item 1', 10);
+		$order->addOrderLine('Item 2', 20);
+		$order->setCustomer($customer);
+		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setTotal(100);
+
+		$this->bpost->createOrReplaceOrder($order);
+		$var = $this->bpost->createNationalLabel($orderId, 1);
+
+		$var = $this->bpost->retrievePDFLabelsForOrder($orderId);
+
+		$this->assertTrue((strpos(base64_decode($var), 'PDF-1.4') !== false));
+	}
 }
 
