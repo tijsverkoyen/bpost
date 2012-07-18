@@ -242,7 +242,7 @@ class bPost
 	 * @param int[optional] $i			A internal counter.
 	 * @return mixed
 	 */
-	private function decodeResponse($item, $return = null, $i = 0)
+	private static function decodeResponse($item, $return = null, $i = 0)
 	{
 		$integerKeys = array('totalPrice');
 		$arrayKeys = array();
