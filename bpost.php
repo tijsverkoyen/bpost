@@ -264,7 +264,7 @@ class bPost
 	 */
 	private static function decodeResponse($item, $return = null, $i = 0)
 	{
-		$arrayKeys = array('barcode', 'orderLine', 'additionalInsurance');
+		$arrayKeys = array('barcode', 'orderLine', 'additionalInsurance', 'infoDistributed', 'infoPugo');
 		$integerKeys = array('totalPrice');
 
 		if($item instanceof SimpleXMLElement)
@@ -641,6 +641,65 @@ class bPost
 				$order->setDeliveryMethod($deliveryMethod);
 			}
 
+			// atShop
+			elseif(isset($return['deliveryMethod']['atShop']))
+			{
+				$deliveryMethod = new bPostDeliveryMethodAtShop();
+
+				$language = $return['deliveryMethod']['atShop']['infoPugo']['@attributes']['language'];
+				$emailAddress = null;
+				$mobilePhone = null;
+				$fixedPhone = null;
+
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress']))
+				{
+					$emailAddress = $return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'];
+				}
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone']))
+				{
+					$mobilePhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'];
+				}
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone']))
+				{
+					$fixedPhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'];
+				}
+
+				$deliveryMethod->setInfoPugo(
+					$return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'],
+					$return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'],
+					new bPostNotification($language, $emailAddress, $mobilePhone, $fixedPhone)
+				);
+
+				if(isset($return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value']))
+				{
+					$deliveryMethod->setInsurance((int) $return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value']);
+				}
+
+				$language = $return['deliveryMethod']['atShop']['infoDistributed']['@attributes']['language'];
+				$emailAddress = null;
+				$mobilePhone = null;
+				$fixedPhone = null;
+
+				if(isset($return['deliveryMethod']['atShop']['infoDistributed'][0]['emailAddress']))
+				{
+					$emailAddress = $return['deliveryMethod']['atShop']['infoDistributed'][0]['emailAddress'];
+				}
+				if(isset($return['deliveryMethod']['atShop']['infoDistributed'][0]['mobilePhone']))
+				{
+					$mobilePhone = $return['deliveryMethod']['atShop']['infoDistributed'][0]['mobilePhone'];
+				}
+				if(isset($return['deliveryMethod']['atShop']['infoDistributed'][0]['fixedPhone']))
+				{
+					$fixedPhone = $return['deliveryMethod']['atShop']['infoDistributed'][0]['fixedPhone'];
+				}
+
+				$deliveryMethod->setInfoDistributed(
+					new bPostNotification($language, $emailAddress, $mobilePhone, $fixedPhone)
+				);
+
+				$order->setDeliveryMethod($deliveryMethod);
+			}
+
 			// intBusiness?
 			elseif(isset($return['deliveryMethod']['intBusiness']))
 			{
@@ -681,7 +740,6 @@ class bPost
 			else
 			{
 				// @todo	implemented other types
-				Spoon::dump($return, false);
 				throw new bPostException('Unhandled key (' . $key . ').');
 				exit;
 			}
@@ -1601,6 +1659,75 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
 {
 	private $infoPugo, $infoDistributed;
+
+	/**
+	 * Get the options
+	 *
+	 * @return array
+	 */
+	public function getInfoDistributed()
+	{
+		return $this->infoDistributed;
+	}
+
+	/**
+	 * Get the info pigu
+	 *
+	 * @return mixed
+	 */
+	public function getInfoPugo()
+	{
+		return $this->infoPugo;
+	}
+
+	/**
+	 * Set the options
+	 *
+	 * @param array $options
+	 */
+	public function setInfoDistributed(bPostNotification $notification)
+	{
+		$this->infoDistributed = $notification;
+	}
+
+	/**
+	 * Set the Pick Up & Go information
+	 *
+	 * @param string $id						Id of the Pick Up & Go
+	 * @param string $name						Name of the Pick Up & Go
+	 * @param bPostNotification $notification	One of the notification tags.
+	 */
+	public function setInfoPugo($id, $name, bPostNotification $notification)
+	{
+		$this->infoPugo['pugoId'] = (string) $id;
+		$this->infoPugo['pugoName'] = (string) $name;
+		$this->infoPugo['notification'] = $notification;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		if(isset($this->infoPugo['notification'])) $data['atShop']['infoPugo'] = $this->infoPugo['notification']->toXMLArray();
+		$data['atShop']['infoPugo']['pugoId'] = $this->infoPugo['pugoId'];
+		$data['atShop']['infoPugo']['pugoName'] = $this->infoPugo['pugoName'];
+
+		if($this->insurance !== null)
+		{
+			if($this->insurance == 0) $data['atShop']['insurance']['basicInsurance'] = '';
+			else $data['atShop']['insurance']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+		}
+		if($this->infoDistributed !== null)
+		{
+			$data['atShop']['infoDistributed'] = $this->infoDistributed->toXMLArray();
+		}
+
+		return $data;
+	}
 }
 
 /**
@@ -1638,6 +1765,16 @@ class bPostDeliveryMethodIntBusiness extends bPostDeliveryMethod
 	private $insured;
 
 	/**
+	 * Get the options
+	 *
+	 * @return array
+	 */
+	public function getInsured()
+	{
+		return $this->insured;
+	}
+
+	/**
 	 * Set the options
 	 *
 	 * @param array $options
@@ -1648,16 +1785,6 @@ class bPostDeliveryMethodIntBusiness extends bPostDeliveryMethod
 		{
 			foreach($options as $key => $value) $this->insured[$key] = $value;
 		}
-	}
-
-	/**
-	 * Get the options
-	 *
-	 * @return array
-	 */
-	public function getInsured()
-	{
-		return $this->insured;
 	}
 
 	/**
