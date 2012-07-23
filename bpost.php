@@ -406,6 +406,7 @@ class bPost
 			if(self::DEBUG)
 			{
 				echo '<pre>';
+				var_dump(htmlentities($body));
 				var_dump($response);
 				var_dump($headers);
 				var_dump($this);
@@ -1675,16 +1676,41 @@ class bPostDeliveryMethod
  */
 class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 {
-	// @todo	implement me correctly
-
-	private $normal, $signed, $insured, $dropAtTheDoor;
+	private $normal, $signed, $insured;
 
 	/**
-	 * Create an atHome instance
+	 * @var bool
 	 */
-	public function __construct()
+	private $dropAtTheDoor;
+
+	/**
+	 * Get the options
+	 *
+	 * @return array
+	 */
+	public function getInsured()
 	{
-		$this->setNormal();
+		return $this->insured;
+	}
+
+	/**
+	 * Get the options
+	 *
+	 * @return mixed
+	 */
+	public function getNormal()
+	{
+		return $this->normal;
+	}
+
+	/**
+	 * Set drop at the door
+	 *
+	 * @param bool $dropAtTheDoor
+	 */
+	public function setDropAtTheDoor($dropAtTheDoor = true)
+	{
+		$this->dropAtTheDoor = (bool) $dropAtTheDoor;
 	}
 
 	/**
@@ -1698,6 +1724,7 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 		{
 			foreach($options as $key => $value) $this->normal[$key] = $value;
 		}
+		else $this->normal = array();
 	}
 
 	/**
@@ -1708,16 +1735,22 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 	public function toXMLArray()
 	{
 		$data = array();
-		$data['atHome'] = parent::toXMLArray();
-		if($this->normal === null) $data['atHome']['normal'] = '';
-		else
+		if($this->normal !== null)
 		{
+			$data['atHome']['normal'] = null;
+
 			foreach($this->normal as $key => $value)
 			{
 				if($key == 'automaticSecondPresentation') $data['atHome']['normal']['options']['automaticSecondPresentation'] = $value;
 				else $data['atHome']['normal']['options'][$key] = $value->toXMLArray();
 			}
 		}
+		if($this->insurance !== null)
+		{
+			if($this->insurance == 0) $data['atHome-7']['insurance']['basicInsurance'] = '';
+			else $data['atHome']['insurance']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+		}
+		if($this->dropAtTheDoor) $data['atHome']['dropAtTheDoor'] = null;
 
 		return $data;
 	}

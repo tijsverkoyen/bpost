@@ -58,22 +58,26 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
-
+		$order = new bPostOrder($orderId);
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$var = $this->bpost->createOrReplaceOrder($order);
 
 		$this->assertTrue($var);
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -83,17 +87,19 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
-
+		$order = new bPostOrder($orderId);
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$this->bpost->createOrReplaceOrder($order);
@@ -102,6 +108,8 @@ class bPostTest extends PHPUnit_Framework_TestCase
 
 		$this->assertInstanceOf('bPostOrder', $var);
 		$this->assertEquals($orderId, $var->getReference());
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -111,17 +119,20 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
+		$order = new bPostOrder($orderId);
 
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$this->bpost->createOrReplaceOrder($order);
@@ -138,17 +149,19 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
-
+		$order = new bPostOrder($orderId);
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$this->bpost->createOrReplaceOrder($order);
@@ -158,6 +171,8 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('orderReference', $var);
 		$this->assertArrayHasKey('barcode', $var);
 		$this->assertArrayHasKey('pdf', $var);
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -173,7 +188,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$deliveryMethod = new bPostDeliveryMethodIntBusiness();
 		$deliveryMethod->setInsurance(10);
 
-		$order = new bPostOrder($orderId, 'OPEN');
+		$order = new bPostOrder($orderId);
 
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
@@ -192,6 +207,8 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$this->assertArrayHasKey('orderReference', $var);
 		$this->assertArrayHasKey('barcode', $var);
 		$this->assertArrayHasKey('pdf', $var);
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -201,23 +218,27 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
-
+		$order = new bPostOrder($orderId);
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$var = $this->bpost->createOrderAndNationalLabel($order, 1);
 
 		$this->assertArrayHasKey('orderReference', $var);
 		$this->assertArrayHasKey('barcode', $var);
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -232,7 +253,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
 
 		$deliveryMethod = new bPostDeliveryMethodIntExpress();
 
-		$order = new bPostOrder($orderId, 'OPEN');
+		$order = new bPostOrder($orderId);
 
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
@@ -248,6 +269,8 @@ class bPostTest extends PHPUnit_Framework_TestCase
 
 		$this->assertArrayHasKey('orderReference', $var);
 		$this->assertArrayHasKey('barcode', $var);
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -257,17 +280,19 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
-
+		$order = new bPostOrder($orderId);
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$this->bpost->createOrReplaceOrder($order);
@@ -276,6 +301,8 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$var = $this->bpost->retrievePDFLabelsForBox($var['barcode'][0]);
 
 		$this->assertTrue((strpos(base64_decode($var), 'PDF-1.4') !== false));
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 
 	/**
@@ -285,17 +312,19 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	{
 		$orderId = time();
 
+		$deliveryMethod = new bPostDeliveryMethodAtHome();
+		$deliveryMethod->setNormal();
+
 		$customer = new bPostCustomer('Tijs', 'Verkoyen');
 		$customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-		$order = new bPostOrder($orderId, 'OPEN');
-
+		$order = new bPostOrder($orderId);
 		$order->setStatus('OPEN');
 		$order->setCostCenter('CostCenter1');
 		$order->addOrderLine('Item 1', 10);
 		$order->addOrderLine('Item 2', 20);
 		$order->setCustomer($customer);
-		$order->setDeliveryMethod(new bPostDeliveryMethodAtHome());
+		$order->setDeliveryMethod($deliveryMethod);
 		$order->setTotal(100);
 
 		$this->bpost->createOrReplaceOrder($order);
@@ -304,6 +333,8 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$var = $this->bpost->retrievePDFLabelsForOrder($orderId);
 
 		$this->assertTrue((strpos(base64_decode($var), 'PDF-1.4') !== false));
+
+		$this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
 	}
 }
 

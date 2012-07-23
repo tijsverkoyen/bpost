@@ -8,10 +8,11 @@ require_once '../bpost.php';
 $bpost = new bPost(ACCOUNT_ID, PASSPHRASE);
 
 // create notification
-//$option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
+$option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
 
 // create delivery method at home
-//$deliveryMethod = new bPostDeliveryMethodAtHome();
+$deliveryMethod = new bPostDeliveryMethodAtHome();
+$deliveryMethod->setNormal();
 //$deliveryMethod->setNormal(
 //	array(
 //		'infoDistributed' => $option,
@@ -20,6 +21,8 @@ $bpost = new bPost(ACCOUNT_ID, PASSPHRASE);
 //		'automaticSecondPresentation' => '',
 //	)
 //);
+//$deliveryMethod->setDropAtTheDoor();
+//$deliveryMethod->setInsurance(10);
 
 // create delivery method at shop
 //$deliveryMethod = new bPostDeliveryMethodAtShop();
@@ -40,24 +43,24 @@ $bpost = new bPost(ACCOUNT_ID, PASSPHRASE);
 //$deliveryMethod = new bPostDeliveryMethodIntExpress();
 
 // create address
-//$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
+$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
 //$deliveryAddress = new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE');
 
 // create customer
-//$customer = new bPostCustomer('Tijs', 'Verkoyen');
-//$customer->setDeliveryAddress($deliveryAddress);
+$customer = new bPostCustomer('Tijs', 'Verkoyen');
+$customer->setDeliveryAddress($deliveryAddress);
 
-//$orderId = time();
+$orderId = time();
 
 // create order
-//$order = new bPostOrder($orderId, 'OPEN');
-//$order->setStatus('OPEN');
-//$order->setCostCenter('Vitashop');
-//$order->addOrderLine('Item 1', 10);
-//$order->addOrderLine('Item 2', 20);
-//$order->setCustomer($customer);
-//$order->setDeliveryMethod($deliveryMethod);
-//$order->setTotal(100);
+$order = new bPostOrder($orderId);
+$order->setStatus('OPEN');
+$order->setCostCenter('Vitashop');
+$order->addOrderLine('Item 1', 10);
+$order->addOrderLine('Item 2', 20);
+$order->setCustomer($customer);
+$order->setDeliveryMethod($deliveryMethod);
+$order->setTotal(100);
 
 //$labelInfo1 = new bPostInternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
 //$labelInfo2 = new bPostInternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
