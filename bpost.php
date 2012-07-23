@@ -1378,6 +1378,11 @@ class bPostAddress
 	}
 }
 
+/**
+ * bPost Delivery Method class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
 class bPostDeliveryMethod
 {
 	private $insurance;
@@ -1412,6 +1417,11 @@ class bPostDeliveryMethod
 	}
 }
 
+/**
+ * bPost Delivery At Home Method class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
 class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 {
 	private $normal, $signed, $insured, $dropAtTheDoor;
@@ -1452,21 +1462,41 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 	}
 }
 
+/**
+ * bPost Delivery At Shop Method class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
 class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
 {
 	private $infoPugo, $insurance, $infoDistributed;
 }
 
+/**
+ * bPost Delivery At 24/7 Method class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
 class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
 {
 	private $infoParcelsDepot, $signature, $insurance, $memberId;
 }
 
+/**
+ * bPost Delivery International Express Method class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
 class bPostDeliveryMethodIntExpress extends bPostDeliveryMethod
 {
 	private $insured;
 }
 
+/**
+ * bPost Delivery International Business Method class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
 class bPostDeliveryMethodIntBusiness extends bPostDeliveryMethod
 {
 	private $insured;
