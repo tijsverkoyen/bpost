@@ -27,7 +27,7 @@
 class bPost
 {
 	// internal constant to enable/disable debugging
-	const DEBUG = true;
+	const DEBUG = false;
 
 	// URL for the api
 	const API_URL = 'https://api.bpost.be/services/shm';
