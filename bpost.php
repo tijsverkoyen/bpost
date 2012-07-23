@@ -959,9 +959,39 @@ class bPost
 		return $return['entry'];
 	}
 
-	public function createOrderAndInternationalLabel()
+	public function createOrderAndInternationalLabel(array $labelInfo, $order)
 	{
-		throw new bPostException('Not implemented.');
+		// build url
+		$url = '/orderAndLabels';
+
+		// build data
+		$data['orderInternationalLabelInfos']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+		foreach($labelInfo as $row)
+		{
+			if(!($row instanceof bPostInternationalLabelInfo))
+			{
+				throw new bPostException(
+					'Invalid value for labelInfo, should be an instance of bPostInternationalLabelInfo'
+				);
+			}
+
+			$data['orderInternationalLabelInfos']['internationalLabelInfo'][] = $row->toXMLArray();
+		}
+		$data['orderInternationalLabelInfos']['order'] = $order->toXMLArray($this->accountId);
+
+		// build headers
+		$headers = array(
+			'Content-type: application/vnd.bpost.shm-orderAndIntLabels-v2+XML'
+		);
+
+		// make the call
+		$return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
+
+		// validate
+		if(!isset($return['entry'])) throw new bPostException('Invalid response.');
+
+		// return
+		return $return['entry'];
 	}
 
 	/**

@@ -221,6 +221,36 @@ class bPostTest extends PHPUnit_Framework_TestCase
 	}
 
 	/**
+	 * Tests bpost->createOrderAndInternationalLabel
+	 */
+	public function testCreateOrderAndInternationalLabel()
+	{
+		$orderId = time();
+
+		$customer = new bPostCustomer('Tijs', 'Verkoyen');
+		$customer->setDeliveryAddress(new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE'));
+
+		$deliveryMethod = new bPostDeliveryMethodIntExpress();
+
+		$order = new bPostOrder($orderId, 'OPEN');
+
+		$order->setStatus('OPEN');
+		$order->setCostCenter('CostCenter1');
+		$order->addOrderLine('Item 1', 10);
+		$order->addOrderLine('Item 2', 20);
+		$order->setCustomer($customer);
+		$order->setDeliveryMethod($deliveryMethod);
+		$order->setTotal(100);
+
+		$labelInfo1 = new bPostInternationalLabelInfo(100, 300, $orderId, 'OTHER', 'RTA', true);
+
+		$var = $this->bpost->createOrderAndInternationalLabel(array($labelInfo1), $order);
+
+		$this->assertArrayHasKey('orderReference', $var);
+		$this->assertArrayHasKey('barcode', $var);
+	}
+
+	/**
 	 * Tests bpost->retrievePDFLabelsForBox
 	 */
 	public function testRetrievePDFLabelsForBox()
