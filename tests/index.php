@@ -27,9 +27,14 @@ $option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
 //$deliveryMethod->setInfoDistributed(new bPostNotification('NL', 'foo@bar.com'));
 //$deliveryMethod->setInsurance(10);
 
-// create delivery method int business
-//$deliveryMethod = new bPostDeliveryMethodIntBusiness();
+// create delivery method at 24-7
+//$deliveryMethod = new bPostDeliveryMethodAt247('014473', '123456789');
 //$deliveryMethod->setInsurance(10);
+//$deliveryMethod->setSignature(true);
+
+// create delivery method int business
+$deliveryMethod = new bPostDeliveryMethodIntBusiness();
+$deliveryMethod->setInsurance(10);
 
 // create address
 $deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');

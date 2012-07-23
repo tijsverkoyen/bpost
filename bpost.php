@@ -79,7 +79,7 @@ class bPost
 
 	// class methods
 	/**
-	 * Default constructor
+	 * Create bPost instance
 	 *
 	 * @param string $accountId
 	 * @param string $passphrase
@@ -138,8 +138,6 @@ class bPost
 
 		// skip attributes
 		if($key == '@attributes') return;
-
-		if(is_null($input)) return;
 
 		// create element
 		$element = new DOMElement($key);
@@ -700,6 +698,29 @@ class bPost
 				$order->setDeliveryMethod($deliveryMethod);
 			}
 
+			// at24-7
+			elseif(isset($return['deliveryMethod']['at24-7']))
+			{
+				$deliveryMethod = new bPostDeliveryMethodAt247(
+					$return['deliveryMethod']['at24-7']['infoParcelsDepot']['infoParcelsDepotId'],
+					$return['deliveryMethod']['at24-7']['memberId']
+				);
+				if(isset($return['deliveryMethod']['at24-7']['signature']['signature']))
+				{
+					$deliveryMethod->setSignature();
+				}
+				if(isset($return['deliveryMethod']['at24-7']['signature']['signature']))
+				{
+					$deliveryMethod->setSignature(true);
+				}
+				if(isset($return['deliveryMethod']['at24-7']['insurance']['additionalInsurance']['@attributes']['value']))
+				{
+					$deliveryMethod->setInsurance((int) $return['deliveryMethod']['at24-7']['insurance']['additionalInsurance']['@attributes']['value']);
+				}
+
+				$order->setDeliveryMethod($deliveryMethod);
+			}
+
 			// intBusiness?
 			elseif(isset($return['deliveryMethod']['intBusiness']))
 			{
@@ -744,6 +765,8 @@ class bPost
 				exit;
 			}
 		}
+
+		// total price
 		if(isset($return['totalPrice'])) $order->setTotal($return['totalPrice']);
 
 		return $order;
@@ -1106,16 +1129,6 @@ class bPostOrder
 	}
 
 	/**
-	 * Get the total price of the order.
-	 *
-	 * @return int
-	 */
-	public function getTotal()
-	{
-		return $this->total;
-	}
-
-	/**
 	 * Get the status
 	 *
 	 * @return string
@@ -1123,6 +1136,16 @@ class bPostOrder
 	public function getStatus()
 	{
 		return $this->status;
+	}
+
+	/**
+	 * Get the total price of the order.
+	 *
+	 * @return int
+	 */
+	public function getTotal()
+	{
+		return $this->total;
 	}
 
 	/**
@@ -1167,16 +1190,6 @@ class bPostOrder
 	}
 
 	/**
-	 * The total price of the order in euro-cents (excluding shipping)
-	 *
-	 * @param int $value
-	 */
-	public function setTotal($total)
-	{
-		$this->total = (int) $total;
-	}
-
-	/**
 	 * Set the order status
 	 *
 	 * @param string $value		Possible values are OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD.
@@ -1194,6 +1207,16 @@ class bPostOrder
 		}
 
 		$this->status = $status;
+	}
+
+	/**
+	 * The total price of the order in euro-cents (excluding shipping)
+	 *
+	 * @param int $value
+	 */
+	public function setTotal($total)
+	{
+		$this->total = (int) $total;
 	}
 
 	/**
@@ -1564,7 +1587,7 @@ class bPostAddress
  */
 class bPostDeliveryMethod
 {
-	protected  $insurance;
+	protected $insurance;
 
 	/**
 	 * Set the insurance level
@@ -1608,7 +1631,7 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 	private $normal, $signed, $insured, $dropAtTheDoor;
 
 	/**
-	 * Default constructor
+	 * Create an atHome instance
 	 */
 	public function __construct()
 	{
@@ -1658,6 +1681,11 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
  */
 class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
 {
+	/**
+	 * Generic Info
+	 *
+	 * @var mixed
+	 */
 	private $infoPugo, $infoDistributed;
 
 	/**
@@ -1737,7 +1765,103 @@ class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
  */
 class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
 {
+	/**
+	 * Generic info
+	 *
+	 * @var mixed
+	 */
 	private $infoParcelsDepot, $signature, $memberId;
+
+	/**
+	 * Create an at24-7 object
+	 *
+	 * @param string $parcelsDepotId
+	 * @param string $memberId
+	 */
+	public function __construct($parcelsDepotId, $memberId)
+	{
+		$this->setInfoParcesDepot($parcelsDepotId);
+		$this->setMemberId($memberId);
+	}
+
+	/**
+	 * Get info parcel depot
+	 *
+	 * @return string
+	 */
+	public function getInfoParcelsDepot()
+	{
+		return $this->infoParcelsDepot;
+	}
+
+	/**
+	 * Get member id
+	 *
+	 * @return mixed
+	 */
+	public function getMemberId()
+	{
+		return $this->memberId;
+	}
+
+	/**
+	 * Get signature
+	 *
+	 * @return mixed
+	 */
+	public function getSignature()
+	{
+		return $this->signature;
+	}
+
+	/**
+	 * Set info parcels depot
+	 *
+	 * @param string $infoParcelsDepot
+	 */
+	public function setInfoParcelsDepot($infoParcelsDepot)
+	{
+		$this->infoParcelsDepot = (string) $infoParcelsDepot;
+	}
+
+	/**
+	 * Set member id
+	 *
+	 * @param string $memberId
+	 */
+	public function setMemberId($memberId)
+	{
+		$this->memberId = $memberId;
+	}
+
+	public function setSignature($isPlus = false)
+	{
+		$this->signature = (bool) $isPlus;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		$data['at24-7']['infoParcelsDepot']['parcelsDepotId'] = $this->infoParcelsDepot;
+		$data['at24-7']['memberId'] = $this->memberId;
+		if($this->signature !== null)
+		{
+			if($this->signature) $data['at24-7']['signaturePlus'] = null;
+			else $data['at24-7']['signature'] = null;
+		}
+		if($this->insurance !== null)
+		{
+			if($this->insurance == 0) $data['at24-7']['insurance']['basicInsurance'] = '';
+			else $data['at24-7']['insurance']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+		}
+
+		return $data;
+	}
 }
 
 /**
@@ -1879,16 +2003,6 @@ class bPostInternationalLabelInfo
 	}
 
 	/**
-	 * Get the parcel weight in grams
-	 *
-	 * @return int
-	 */
-	public function getParcelWeight()
-	{
-		return $this->parcelWeight;
-	}
-
-	/**
 	 * Get the parcel value in euro cents
 	 *
 	 * @return string
@@ -1896,6 +2010,16 @@ class bPostInternationalLabelInfo
 	public function getParcelValue()
 	{
 		return $this->parcelValue;
+	}
+
+	/**
+	 * Get the parcel weight in grams
+	 *
+	 * @return int
+	 */
+	public function getParcelWeight()
+	{
+		return $this->parcelWeight;
 	}
 
 	/**
