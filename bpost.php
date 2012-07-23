@@ -116,7 +116,7 @@ class bPost
 	private static function arrayToXML(&$input, $key, $xml)
 	{
 		// wierd stuff
-		if($key == 'orderLine')
+		if(in_array($key, array('orderLine', 'internationalLabelInfo')))
 		{
 			foreach($input as $row)
 			{
@@ -126,6 +126,8 @@ class bPost
 				// loop properties
 				foreach($row as $name => $value)
 				{
+					if(is_bool($value)) $value = ($value) ? 'true' : 'false';
+
 					$node = new DOMElement($name, $value);
 					$element->appendChild($node);
 				}
@@ -262,13 +264,20 @@ class bPost
 	 */
 	private static function decodeResponse($item, $return = null, $i = 0)
 	{
-		$arrayKeys = array('barcode', 'orderLine');
+		$arrayKeys = array('barcode', 'orderLine', 'additionalInsurance');
 		$integerKeys = array('totalPrice');
 
 		if($item instanceof SimpleXMLElement)
 		{
 			foreach($item as $key => $value)
 			{
+				$attributes = (array) $value->attributes();
+
+				if(!empty($attributes) && isset($attributes['@attributes']))
+				{
+					$return[$key]['@attributes'] = $attributes['@attributes'];
+				}
+
 				// empty
 				if(isset($value['nil']) && (string) $value['nil'] === 'true') $return[$key] = null;
 
@@ -552,10 +561,9 @@ class bPost
 		{
 			foreach($return as $key => $value)
 			{
-				if(!in_array($key, array('status', 'costCenter', 'orderLine', 'customer', 'deliveryMethod', 'totalPrice')))
+				if(!in_array($key, array('accountId', 'orderReference', 'status', 'costCenter', 'orderLine', 'customer', 'deliveryMethod', 'totalPrice')))
 				{
-					var_dump($return);
-					exit;
+					throw new bPostException('Unhandled key (' . $key . ').');
 				}
 			}
 		}
@@ -633,10 +641,48 @@ class bPost
 				$order->setDeliveryMethod($deliveryMethod);
 			}
 
+			// intBusiness?
+			elseif(isset($return['deliveryMethod']['intBusiness']))
+			{
+				$deliveryMethod = new bPostDeliveryMethodIntBusiness();
+
+				if(isset($return['deliveryMethod']['intBusiness']['insured']['additionalInsurance']['@attributes']['value']))
+				{
+					$deliveryMethod->setInsurance((int) $return['deliveryMethod']['intBusiness']['insured']['additionalInsurance']['@attributes']['value']);
+				}
+
+				// options
+				if(isset($return['deliveryMethod']['intBusiness']['insured']['options']) && !empty($return['deliveryMethod']['intBusiness']['insured']['options']))
+				{
+					$options = array();
+
+					foreach($return['deliveryMethod']['intBusiness']['insured']['options'] as $key => $row)
+					{
+						$language = 'NL';	// @todo fix me
+						$emailAddress = null;
+						$mobilePhone = null;
+						$fixedPhone = null;
+
+						if(isset($row['emailAddress'])) $emailAddress = $row['emailAddress'];
+						if(isset($row['mobilePhone'])) $mobilePhone = $row['mobilePhone'];
+						if(isset($row['fixedPhone'])) $fixedPhone = $row['fixedPhone'];
+
+						if($emailAddress === null && $mobilePhone === null && $fixedPhone === null) continue;
+
+						$options[$key] = new bPostNotification($language, $emailAddress, $mobilePhone, $fixedPhone);
+					}
+
+					$deliveryMethod->setInsured($options);
+				}
+
+				$order->setDeliveryMethod($deliveryMethod);
+			}
+
 			else
 			{
 				// @todo	implemented other types
-				var_dump($return);
+				Spoon::dump($return, false);
+				throw new bPostException('Unhandled key (' . $key . ').');
 				exit;
 			}
 		}
@@ -735,9 +781,50 @@ class bPost
 		return $return['entry'];
 	}
 
-	public function createInternationalLabel($reference, bPostInternationalLabelInfo $labelInfo, $returnLabels = null)
+	/**
+	 * Create an international label
+	 *
+	 * @param string $reference									Order reference: unique ID used in your web shop to assign to an order.
+	 * @param array of bPostInternationalLabelInfo $labelInfo	For each label an object should be present
+	 * @param bool[optional] $returnLabels						Should the labels be included?
+	 * @return array
+	 */
+	public function createInternationalLabel($reference, array $labelInfo, $returnLabels = null)
 	{
+		// build url
+		$url = '/labels';
 
+		// build data
+		$data['internationalLabelInfos']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
+
+		foreach($labelInfo as $row)
+		{
+			if(!($row instanceof bPostInternationalLabelInfo))
+			{
+				throw new bPostException(
+					'Invalid value for labelInfo, should be an instance of bPostInternationalLabelInfo'
+				);
+			}
+
+			$data['internationalLabelInfos']['internationalLabelInfo'][] = $row->toXMLArray();
+		}
+
+		$data['internationalLabelInfos']['orderReference'] = (string) $reference;
+		if($returnLabels !== null) $data['internationalLabelInfos']['returnLabels'] = (bool) $returnLabels;
+
+		// build headers
+		$headers = array(
+			'Content-type: application/vnd.bpost.shm-int-label-v2+XML'
+		);
+
+		// make the call
+		$return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
+
+		// validate
+		if(!isset($return['entry'])) throw new bPostException('Invalid response.');
+
+		// return
+		return $return['entry'];
 	}
 
 	/**
@@ -1419,7 +1506,7 @@ class bPostAddress
  */
 class bPostDeliveryMethod
 {
-	private $insurance;
+	protected  $insurance;
 
 	/**
 	 * Set the insurance level
@@ -1513,7 +1600,7 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
  */
 class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
 {
-	private $infoPugo, $insurance, $infoDistributed;
+	private $infoPugo, $infoDistributed;
 }
 
 /**
@@ -1523,7 +1610,7 @@ class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
  */
 class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
 {
-	private $infoParcelsDepot, $signature, $insurance, $memberId;
+	private $infoParcelsDepot, $signature, $memberId;
 }
 
 /**
@@ -1543,7 +1630,264 @@ class bPostDeliveryMethodIntExpress extends bPostDeliveryMethod
  */
 class bPostDeliveryMethodIntBusiness extends bPostDeliveryMethod
 {
+	/**
+	 * The options
+	 *
+	 * @var array
+	 */
 	private $insured;
+
+	/**
+	 * Set the options
+	 *
+	 * @param array $options
+	 */
+	public function setInsured(array $options = null)
+	{
+		if($options !== null)
+		{
+			foreach($options as $key => $value) $this->insured[$key] = $value;
+		}
+	}
+
+	/**
+	 * Get the options
+	 *
+	 * @return array
+	 */
+	public function getInsured()
+	{
+		return $this->insured;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		if($this->insurance !== null)
+		{
+			if($this->insurance == 0) $data['intBusiness']['insured']['basicInsurance'] = '';
+			else $data['intBusiness']['insured']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+		}
+		if($this->insured !== null)
+		{
+			foreach($this->insured as $key => $value)
+			{
+				if($key == 'automaticSecondPresentation') $data['intBusiness']['insured']['options']['automaticSecondPresentation'] = $value;
+				else $data['intBusiness']['insured']['options'][$key] = $value->toXMLArray();
+			}
+		}
+		return $data;
+	}
+}
+
+/**
+ * bPost International Label Info class
+ *
+ * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ */
+class bPostInternationalLabelInfo
+{
+	/**
+	 * Generic info
+	 *
+	 * @var string
+	 */
+	private $contentDescription, $shipmentType, $parcelReturnInstructions;
+
+	/**
+	 * Generic info
+	 *
+	 * @var int
+	 */
+	private $parcelValue, $parcelWeight;
+
+	/**
+	 * Generic info
+	 *
+	 * @var bool
+	 */
+	private $privateAddress;
+
+	/**
+	 * @param int $parcelValue					The value of the parcel in euro cent
+	 * @param int $parcelWeight					The weight of the parcel in grams
+	 * @param string $contentDescription		The content description
+	 * @param string $shipmentType				The shipment type, allowed values are: SAMPLE, GIFT, OTHER, DOCUMENT
+	 * @param string $parcelReturnInstructions	The return instructions, allowed values are: RTA, ABANDONED, RTS
+	 * @param bool[optional] $privateAddress	Is the address a private address?
+	 */
+	public function __construct($parcelValue, $parcelWeight, $contentDescription, $shipmentType, $parcelReturnInstructions, $privateAddress = true)
+	{
+		$this->setParcelValue($parcelValue);
+		$this->setParcelWeight($parcelWeight);
+		$this->setContentDescription($contentDescription);
+		$this->setShipmentType($shipmentType);
+		$this->setParcelReturnInstructions($parcelReturnInstructions);
+		$this->setPrivateAddress($privateAddress);
+	}
+
+	/**
+	 * Get the content description
+	 *
+	 * @return string
+	 */
+	public function getContentDescription()
+	{
+		return $this->contentDescription;
+	}
+
+	/**
+	 * Get the parcel return instructions
+	 *
+	 * @return string
+	 */
+	public function getParcelReturnInstructions()
+	{
+		return $this->parcelReturnInstructions;
+	}
+
+	/**
+	 * Get the parcel weight in grams
+	 *
+	 * @return int
+	 */
+	public function getParcelWeight()
+	{
+		return $this->parcelWeight;
+	}
+
+	/**
+	 * Get the parcel value in euro cents
+	 *
+	 * @return string
+	 */
+	public function getParcelValue()
+	{
+		return $this->parcelValue;
+	}
+
+	/**
+	 * Is the address a private address?
+	 *
+	 * @return bool
+	 */
+	public function getPrivateAddress()
+	{
+		return $this->privateAddress;
+	}
+
+	/**
+	 * Get the shipment type
+	 *
+	 * @return string
+	 */
+	public function getShipmentType()
+	{
+		return $this->shipmentType;
+	}
+
+	/**
+	 * Get the content description
+	 *
+	 * @param string $contentDescription
+	 */
+	public function setContentDescription($contentDescription)
+	{
+		$this->contentDescription = (string) $contentDescription;
+	}
+
+	/**
+	 * The return instructions
+	 *
+	 * @param string $parcelRetrurnInstructions		Allowed values are: RTA, ABANDONED, RTS.
+	 */
+	public function setParcelReturnInstructions($parcelReturnInstructions)
+	{
+		$allowedParcelReturnInstructions = array('RTA', 'ABANDONED', 'RTS');
+
+		// validate
+		if(!in_array($parcelReturnInstructions, $allowedParcelReturnInstructions))
+		{
+			throw new bPostException(
+				'Invalid value for parcelReturnInstructions (' . $parcelReturnInstructions . '), allowed values are: ' .
+				implode(',  ', $allowedParcelReturnInstructions) . '.'
+			);
+		}
+		$this->parcelReturnInstructions = (string) $parcelReturnInstructions;
+	}
+
+	/**
+	 * The value of the parce in Euro cent
+	 *
+	 * @param int $parcelValue
+	 */
+	public function setParcelValue($parcelValue)
+	{
+		$this->parcelValue = (int) $parcelValue;
+	}
+
+	/**
+	 * The weight of the parcel in grams
+	 *
+	 * @param int $parcelWeight
+	 */
+	public function setParcelWeight($parcelWeight)
+	{
+		$this->parcelWeight = (int) $parcelWeight;
+	}
+
+	/**
+	 * Is the address a private address?
+	 *
+	 * @param bool $privateAddress
+	 */
+	public function setPrivateAddress($privateAddress)
+	{
+		$this->privateAddress = (bool) $privateAddress;
+	}
+
+	/**
+	 * Set the shipment type
+	 *
+	 * @param string $shipmentType	Allowed values are: SAMPLE, GIFT, OTHER, DOCUMENTS
+	 */
+	public function setShipmentType($shipmentType)
+	{
+		$allowedShipmentTypes = array('SAMPLE', 'GIFT', 'OTHER', 'DOCUMENTS');
+
+		// validate
+		if(!in_array($shipmentType, $allowedShipmentTypes))
+		{
+			throw new bPostException(
+				'Invalid value for shipmentType (' . $shipmentType . '), allowed values are: ' .
+				implode(',  ', $allowedShipmentTypes) . '.'
+			);
+		}
+		$this->shipmentType = (string) $shipmentType;
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		$data['parcelValue'] = $this->parcelValue;
+		$data['parcelWeight'] = $this->parcelWeight;
+		$data['contentDescription'] = $this->contentDescription;
+		$data['shipmentType'] = $this->shipmentType;
+		$data['parcelReturnInstructions'] = $this->parcelReturnInstructions;
+		$data['privateAddress'] = $this->privateAddress;
+
+		return $data;
+	}
 }
 
 /**
