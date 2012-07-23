@@ -33,12 +33,15 @@ $option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
 //$deliveryMethod->setSignature(true);
 
 // create delivery method int business
-$deliveryMethod = new bPostDeliveryMethodIntBusiness();
-$deliveryMethod->setInsurance(10);
+//$deliveryMethod = new bPostDeliveryMethodIntBusiness();
+//$deliveryMethod->setInsurance(10);
+
+// create delivery method int express
+$deliveryMethod = new bPostDeliveryMethodIntExpress();
 
 // create address
-$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
-//$deliveryAddress = new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE');
+//$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
+$deliveryAddress = new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE');
 
 // create customer
 $customer = new bPostCustomer('Tijs', 'Verkoyen');

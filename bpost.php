@@ -555,17 +555,6 @@ class bPost
 
 		$order = new bPostOrder($return['orderReference']);
 
-		if(self::DEBUG)
-		{
-			foreach($return as $key => $value)
-			{
-				if(!in_array($key, array('accountId', 'orderReference', 'status', 'costCenter', 'orderLine', 'customer', 'deliveryMethod', 'totalPrice')))
-				{
-					throw new bPostException('Unhandled key (' . $key . ').');
-				}
-			}
-		}
-
 		if(isset($return['status'])) $order->setStatus($return['status']);
 		if(isset($return['costCenter'])) $order->setCostCenter($return['costCenter']);
 
@@ -721,6 +710,43 @@ class bPost
 				$order->setDeliveryMethod($deliveryMethod);
 			}
 
+			// intExpress?
+			elseif(isset($return['deliveryMethod']['intExpress']))
+			{
+				$deliveryMethod = new bPostDeliveryMethodIntBusiness();
+
+				if(isset($return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value']))
+				{
+					$deliveryMethod->setInsurance((int) $return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value']);
+				}
+
+				// options
+				if(isset($return['deliveryMethod']['intBusiness']['insured']['options']) && !empty($return['deliveryMethod']['intExpress']['insured']['options']))
+				{
+					$options = array();
+
+					foreach($return['deliveryMethod']['intExpress']['insured']['options'] as $key => $row)
+					{
+						$language = 'NL';	// @todo fix me
+						$emailAddress = null;
+						$mobilePhone = null;
+						$fixedPhone = null;
+
+						if(isset($row['emailAddress'])) $emailAddress = $row['emailAddress'];
+						if(isset($row['mobilePhone'])) $mobilePhone = $row['mobilePhone'];
+						if(isset($row['fixedPhone'])) $fixedPhone = $row['fixedPhone'];
+
+						if($emailAddress === null && $mobilePhone === null && $fixedPhone === null) continue;
+
+						$options[$key] = new bPostNotification($language, $emailAddress, $mobilePhone, $fixedPhone);
+					}
+
+					$deliveryMethod->setInsured($options);
+				}
+
+				$order->setDeliveryMethod($deliveryMethod);
+			}
+
 			// intBusiness?
 			elseif(isset($return['deliveryMethod']['intBusiness']))
 			{
@@ -756,13 +782,6 @@ class bPost
 				}
 
 				$order->setDeliveryMethod($deliveryMethod);
-			}
-
-			else
-			{
-				// @todo	implemented other types
-				throw new bPostException('Unhandled key (' . $key . ').');
-				exit;
 			}
 		}
 
@@ -1871,7 +1890,62 @@ class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
  */
 class bPostDeliveryMethodIntExpress extends bPostDeliveryMethod
 {
+	/**
+	 * The options
+	 *
+	 * @var array
+	 */
 	private $insured;
+
+	/**
+	 * Get the options
+	 *
+	 * @return array
+	 */
+	public function getInsured()
+	{
+		return $this->insured;
+	}
+
+	/**
+	 * Set the options
+	 *
+	 * @param array $options
+	 */
+	public function setInsured(array $options = null)
+	{
+		if($options !== null)
+		{
+			foreach($options as $key => $value) $this->insured[$key] = $value;
+		}
+	}
+
+	/**
+	 * Return the object as an array for usage in the XML
+	 *
+	 * @return array
+	 */
+	public function toXMLArray()
+	{
+		$data = array();
+		$data['intExpress'] = null;
+		if($this->insurance !== null)
+		{
+			if($this->insurance == 0) $data['intExpress']['insured']['basicInsurance'] = '';
+			else $data['intExpress']['insured']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+		}
+		if($this->insured !== null)
+		{
+			foreach($this->insured as $key => $value)
+			{
+				if($key == 'automaticSecondPresentation') $data['intExpress']['insured']['options']['automaticSecondPresentation'] = $value;
+				else $data['intExpress']['insured']['options'][$key] = $value->toXMLArray();
+			}
+		}
+
+		return $data;
+	}
+
 }
 
 /**
@@ -1919,6 +1993,7 @@ class bPostDeliveryMethodIntBusiness extends bPostDeliveryMethod
 	public function toXMLArray()
 	{
 		$data = array();
+		$data['intBusiness'] = null;
 		if($this->insurance !== null)
 		{
 			if($this->insurance == 0) $data['intBusiness']['insured']['basicInsurance'] = '';
