@@ -80,6 +80,9 @@ class bPost
 	// class methods
 	/**
 	 * Default constructor
+	 *
+	 * @param string $accountId
+	 * @param string $passphrase
 	 */
 	public function __construct($accountId, $passphrase)
 	{
@@ -301,7 +304,7 @@ class bPost
 			}
 		}
 
-		else throw new bPostException('invalid item');
+		else throw new bPostException('Invalid item.');
 
 		return $return;
 	}
@@ -309,12 +312,11 @@ class bPost
 	/**
 	 * Make the call
 	 *
-	 * @param string $method					The method to be called.
-	 * @param array[optional] $data				The data to pass.
-	 * @param bool[optional] $includeContext	Should we include the context, if available.
-	 * @param bool[optional] $overruleKey		The method is wrapped, but for several methods this can't be done automatically.
-	 * @param bool[optional] $removeNullValues	Should null values be removed from the XML?
-	 * @param bool[optional] $sort				Should the passed data be sorted?
+	 * @param string $url					The URL to call.
+	 * @param array[optional] $data			The data to pass.
+	 * @param array[optional] $headers		The headers to pass.
+	 * @param string[optional] $method		The HTTP-method to use.
+	 * @param bool[optional] $expectXML		Do we expect XML?
 	 * @return mixed
 	 */
 	private function doCall($url, $data = null, $headers = array(), $method = 'GET', $expectXML = true)
@@ -403,7 +405,7 @@ class bPost
 				echo '</pre>';
 			}
 
-			throw new bPostException('invalid response', $headers['http_code']);
+			throw new bPostException('Invalid response.', $headers['http_code']);
 		}
 
 		// if we don't expect XML we can return the content here
@@ -530,7 +532,7 @@ class bPost
 	/**
 	 * Fetch an order
 	 *
-	 * @param $reference
+	 * @param string $reference
 	 * @return array
 	 */
 	public function fetchOrder($reference)
@@ -658,7 +660,10 @@ class bPost
 		// validate
 		if(!in_array($status, $allowedStatuses))
 		{
-			throw new bPostException('Invalid status (' . $status . '), allowed values are: ' . implode(', ', $allowedStatuses) . '.');
+			throw new bPostException(
+				'Invalid status (' . $status . '), allowed values are: ' .
+				implode(', ', $allowedStatuses) . '.'
+			);
 		}
 
 		// build url
@@ -697,7 +702,10 @@ class bPost
 		// validate
 		if($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats))
 		{
-			throw new bPostException('Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' . implode(', ', $allowedLabelFormats));
+			throw new bPostException(
+				'Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' .
+				implode(', ', $allowedLabelFormats) . '.'
+			);
 		}
 
 		// build url
@@ -721,22 +729,22 @@ class bPost
 		$return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
 
 		// validate
-		if(!isset($return['entry'])) throw new bPostException('Invalid response');
+		if(!isset($return['entry'])) throw new bPostException('Invalid response.');
 
 		// return
 		return $return['entry'];
 	}
 
-	public function createInternationalLabel()
+	public function createInternationalLabel($reference, bPostInternationalLabelInfo $labelInfo, $returnLabels = null)
 	{
-		throw new bPostException('Not implemented');
+
 	}
 
 	/**
 	 * Create an order and the labels
 	 *
 	 * @param bPostOrder $order
-	 * @param $amount
+	 * @param int $amount
 	 * @return array
 	 */
 	public function createOrderAndNationalLabel(bPostOrder $order, $amount)
@@ -758,7 +766,7 @@ class bPost
 		$return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
 
 		// validate
-		if(!isset($return['entry'])) throw new bPostException('Invalid response');
+		if(!isset($return['entry'])) throw new bPostException('Invalid response.');
 
 		// return
 		return $return['entry'];
@@ -766,7 +774,7 @@ class bPost
 
 	public function createOrderAndInternationalLabel()
 	{
-		throw new bPostException('Not implemented');
+		throw new bPostException('Not implemented.');
 	}
 
 	/**
@@ -783,11 +791,14 @@ class bPost
 		// validate
 		if($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats))
 		{
-			throw new bPostException('Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' . implode(', ', $allowedLabelFormats));
+			throw new bPostException(
+				'Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' .
+				implode(', ', $allowedLabelFormats) . '.'
+			);
 		}
 
 		// build url
-		$url = '/labels/' . (string) $barcode .'/pdf';
+		$url = '/labels/' . (string) $barcode . '/pdf';
 
 		if($labelFormat !== null) $url .= '?labelFormat=' . $labelFormat;
 
@@ -814,11 +825,14 @@ class bPost
 		// validate
 		if($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats))
 		{
-			throw new bPostException('Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' . implode(', ', $allowedLabelFormats));
+			throw new bPostException(
+				'Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' .
+				implode(', ', $allowedLabelFormats) . '.'
+			);
 		}
 
 		// build url
-		$url = '/orders/' . (string) $reference .'/pdf';
+		$url = '/orders/' . (string) $reference . '/pdf';
 
 		if($labelFormat !== null) $url .= '?labelFormat=' . $labelFormat;
 
@@ -876,7 +890,7 @@ class bPostOrder
 	/**
 	 * Create an order
 	 *
-	 * @param $reference
+	 * @param string $reference
 	 */
 	public function __construct($reference)
 	{
@@ -969,7 +983,7 @@ class bPostOrder
 	/**
 	 * Set teh cost center, will be used on your invoice and allows you to attribute different cost centers
 	 *
-	 * @param $value
+	 * @param string $value
 	 */
 	public function setCostCenter($costCenter)
 	{
@@ -1000,7 +1014,7 @@ class bPostOrder
 	 * Set the order reference, a unique id used in your web-shop.
 	 * If the value already exists it will overwrite the current info.
 	 *
-	 * @param $value
+	 * @param string $value
 	 */
 	public function setReference($reference)
 	{
@@ -1010,7 +1024,7 @@ class bPostOrder
 	/**
 	 * The total price of the order in euro-cents (excluding shipping)
 	 *
-	 * @param $value
+	 * @param int $value
 	 */
 	public function setTotal($total)
 	{
@@ -1029,7 +1043,9 @@ class bPostOrder
 		// validate
 		if(!in_array($status, $allowedStatuses))
 		{
-			throw new bPostException('Invalid status (' . $status . '), possible values are: ' . implode(', ', $allowedStatuses));
+			throw new bPostException(
+				'Invalid status (' . $status . '), possible values are: ' . implode(', ', $allowedStatuses) . '.'
+			);
 		}
 
 		$this->status = $status;
@@ -1038,6 +1054,7 @@ class bPostOrder
 	/**
 	 * Return the object as an array for usage in the XML
 	 *
+	 * @param string accountId
 	 * @return array
 	 */
 	public function toXMLArray($accountId)
@@ -1089,8 +1106,8 @@ class bPostCustomer
 	/**
 	 * Create a customer
 	 *
-	 * @param $firstName
-	 * @param $lastName
+	 * @param string $firstName
+	 * @param string $lastName
 	 */
 	public function __construct($firstName, $lastName)
 	{
@@ -1165,7 +1182,7 @@ class bPostCustomer
 	 */
 	public function setEmail($email)
 	{
-		if(mb_strlen($email) > 50) throw new bPostException('Invalid length for email, maximum is 50');
+		if(mb_strlen($email) > 50) throw new bPostException('Invalid length for email, maximum is 50.');
 		$this->email = $email;
 	}
 
@@ -1176,7 +1193,7 @@ class bPostCustomer
 	 */
 	public function setFirstName($firstName)
 	{
-		if(mb_strlen($firstName) > 40) throw new bPostException('Invalid length for firstName, maximum is 40');
+		if(mb_strlen($firstName) > 40) throw new bPostException('Invalid length for firstName, maximum is 40.');
 		$this->firstName = $firstName;
 	}
 
@@ -1187,7 +1204,7 @@ class bPostCustomer
 	 */
 	public function setLastName($lastName)
 	{
-		if(mb_strlen($lastName) > 40) throw new bPostException('Invalid length for lastName, maximum is 40');
+		if(mb_strlen($lastName) > 40) throw new bPostException('Invalid length for lastName, maximum is 40.');
 		$this->lastName = $lastName;
 	}
 
@@ -1198,7 +1215,7 @@ class bPostCustomer
 	 */
 	public function setPhoneNumber($phoneNumber)
 	{
-		if(mb_strlen($phoneNumber) > 20) throw new bPostException('Invalid length for phone number, maximum is 20');
+		if(mb_strlen($phoneNumber) > 20) throw new bPostException('Invalid length for phone number, maximum is 20.');
 		$this->phoneNumber = $phoneNumber;
 	}
 
@@ -1237,11 +1254,11 @@ class bPostAddress
 	/**
 	 * Create a Address object
 	 *
-	 * @param $streetName
-	 * @param $number
-	 * @param $postalCode
-	 * @param $locality
-	 * @param string $countryCode
+	 * @param string $streetName
+	 * @param string $number
+	 * @param string $postalCode
+	 * @param string $locality
+	 * @param string[optional] $countryCode
 	 */
 	public function __construct($streetName, $number, $postalCode, $locality, $countryCode = 'BE')
 	{
@@ -1319,7 +1336,7 @@ class bPostAddress
 	 */
 	public function setBox($box)
 	{
-		if(mb_strlen($box) > 8) throw new bPostException('Invalid length for box, maximum is 8');
+		if(mb_strlen($box) > 8) throw new bPostException('Invalid length for box, maximum is 8.');
 		$this->box = $box;
 	}
 
@@ -1340,7 +1357,7 @@ class bPostAddress
 	 */
 	public function setLocality($locality)
 	{
-		if(mb_strlen($locality) > 40) throw new bPostException('Invalid length for locality, maximum is 40');
+		if(mb_strlen($locality) > 40) throw new bPostException('Invalid length for locality, maximum is 40.');
 		$this->locality = $locality;
 	}
 
@@ -1351,7 +1368,7 @@ class bPostAddress
 	 */
 	public function setNumber($number)
 	{
-		if(mb_strlen($number) > 8) throw new bPostException('Invalid length for number, maximum is 8');
+		if(mb_strlen($number) > 8) throw new bPostException('Invalid length for number, maximum is 8.');
 		$this->number = $number;
 	}
 
@@ -1362,7 +1379,7 @@ class bPostAddress
 	 */
 	public function setPostcalCode($postcalCode)
 	{
-		if(mb_strlen($postcalCode) > 8) throw new bPostException('Invalid length for postalCode, maximum is 8');
+		if(mb_strlen($postcalCode) > 8) throw new bPostException('Invalid length for postalCode, maximum is 8.');
 		$this->postcalCode = $postcalCode;
 	}
 
@@ -1372,7 +1389,7 @@ class bPostAddress
 	 */
 	public function setStreetName($streetName)
 	{
-		if(mb_strlen($streetName) > 40) throw new bPostException('Invalid length for streetName, maximum is 40');
+		if(mb_strlen($streetName) > 40) throw new bPostException('Invalid length for streetName, maximum is 40.');
 		$this->streetName = $streetName;
 	}
 
@@ -1441,13 +1458,23 @@ class bPostDeliveryMethod
  */
 class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 {
+	// @todo	implement me correctly
+
 	private $normal, $signed, $insured, $dropAtTheDoor;
 
+	/**
+	 * Default constructor
+	 */
 	public function __construct()
 	{
 		$this->setNormal();
 	}
 
+	/**
+	 * Set normal
+	 *
+	 * @param array $options
+	 */
 	public function setNormal(array $options = null)
 	{
 		if($options !== null)
@@ -1536,7 +1563,7 @@ class bPostNotification
 	/**
 	 * Create a notification
 	 *
-	 * @param $language
+	 * @param string $language
 	 * @param string[otpional] $emailAddress
 	 * @param string[otpional] $mobilePhone
 	 * @param string[otpional] $fixedPhone
@@ -1550,7 +1577,7 @@ class bPostNotification
 			$fixedPhone !== null && $mobilePhone !== null
 		)
 		{
-			throw new bPostException('You can\'t specify multiple notifications');
+			throw new bPostException('You can\'t specify multiple notifications.');
 		}
 
 		$this->setLanguage($language);
@@ -1606,7 +1633,7 @@ class bPostNotification
 	 */
 	public function setEmailAddress($emailAddress)
 	{
-		if(mb_strlen($emailAddress) > 50) throw new bPostException('Invalid length for emailAddress, maximum is 50');
+		if(mb_strlen($emailAddress) > 50) throw new bPostException('Invalid length for emailAddress, maximum is 50.');
 		$this->emailAddress = $emailAddress;
 	}
 
@@ -1617,7 +1644,7 @@ class bPostNotification
 	 */
 	public function setFixedPhone($fixedPhone)
 	{
-		if(mb_strlen($fixedPhone) > 20) throw new bPostException('Invalid length for fixedPhone, maximum is 20');
+		if(mb_strlen($fixedPhone) > 20) throw new bPostException('Invalid length for fixedPhone, maximum is 20.');
 		$this->fixedPhone = $fixedPhone;
 	}
 
@@ -1633,7 +1660,10 @@ class bPostNotification
 		// validate
 		if(!in_array($language, $allowedLanguages))
 		{
-			throw new bPostException('Invalid value for language (' . $language . '), allowed values are: '. implode(',  ', $allowedLanguages));
+			throw new bPostException(
+				'Invalid value for language (' . $language . '), allowed values are: ' .
+				implode(',  ', $allowedLanguages) . '.'
+			);
 		}
 		$this->language = $language;
 	}
@@ -1645,7 +1675,7 @@ class bPostNotification
 	 */
 	public function setMobilePhone($mobilePhone)
 	{
-		if(mb_strlen($mobilePhone) > 20) throw new bPostException('Invalid length for mobilePhone, maximum is 20');
+		if(mb_strlen($mobilePhone) > 20) throw new bPostException('Invalid length for mobilePhone, maximum is 20.');
 		$this->mobilePhone = $mobilePhone;
 	}
 

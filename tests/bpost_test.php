@@ -131,7 +131,6 @@ class bPostTest extends PHPUnit_Framework_TestCase
 		$this->assertTrue($var);
 	}
 
-
 	/**
 	 * Tests bpost->createNationalLabel
 	 */
