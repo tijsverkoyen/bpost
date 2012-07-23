@@ -546,6 +546,18 @@ class bPost
 
 		$order = new bPostOrder($return['orderReference']);
 
+		if(self::DEBUG)
+		{
+			foreach($return as $key => $value)
+			{
+				if(!in_array($key, array('status', 'costCenter', 'orderLine', 'customer', 'deliveryMethod', 'totalPrice')))
+				{
+					var_dump($return);
+					exit;
+				}
+			}
+		}
+
 		if(isset($return['status'])) $order->setStatus($return['status']);
 		if(isset($return['costCenter'])) $order->setCostCenter($return['costCenter']);
 
@@ -619,7 +631,12 @@ class bPost
 				$order->setDeliveryMethod($deliveryMethod);
 			}
 
-			// @todo	implemented other types
+			else
+			{
+				// @todo	implemented other types
+				var_dump($return);
+				exit;
+			}
 		}
 		if(isset($return['totalPrice'])) $order->setTotal($return['totalPrice']);
 
