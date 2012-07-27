@@ -448,6 +448,16 @@ class bPost
 	}
 
 	/**
+	 * Get the account id
+	 *
+	 * @return string
+	 */
+	public function getAccountId()
+	{
+		return $this->accountId;
+	}
+
+	/**
 	 * Generate the secret string for the Authorization header
 	 *
 	 * @return string
@@ -455,6 +465,16 @@ class bPost
 	private function getAuthorizationHeader()
 	{
 		return base64_encode($this->accountId . ':' . $this->passphrase);
+	}
+
+	/**
+	 * Get the passphrase
+	 *
+	 * @return string
+	 */
+	public function getPassphrase()
+	{
+		return $this->passphrase;
 	}
 
 	/**
