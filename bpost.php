@@ -50,11 +50,11 @@ class bPost
 	private $curl;
 
 	/**
-	 * The passphrase
+	 * The passPhrase
 	 *
 	 * @var string
 	 */
-	private $passphrase;
+	private $passPhrase;
 
 	/**
 	 * The port to use.
@@ -82,12 +82,12 @@ class bPost
 	 * Create bPost instance
 	 *
 	 * @param string $accountId
-	 * @param string $passphrase
+	 * @param string $passPhrase
 	 */
-	public function __construct($accountId, $passphrase)
+	public function __construct($accountId, $passPhrase)
 	{
 		$this->accountId = (string) $accountId;
-		$this->passphrase = (string) $passphrase;
+		$this->passPhrase = (string) $passPhrase;
 	}
 
 	/**
@@ -464,17 +464,17 @@ class bPost
 	 */
 	private function getAuthorizationHeader()
 	{
-		return base64_encode($this->accountId . ':' . $this->passphrase);
+		return base64_encode($this->accountId . ':' . $this->passPhrase);
 	}
 
 	/**
-	 * Get the passphrase
+	 * Get the passPhrase
 	 *
 	 * @return string
 	 */
-	public function getPassphrase()
+	public function getPassPhrase()
 	{
-		return $this->passphrase;
+		return $this->passPhrase;
 	}
 
 	/**
@@ -926,7 +926,7 @@ class bPost
 	 * Create an international label
 	 *
 	 * @param string $reference									Order reference: unique ID used in your web shop to assign to an order.
-	 * @param array of bPostInternationalLabelInfo $labelInfo	For each label an object should be present
+	 * @param array $labelInfo	For each label an object should be present
 	 * @param bool[optional] $returnLabels						Should the labels be included?
 	 * @return array
 	 */
@@ -1000,7 +1000,14 @@ class bPost
 		return $return['entry'];
 	}
 
-	public function createOrderAndInternationalLabel(array $labelInfo, $order)
+	/**
+	 * Create an order and an international label
+	 *
+	 * @param array $labelInfo		The label info
+	 * @param bpostOrder $order		The order
+	 * @return array
+	 */
+	public function createOrderAndInternationalLabel(array $labelInfo, bPostOrder $order)
 	{
 		// build url
 		$url = '/orderAndLabels';
@@ -1261,7 +1268,7 @@ class bPostOrder
 	/**
 	 * Set teh cost center, will be used on your invoice and allows you to attribute different cost centers
 	 *
-	 * @param string $value
+	 * @param string $costCenter
 	 */
 	public function setCostCenter($costCenter)
 	{
@@ -1271,7 +1278,7 @@ class bPostOrder
 	/**
 	 * Set the customer
 	 *
-	 * @param bPostCustomer $value
+	 * @param bPostCustomer $customer
 	 */
 	public function setCustomer(bPostCustomer $customer)
 	{
@@ -1281,7 +1288,7 @@ class bPostOrder
 	/**
 	 * Set the delivery method
 	 *
-	 * @param bPostDeliveryMethod $value
+	 * @param bPostDeliveryMethod $deliveryMethod
 	 */
 	public function setDeliveryMethod(bPostDeliveryMethod $deliveryMethod)
 	{
@@ -1292,7 +1299,7 @@ class bPostOrder
 	 * Set the order reference, a unique id used in your web-shop.
 	 * If the value already exists it will overwrite the current info.
 	 *
-	 * @param string $value
+	 * @param string $reference
 	 */
 	public function setReference($reference)
 	{
@@ -1302,7 +1309,7 @@ class bPostOrder
 	/**
 	 * Set the order status
 	 *
-	 * @param string $value		Possible values are OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD.
+	 * @param string $status	Possible values are OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD.
 	 */
 	public function setStatus($status)
 	{
@@ -1322,7 +1329,7 @@ class bPostOrder
 	/**
 	 * The total price of the order in euro-cents (excluding shipping)
 	 *
-	 * @param int $value
+	 * @param int $total
 	 */
 	public function setTotal($total)
 	{
@@ -1332,7 +1339,7 @@ class bPostOrder
 	/**
 	 * Return the object as an array for usage in the XML
 	 *
-	 * @param string accountId
+	 * @param string $accountId
 	 * @return array
 	 */
 	public function toXMLArray($accountId)
@@ -1736,7 +1743,7 @@ class bPostDeliveryMethod
  */
 class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 {
-	private $normal, $signed, $insured;
+	private $normal, $insured;
 
 	/**
 	 * @var bool
@@ -1853,7 +1860,7 @@ class bPostDeliveryMethodAtShop extends bPostDeliveryMethod
 	/**
 	 * Set the options
 	 *
-	 * @param array $options
+	 * @param bPostNotification $notification
 	 */
 	public function setInfoDistributed(bPostNotification $notification)
 	{
@@ -1974,6 +1981,11 @@ class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
 		$this->memberId = $memberId;
 	}
 
+	/**
+	 * Set signature
+	 *
+	 * @param bool[optional] $isPlus
+	 */
 	public function setSignature($isPlus = false)
 	{
 		$this->signature = (bool) $isPlus;
@@ -2347,7 +2359,7 @@ class bPostNotification
 	/**
 	 * Generic info
 	 *
-	 * @var strings
+	 * @var string
 	 */
 	private $emailAddress, $mobilePhone, $fixedPhone, $language;
 
@@ -2380,7 +2392,7 @@ class bPostNotification
 	/**
 	 * Get the email address
 	 *
-	 * @return strings
+	 * @return string
 	 */
 	public function getEmailAddress()
 	{
@@ -2390,7 +2402,7 @@ class bPostNotification
 	/**
 	 * Get the fixed phone
 	 *
-	 * @return strings
+	 * @return string
 	 */
 	public function getFixedPhone()
 	{
@@ -2400,7 +2412,7 @@ class bPostNotification
 	/**
 	 * Get the language
 	 *
-	 * @return strings
+	 * @return string
 	 */
 	public function getLanguage()
 	{
@@ -2410,7 +2422,7 @@ class bPostNotification
 	/**
 	 * Get the mobile phone
 	 *
-	 * @return strings
+	 * @return string
 	 */
 	public function getMobilePhone()
 	{
@@ -2420,7 +2432,7 @@ class bPostNotification
 	/**
 	 * Set the email address
 	 *
-	 * @param strings $emailAddress
+	 * @param string $emailAddress
 	 */
 	public function setEmailAddress($emailAddress)
 	{
@@ -2431,7 +2443,7 @@ class bPostNotification
 	/**
 	 * Set the fixed phone
 	 *
-	 * @param strings $fixedPhone
+	 * @param string $fixedPhone
 	 */
 	public function setFixedPhone($fixedPhone)
 	{
@@ -2442,7 +2454,7 @@ class bPostNotification
 	/**
 	 * Set the language
 	 *
-	 * @param strings $language		Allowed values are EN, NL, FR, DE.
+	 * @param string $language		Allowed values are EN, NL, FR, DE.
 	 */
 	public function setLanguage($language)
 	{
@@ -2462,7 +2474,7 @@ class bPostNotification
 	/**
 	 * Set the mobile phone
 	 *
-	 * @param strings $mobilePhone
+	 * @param string $mobilePhone
 	 */
 	public function setMobilePhone($mobilePhone)
 	{
