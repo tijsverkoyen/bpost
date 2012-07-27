@@ -572,9 +572,15 @@ class bPost
 		$return = self::decodeResponse($this->doCall($url));
 
 		// for some reason the order-data is wrapped in an order tag sometimes.
-		if(isset($return['order'])) $return = $return['order'];
+		if(isset($return['order']))
+		{
+			if(isset($return['barcode'])) $barcodes = $return['barcode'];
+			$return = $return['order'];
+		}
 
 		$order = new bPostOrder($return['orderReference']);
+
+		if(isset($barcodes)) $order->setBarcodes($barcodes);
 
 		if(isset($return['status'])) $order->setStatus($return['status']);
 		if(isset($return['costCenter'])) $order->setCostCenter($return['costCenter']);
@@ -1102,7 +1108,7 @@ class bPostOrder
 	 * The order lines
 	 * @var array
 	 */
-	private $lines;
+	private $lines, $barcodes;
 
 	/**
 	 * The customer
@@ -1147,6 +1153,16 @@ class bPostOrder
 			'text' => (string) $text,
 			'nbOfItems' => (int) $numberOfItems
 		);
+	}
+
+	/**
+	 * Get the barcodes
+	 *
+	 * @return array
+	 */
+	public function getBarcodes()
+	{
+		return $this->barcodes;
 	}
 
 	/**
@@ -1216,6 +1232,16 @@ class bPostOrder
 	public function getTotal()
 	{
 		return $this->total;
+	}
+
+	/**
+	 * Set the barcodes
+	 *
+	 * @param array $barcodes
+	 */
+	public function setBarcodes(array $barcodes)
+	{
+		$this->barcodes = $barcodes;
 	}
 
 	/**
