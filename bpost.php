@@ -689,25 +689,36 @@ class bPost
 					$deliveryMethod->setInsurance((int) $return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value']);
 				}
 
-				$language = $return['deliveryMethod']['atShop']['infoDistributed']['@attributes']['language'];
+				$language = $return['deliveryMethod']['atShop']['infoPugo']['@attributes']['language'];
 				$emailAddress = null;
 				$mobilePhone = null;
 				$fixedPhone = null;
+				$pugoId = null;
+				$pugoName = null;
 
-				if(isset($return['deliveryMethod']['atShop']['infoDistributed'][0]['emailAddress']))
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress']))
 				{
-					$emailAddress = $return['deliveryMethod']['atShop']['infoDistributed'][0]['emailAddress'];
+					$emailAddress = $return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'];
 				}
-				if(isset($return['deliveryMethod']['atShop']['infoDistributed'][0]['mobilePhone']))
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone']))
 				{
-					$mobilePhone = $return['deliveryMethod']['atShop']['infoDistributed'][0]['mobilePhone'];
+					$mobilePhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'];
 				}
-				if(isset($return['deliveryMethod']['atShop']['infoDistributed'][0]['fixedPhone']))
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone']))
 				{
-					$fixedPhone = $return['deliveryMethod']['atShop']['infoDistributed'][0]['fixedPhone'];
+					$fixedPhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'];
+				}
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId']))
+				{
+					$pugoId = $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'];
+				}
+				if(isset($return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName']))
+				{
+					$pugoName = $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'];
 				}
 
-				$deliveryMethod->setInfoDistributed(
+				$deliveryMethod->setInfoPugo(
+					$pugoId, $pugoName,
 					new bPostNotification($language, $emailAddress, $mobilePhone, $fixedPhone)
 				);
 
@@ -718,9 +729,12 @@ class bPost
 			elseif(isset($return['deliveryMethod']['at24-7']))
 			{
 				$deliveryMethod = new bPostDeliveryMethodAt247(
-					$return['deliveryMethod']['at24-7']['infoParcelsDepot']['infoParcelsDepotId'],
-					$return['deliveryMethod']['at24-7']['memberId']
+					$return['deliveryMethod']['at24-7']['infoParcelsDepot']['parcelsDepotId']
 				);
+				if(isset($return['deliveryMethod']['at24-7']['memberId']))
+				{
+					$deliveryMethod->setMemberId($return['deliveryMethod']['at24-7']['memberId']);
+				}
 				if(isset($return['deliveryMethod']['at24-7']['signature']['signature']))
 				{
 					$deliveryMethod->setSignature();
@@ -1904,12 +1918,10 @@ class bPostDeliveryMethodAt247 extends bPostDeliveryMethod
 	 * Create an at24-7 object
 	 *
 	 * @param string $parcelsDepotId
-	 * @param string $memberId
 	 */
-	public function __construct($parcelsDepotId, $memberId)
+	public function __construct($parcelsDepotId)
 	{
-		$this->setInfoParcesDepot($parcelsDepotId);
-		$this->setMemberId($memberId);
+		$this->setInfoParcelsDepot($parcelsDepotId);
 	}
 
 	/**
