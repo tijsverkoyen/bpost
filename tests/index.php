@@ -8,11 +8,11 @@ require_once '../bpost.php';
 $bpost = new bPost(ACCOUNT_ID, PASSPHRASE);
 
 // create notification
-$option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
+//$option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
 
 // create delivery method at home
-$deliveryMethod = new bPostDeliveryMethodAtHome();
-$deliveryMethod->setNormal();
+//$deliveryMethod = new bPostDeliveryMethodAtHome();
+//$deliveryMethod->setNormal();
 //$deliveryMethod->setNormal(
 //	array(
 //		'infoDistributed' => $option,
@@ -43,24 +43,24 @@ $deliveryMethod->setNormal();
 //$deliveryMethod = new bPostDeliveryMethodIntExpress();
 
 // create address
-$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
+//$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
 //$deliveryAddress = new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE');
 
 // create customer
-$customer = new bPostCustomer('Tijs', 'Verkoyen');
-$customer->setDeliveryAddress($deliveryAddress);
+//$customer = new bPostCustomer('Tijs', 'Verkoyen');
+//$customer->setDeliveryAddress($deliveryAddress);
 
 $orderId = time();
 
 // create order
-$order = new bPostOrder($orderId);
-$order->setStatus('OPEN');
-$order->setCostCenter('Vitashop');
-$order->addOrderLine('Item 1', 10);
-$order->addOrderLine('Item 2', 20);
-$order->setCustomer($customer);
-$order->setDeliveryMethod($deliveryMethod);
-$order->setTotal(100);
+//$order = new bPostOrder($orderId);
+//$order->setStatus('OPEN');
+//$order->setCostCenter('Vitashop');
+//$order->addOrderLine('Item 1', 10);
+//$order->addOrderLine('Item 2', 20);
+//$order->setCustomer($customer);
+//$order->setDeliveryMethod($deliveryMethod);
+//$order->setTotal(100);
 
 //$labelInfo1 = new bPostInternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
 //$labelInfo2 = new bPostInternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
@@ -80,13 +80,5 @@ $order->setTotal(100);
 //echo base64_decode($response);
 //exit;
 
-// output (Spoon::dump())
-ob_start();
+// output
 var_dump($response);
-$output = ob_get_clean();
-
-// cleanup the output
-$output = preg_replace('/\]\=\>\n(\s+)/m', '] => ', $output);
-
-// print
-echo '<pre>' . htmlspecialchars($output, ENT_QUOTES, 'UTF-8') . '</pre>';
