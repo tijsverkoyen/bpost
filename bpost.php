@@ -170,12 +170,8 @@ class bPost
 			// boolean
 			if(is_bool($input)) $element->appendChild(new DOMText(($input) ? 'true' : 'false'));
 
-			// integer
-			elseif(is_int($input)) $element->appendChild(new DOMText($input));
-
-			// floats
-			elseif(is_double($input)) $element->appendChild(new DOMText($input));
-			elseif(is_float($input)) $element->appendChild(new DOMText($input));
+			// is_numeric
+			elseif(is_numeric($input)) $element->appendChild(new DOMText($input));
 
 			// a string?
 			elseif(is_string($input))
