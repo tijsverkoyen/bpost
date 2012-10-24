@@ -1,71 +1,83 @@
 <?php
 
-// require
+//require
+require_once '../../../autoload.php';
 require_once 'config.php';
-require_once '../bpost.php';
+
+use \TijsVerkoyen\Bpost\Bpost;
+use \TijsVerkoyen\Bpost\Notification;
+use \TijsVerkoyen\Bpost\DeliveryMethodAtHome;
+use \TijsVerkoyen\Bpost\DeliveryMethodAtShop;
+use \TijsVerkoyen\Bpost\DeliveryMethodAt247;
+use \TijsVerkoyen\Bpost\DeliveryMethodIntBusiness;
+use \TijsVerkoyen\Bpost\DeliveryMethodIntExpress;
+use \TijsVerkoyen\Bpost\Address;
+use \TijsVerkoyen\Bpost\Customer;
+use \TijsVerkoyen\Bpost\Order;
+use \TijsVerkoyen\Bpost\InternationalLabelInfo;
 
 // create instance
-$bpost = new bPost(ACCOUNT_ID, PASSPHRASE);
+$bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 
 // create notification
-//$option =  new bPostNotification('NL', 'tijs@verkoyen.eu');
+$option =  new Notification('NL', 'tijs@verkoyen.eu');
 
 // create delivery method at home
-//$deliveryMethod = new bPostDeliveryMethodAtHome();
-//$deliveryMethod->setNormal();
-//$deliveryMethod->setNormal(
-//	array(
-//		'infoDistributed' => $option,
-//		'infoNextDay' => $option,
-//		'infoReminder' => $option,
-//		'automaticSecondPresentation' => '',
-//	)
-//);
-//$deliveryMethod->setDropAtTheDoor();
-//$deliveryMethod->setInsurance(10);
+$deliveryMethod = new DeliveryMethodAtHome();
+$deliveryMethod->setNormal();
+$deliveryMethod->setNormal(
+	array(
+		'infoDistributed' => $option,
+		'infoNextDay' => $option,
+		'infoReminder' => $option,
+		'automaticSecondPresentation' => '',
+	)
+);
+$deliveryMethod->setDropAtTheDoor();
+$deliveryMethod->setInsurance(10);
 
 // create delivery method at shop
-//$deliveryMethod = new bPostDeliveryMethodAtShop();
-//$deliveryMethod->setInfoPugo(1, '1', $option);
-//$deliveryMethod->setInfoDistributed(new bPostNotification('NL', 'foo@bar.com'));
-//$deliveryMethod->setInsurance(10);
+$deliveryMethod = new DeliveryMethodAtShop();
+$deliveryMethod->setInfoPugo(1, '1', $option);
+$deliveryMethod->setInfoDistributed(new Notification('NL', 'foo@bar.com'));
+$deliveryMethod->setInsurance(10);
 
 // create delivery method at 24-7
-//$deliveryMethod = new bPostDeliveryMethodAt247('014473', '123456789');
-//$deliveryMethod->setInsurance(10);
-//$deliveryMethod->setSignature(true);
+$deliveryMethod = new DeliveryMethodAt247('014473', '123456789');
+$deliveryMethod->setInsurance(10);
+$deliveryMethod->setSignature(true);
 
 // create delivery method int business
-//$deliveryMethod = new bPostDeliveryMethodIntBusiness();
-//$deliveryMethod->setInsurance(10);
+$deliveryMethod = new DeliveryMethodIntBusiness();
+$deliveryMethod->setInsurance(10);
 
 // create delivery method int express
-//$deliveryMethod = new bPostDeliveryMethodIntExpress();
+$deliveryMethod = new DeliveryMethodIntExpress();
 
 // create address
-//$deliveryAddress = new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge');
-//$deliveryAddress = new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE');
+$deliveryAddress = new Address('Kerkstraat', '108', '9050', 'Gentbrugge');
+$deliveryAddress = new Address('Dieselstr.', '24', '85748', 'Garching', 'DE');
 
 // create customer
-//$customer = new bPostCustomer('Tijs', 'Verkoyen');
-//$customer->setDeliveryAddress($deliveryAddress);
+$customer = new Customer('Tijs', 'Verkoyen');
+$customer->setDeliveryAddress($deliveryAddress);
 
 $orderId = time();
 
 // create order
-//$order = new bPostOrder($orderId);
-//$order->setStatus('OPEN');
-//$order->setCostCenter('Vitashop');
-//$order->addOrderLine('Item 1', 10);
-//$order->addOrderLine('Item 2', 20);
-//$order->setCustomer($customer);
-//$order->setDeliveryMethod($deliveryMethod);
-//$order->setTotal(100);
+$order = new Order($orderId);
+$order->setStatus('OPEN');
+$order->setCostCenter('Vitashop');
+$order->addOrderLine('Item 1', 10);
+$order->addOrderLine('Item 2', 20);
+$order->setCustomer($customer);
+$order->setDeliveryMethod($deliveryMethod);
+$order->setTotal(100);
 
-//$labelInfo1 = new bPostInternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
-//$labelInfo2 = new bPostInternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
+$labelInfo1 = new InternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
+$labelInfo2 = new InternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
 
-//$response = $bpost->createOrReplaceOrder($order);
+$response = $bpost->createOrReplaceOrder($order);
 //$response = $bpost->fetchOrder($orderId);
 //$response = $bpost->modifyOrderStatus(660, 'OPEN');
 //$response = $bpost->createNationalLabel($orderId, 1);
