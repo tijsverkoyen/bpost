@@ -60,4 +60,3 @@ class DeliveryMethodIntBusiness extends DeliveryMethod
         return $data;
     }
 }
-

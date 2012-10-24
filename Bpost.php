@@ -401,7 +401,7 @@ class Bpost
 
                     // message
                     $message = (string) $xml->message;
-                    $code = (string) $xml->code;
+                    $code = (int) $xml->code;
 
                     // throw exception
                     throw new Exception($message, $code);
@@ -928,7 +928,7 @@ class Bpost
      * Create an order and the labels
      *
      * @param  Order $order
-     * @param  int        $amount
+     * @param  int   $amount
      * @return array
      */
     public function createOrderAndNationalLabel(Order $order, $amount)
@@ -959,7 +959,7 @@ class Bpost
     /**
      * Create an order and an international label
      *
-     * @param  array      $labelInfo The label info
+     * @param  array $labelInfo The label info
      * @param  Order $order     The order
      * @return array
      */
@@ -1062,8 +1062,3 @@ class Bpost
         return (string) $this->doCall($url, null, $headers);
     }
 }
-
-
-
-
-

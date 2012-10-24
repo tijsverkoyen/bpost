@@ -26,12 +26,12 @@ $option =  new Notification('NL', 'tijs@verkoyen.eu');
 $deliveryMethod = new DeliveryMethodAtHome();
 $deliveryMethod->setNormal();
 $deliveryMethod->setNormal(
-	array(
-		'infoDistributed' => $option,
-		'infoNextDay' => $option,
-		'infoReminder' => $option,
-		'automaticSecondPresentation' => '',
-	)
+    array(
+        'infoDistributed' => $option,
+        'infoNextDay' => $option,
+        'infoReminder' => $option,
+        'automaticSecondPresentation' => '',
+    )
 );
 $deliveryMethod->setDropAtTheDoor();
 $deliveryMethod->setInsurance(10);
@@ -77,7 +77,7 @@ $order->setTotal(100);
 $labelInfo1 = new InternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
 $labelInfo2 = new InternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
 
-$response = $bpost->createOrReplaceOrder($order);
+//$response = $bpost->createOrReplaceOrder($order);
 //$response = $bpost->fetchOrder($orderId);
 //$response = $bpost->modifyOrderStatus(660, 'OPEN');
 //$response = $bpost->createNationalLabel($orderId, 1);

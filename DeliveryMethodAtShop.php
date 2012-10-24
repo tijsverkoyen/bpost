@@ -48,8 +48,8 @@ class DeliveryMethodAtShop extends DeliveryMethod
     /**
      * Set the Pick Up & Go information
      *
-     * @param string            $id           Id of the Pick Up & Go
-     * @param string            $name         Name of the Pick Up & Go
+     * @param string       $id           Id of the Pick Up & Go
+     * @param string       $name         Name of the Pick Up & Go
      * @param Notification $notification One of the notification tags.
      */
     public function setInfoPugo($id, $name, Notification $notification)

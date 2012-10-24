@@ -253,4 +253,3 @@ class Order
         return $data;
     }
 }
-
