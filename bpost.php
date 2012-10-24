@@ -8,6 +8,9 @@
  * The class is documented in the file itself. If you find any bugs help me out and report them. Reporting can be done by sending an email to php-bpost-bugs[at]verkoyen[dot]eu.
  * If you report a bug, make sure you give me enough information (include your code).
  *
+ * Changelog since 1.0.1
+ * - better errorhandling
+ *
  * Changelog since 1.0.0
  * - added a class to handle the form.
  *
@@ -405,11 +408,39 @@ class bPost
 			if(self::DEBUG)
 			{
 				echo '<pre>';
+				var_dump($options);
 				var_dump(htmlentities($body));
 				var_dump($response);
 				var_dump($headers);
 				var_dump($this);
 				echo '</pre>';
+			}
+
+			if($expectXML)
+			{
+				// convert into XML
+				$xml = simplexml_load_string($response);
+
+				// validate
+				if($xml->getName() == 'businessException')
+				{
+					// internal debugging enabled
+					if(self::DEBUG)
+					{
+						echo '<pre>';
+						var_dump($response);
+						var_dump($headers);
+						var_dump($this);
+						echo '</pre>';
+					}
+
+					// message
+					$message = (string) $xml->message;
+					$code = (string) $xml->code;
+
+					// throw exception
+					throw new bPostException($message, $code);
+				}
 			}
 
 			throw new bPostException('Invalid response.', $headers['http_code']);
@@ -435,8 +466,8 @@ class bPost
 			}
 
 			// message
-			$message = (string) $response->Message;
-			$code = (string) $response->Code;
+			$message = (string) $xml->message;
+			$code = (string) $xml->code;
 
 			// throw exception
 			throw new bPostException($message, $code);
