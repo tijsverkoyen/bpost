@@ -2,9 +2,9 @@
 namespace TijsVerkoyen\Bpost;
 
 /**
- * bPost class
+ * Bpost class
  *
- * This source file can be used to communicate with the bPost Shipping Manager API
+ * This source file can be used to communicate with the Bpost Shipping Manager API
  *
  * The class is documented in the file itself. If you find any bugs help me out and report them. Reporting can be done by sending an email to php-bpost-bugs[at]verkoyen[dot]eu.
  * If you report a bug, make sure you give me enough information (include your code).
@@ -86,7 +86,7 @@ class Bpost
 
     // class methods
     /**
-     * Create bPost instance
+     * Create Bpost instance
      *
      * @param string $accountId
      * @param string $passPhrase
@@ -384,29 +384,29 @@ class Bpost
                 echo '</pre>';
             }
 
-            if ($expectXML) {
-                // convert into XML
-                $xml = simplexml_load_string($response);
+			// convert into XML
+			$xml = @simplexml_load_string($response);
 
-                // validate
-                if ($xml->getName() == 'businessException') {
-                    // internal debugging enabled
-                    if (self::DEBUG) {
-                        echo '<pre>';
-                        var_dump($response);
-                        var_dump($headers);
-                        var_dump($this);
-                        echo '</pre>';
-                    }
+			var_dump($response);
 
-                    // message
-                    $message = (string) $xml->message;
-                    $code = (int) $xml->code;
+			// validate
+			if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')) {
+				// internal debugging enabled
+				if (self::DEBUG) {
+					echo '<pre>';
+					var_dump($response);
+					var_dump($headers);
+					var_dump($this);
+					echo '</pre>';
+				}
 
-                    // throw exception
-                    throw new Exception($message, $code);
-                }
-            }
+				// message
+				$message = (string) $xml->message;
+				$code = isset($xml->code) ? (int) $xml->code : null;
+
+				// throw exception
+				throw new Exception($message, $code);
+			}
 
             throw new Exception('Invalid response.', $headers['http_code']);
         }
@@ -493,13 +493,13 @@ class Bpost
     /**
      * Get the useragent that will be used.
      * Our version will be prepended to yours.
-     * It will look like: "PHP bPost/<version> <your-user-agent>"
+     * It will look like: "PHP Bpost/<version> <your-user-agent>"
      *
      * @return string
      */
     public function getUserAgent()
     {
-        return (string) 'PHP bPost/' . self::VERSION . ' ' . $this->userAgent;
+        return (string) 'PHP Bpost/' . self::VERSION . ' ' . $this->userAgent;
     }
 
     /**
@@ -515,7 +515,7 @@ class Bpost
 
     /**
      * Set the user-agent for you application
-     * It will be appended to ours, the result will look like: "PHP bPost/<version> <your-user-agent>"
+     * It will be appended to ours, the result will look like: "PHP Bpost/<version> <your-user-agent>"
      *
      * @param string $userAgent Your user-agent, it should look like <app-name>/<app-version>.
      */
@@ -529,7 +529,7 @@ class Bpost
     /**
      * Creates a new order. If an order with the same orderReference already exists
      *
-     * @param  bPostOrder $order
+     * @param  Order $order
      * @return bool
      */
     public function createOrReplaceOrder(Order $order)
