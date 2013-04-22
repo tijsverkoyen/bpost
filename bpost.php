@@ -1509,7 +1509,7 @@ class bPostCustomer
 	 */
 	public function setCompany($company)
 	{
-		if(mb_strlen($company) > 40) throw new bPostException('Invalid length for lastName, maximum is 40.');
+		if(mb_strlen($company) > 40) throw new bPostException('Invalid length for company, maximum is 40.');
 		$this->company = $company;
 	}
 
