@@ -1378,7 +1378,7 @@ class bPostCustomer
 	 *
 	 * @var string
 	 */
-	private $firstName, $lastName, $email, $phoneNumber;
+	private $firstName, $lastName, $company, $email, $phoneNumber;
 
 	/**
 	 * The address
@@ -1440,6 +1440,16 @@ class bPostCustomer
 	}
 
 	/**
+	 * Get the company
+	 *
+	 * @return string
+	 */
+	public function getCompany()
+	{
+		return $this->company;
+	}
+
+	/**
 	 * Get the phone number
 	 *
 	 * @return string
@@ -1493,6 +1503,17 @@ class bPostCustomer
 	}
 
 	/**
+	 * Set the company
+	 *
+	 * @param string $lastName
+	 */
+	public function setCompany($company)
+	{
+		if(mb_strlen($company) > 40) throw new bPostException('Invalid length for lastName, maximum is 40.');
+		$this->company = $company;
+	}
+
+	/**
 	 * Set the phone number
 	 *
 	 * @param string $phoneNumber
@@ -1513,6 +1534,7 @@ class bPostCustomer
 		$data = array();
 		if($this->firstName !== null) $data['firstName'] = $this->firstName;
 		if($this->lastName !== null) $data['lastName'] = $this->lastName;
+		if($this->company !== null) $data['company'] = $this->company;
 		if($this->deliveryAddress !== null) $data['deliveryAddress'] = $this->deliveryAddress->toXMLArray();
 		if($this->email !== null) $data['email'] = $this->email;
 		if($this->phoneNumber !== null) $data['phoneNumber'] = $this->phoneNumber;
