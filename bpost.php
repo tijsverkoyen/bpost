@@ -1835,8 +1835,8 @@ class bPostDeliveryMethodAtHome extends bPostDeliveryMethod
 		}
 		if($this->insurance !== null)
 		{
-			if($this->insurance == 0) $data['atHome-7']['insurance']['basicInsurance'] = '';
-			else $data['atHome']['insurance']['additionalInsurance']['@attributes']['value'] = $this->insurance;
+			if($this->insurance == 0) $data['atHome']['insured']['basicInsurance'] = '';
+			else $data['atHome']['insured']['additionalInsurance']['@attributes']['value'] = $this->insurance;
 		}
 		if($this->dropAtTheDoor) $data['atHome']['dropAtTheDoor'] = null;
 
