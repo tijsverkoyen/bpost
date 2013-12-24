@@ -753,7 +753,7 @@ class bPost
 			// intExpress?
 			elseif(isset($return['deliveryMethod']['intExpress']))
 			{
-				$deliveryMethod = new bPostDeliveryMethodIntBusiness();
+				$deliveryMethod = new bPostDeliveryMethodIntExpress();
 
 				if(isset($return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value']))
 				{
