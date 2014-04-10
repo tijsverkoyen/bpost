@@ -1,6 +1,9 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
+use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\Geo6\Poi;
+
 /**
  * Geo6 class
  *
@@ -31,7 +34,7 @@ class Geo6
     const DEBUG = false;
 
     // URL for the api
-    const API_URL = 'http://taxipost.geo6.be/Locator?';
+    const API_URL = 'http://taxipost.geo6.be/Locator';
 
     // current version
     const VERSION = '3';
@@ -40,13 +43,6 @@ class Geo6
      * @var string
      */
     private $appId;
-
-    /**
-     * A cURL instance
-     *
-     * @var resource
-     */
-    private $curl;
 
     /**
      * @var string
@@ -79,25 +75,65 @@ class Geo6
     }
 
     /**
-     * Destructor
-     */
-    public function __destruct()
-    {
-        if ($this->curl !== null) {
-            curl_close($this->curl);
-            $this->curl = null;
-        }
-    }
-
-    /**
      * Make the real call
      *
      * @param string     $method
      * @param array|null $parameters
+     * @return  SimpleXMLElement
      */
     private function doCall($method, $parameters = null)
     {
-        // @todo implement me
+        // add credentials
+        $parameters['Function'] = $method;
+        $parameters['Partner'] = $this->getPartner();
+        $parameters['AppId'] = $this->getAppId();
+        $parameters['Format'] = 'xml';
+
+        $url = self::API_URL . '?' . http_build_query($parameters);
+
+        $options[CURLOPT_URL] = $url;
+        $options[CURLOPT_USERAGENT] = $this->getUserAgent();
+        $options[CURLOPT_FOLLOWLOCATION] = true;
+        $options[CURLOPT_SSL_VERIFYPEER] = false;
+        $options[CURLOPT_SSL_VERIFYHOST] = false;
+        $options[CURLOPT_RETURNTRANSFER] = true;
+        $options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
+
+        $curl = curl_init();
+
+        // set options
+        curl_setopt_array($curl, $options);
+
+        // execute
+        $response = curl_exec($curl);
+        $errorNumber = curl_errno($curl);
+        $errorMessage = curl_error($curl);
+
+        // error?
+        if ($errorNumber != '') {
+            throw new Exception($errorMessage, $errorNumber);
+        }
+
+        // we expect XML so decode it
+        $xml = @simplexml_load_string($response);
+
+        var_dump($response);
+
+        // validate json
+        if ($xml === false || (isset($xml->head) && isset($xml->body))) {
+            // internal debugging enabled
+            if (self::DEBUG) {
+                echo '<pre>';
+                var_dump($response);
+                var_dump($this);
+                echo '</pre>';
+            }
+
+            throw new Exception('Invalid XML-response');
+        }
+
+        // return
+        return $xml;
     }
 
     /**
