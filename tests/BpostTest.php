@@ -1,17 +1,26 @@
 <?php
 
-require_once 'config.php';
-require_once '../Bpost.php';
+namespace TijsVerkoyen\Bpost\tests;
 
-require_once 'PHPUnit/Framework/TestCase.php';
+require_once __DIR__ . '/../../../autoload.php';
+require_once 'config.php';
+
+use \TijsVerkoyen\Bpost\Bpost;
+use \TijsVerkoyen\Bpost\DeliveryMethodAtHome;
+use \TijsVerkoyen\Bpost\DeliveryMethodIntBusiness;
+use \TijsVerkoyen\Bpost\DeliveryMethodIntExpress;
+use \TijsVerkoyen\Bpost\Address;
+use \TijsVerkoyen\Bpost\Customer;
+use \TijsVerkoyen\Bpost\Order;
+use \TijsVerkoyen\Bpost\InternationalLabelInfo;
 
 /**
  * test case.
  */
-class bPostTest extends PHPUnit_Framework_TestCase
+class BpostTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @var bPost
+     * @var Bpost
      */
     private $bpost;
 
@@ -21,7 +30,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
     protected function setUp()
     {
         parent::setUp();
-        $this->bpost = new bPost(ACCOUNT_ID, PASSPHRASE);
+        $this->bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
     }
 
     /**
@@ -34,7 +43,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests bPost->getTimeOut()
+     * Tests Bpost->getTimeOut()
      */
     public function testGetTimeOut()
     {
@@ -43,12 +52,12 @@ class bPostTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * Tests bPost->getUserAgent()
+     * Tests Bpost->getUserAgent()
      */
     public function testGetUserAgent()
     {
         $this->bpost->setUserAgent('testing/1.0.0');
-        $this->assertEquals('PHP bPost/' . bPost::VERSION . ' testing/1.0.0', $this->bpost->getUserAgent());
+        $this->assertEquals('PHP Bpost/' . Bpost::VERSION . ' testing/1.0.0', $this->bpost->getUserAgent());
     }
 
     /**
@@ -58,13 +67,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
         $order->addOrderLine('Item 1', 10);
@@ -87,13 +96,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
         $order->addOrderLine('Item 1', 10);
@@ -106,7 +115,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
 
         $var = $this->bpost->fetchOrder($orderId);
 
-        $this->assertInstanceOf('bPostOrder', $var);
+        $this->assertInstanceOf('Order', $var);
         $this->assertEquals($orderId, $var->getReference());
 
         $this->bpost->modifyOrderStatus($orderId, 'CANCELLED');
@@ -119,13 +128,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
 
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
@@ -149,13 +158,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
         $order->addOrderLine('Item 1', 10);
@@ -182,13 +191,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Dieselstr.', '24', '85748', 'Garching', 'DE'));
 
-        $deliveryMethod = new bPostDeliveryMethodIntBusiness();
+        $deliveryMethod = new DeliveryMethodIntBusiness();
         $deliveryMethod->setInsurance(10);
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
 
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
@@ -200,7 +209,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
 
         $this->bpost->createOrReplaceOrder($order);
 
-        $labelInfo1 = new bPostInternationalLabelInfo(100, 300, $orderId, 'OTHER', 'RTA', true);
+        $labelInfo1 = new InternationalLabelInfo(100, 300, $orderId, 'OTHER', 'RTA', true);
 
         $var = $this->bpost->createInternationalLabel($orderId, array($labelInfo1), true);
 
@@ -218,13 +227,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
         $order->addOrderLine('Item 1', 10);
@@ -248,12 +257,12 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Dieselstr.', '24', '85748', 'Garching', 'DE'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Dieselstr.', '24', '85748', 'Garching', 'DE'));
 
-        $deliveryMethod = new bPostDeliveryMethodIntExpress();
+        $deliveryMethod = new DeliveryMethodIntExpress();
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
 
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
@@ -263,7 +272,7 @@ class bPostTest extends PHPUnit_Framework_TestCase
         $order->setDeliveryMethod($deliveryMethod);
         $order->setTotal(100);
 
-        $labelInfo1 = new bPostInternationalLabelInfo(100, 300, $orderId, 'OTHER', 'RTA', true);
+        $labelInfo1 = new InternationalLabelInfo(100, 300, $orderId, 'OTHER', 'RTA', true);
 
         $var = $this->bpost->createOrderAndInternationalLabel(array($labelInfo1), $order);
 
@@ -280,13 +289,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
         $order->addOrderLine('Item 1', 10);
@@ -312,13 +321,13 @@ class bPostTest extends PHPUnit_Framework_TestCase
     {
         $orderId = time();
 
-        $deliveryMethod = new bPostDeliveryMethodAtHome();
+        $deliveryMethod = new DeliveryMethodAtHome();
         $deliveryMethod->setNormal();
 
-        $customer = new bPostCustomer('Tijs', 'Verkoyen');
-        $customer->setDeliveryAddress(new bPostAddress('Kerkstraat', '108', '9050', 'Gentbrugge'));
+        $customer = new Customer('Tijs', 'Verkoyen');
+        $customer->setDeliveryAddress(new Address('Kerkstraat', '108', '9050', 'Gentbrugge'));
 
-        $order = new bPostOrder($orderId);
+        $order = new Order($orderId);
         $order->setStatus('OPEN');
         $order->setCostCenter('CostCenter1');
         $order->addOrderLine('Item 1', 10);
