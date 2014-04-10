@@ -9,7 +9,7 @@ use TijsVerkoyen\Bpost\Geo6\Service;
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Poi::createFromXml()
+     * Tests Service::createFromXml()
      */
     public function testCreateFromXml()
     {

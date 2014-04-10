@@ -1,14 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tijs
- * Date: 10/04/14
- * Time: 16:02
- */
 
 namespace TijsVerkoyen\Bpost\Geo6;
 
-
+/**
+ * Geo6 class
+ *
+ * @author    Tijs Verkoyen <php-bpost@verkoyen.eu>
+ * @version   3.0.0
+ * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
+ * @license   BSD License
+ */
 class Service
 {
     /**
@@ -75,10 +76,10 @@ class Service
     }
 
     /**
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      * @return Service
      */
-    public static function createFromXML($xml)
+    public static function createFromXML(\SimpleXMLElement $xml)
     {
         $service = new Service();
         $service->setName((string) $xml);

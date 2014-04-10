@@ -1,14 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tijs
- * Date: 10/04/14
- * Time: 14:10
- */
 
 namespace TijsVerkoyen\Bpost\Geo6;
 
-
+/**
+ * Geo6 class
+ *
+ * @author    Tijs Verkoyen <php-bpost@verkoyen.eu>
+ * @version   3.0.0
+ * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
+ * @license   BSD License
+ */
 class Poi
 {
     /**
@@ -140,6 +141,15 @@ class Poi
     }
 
     /**
+     * @param int $index
+     * @param Day $day
+     */
+    public function addHour($index, Day $day)
+    {
+        $this->hours[$index] = $day;
+    }
+
+    /**
      * @param array $hours
      */
     public function setHours($hours)
@@ -252,6 +262,14 @@ class Poi
     }
 
     /**
+     * @param Service $service
+     */
+    public function addService(Service $service)
+    {
+        $this->services[] = $service;
+    }
+
+    /**
      * @param array $services
      */
     public function setServices($services)
@@ -350,45 +368,99 @@ class Poi
     /**
      * Create a POI based on an XML-object
      *
-     * @param SimpleXMLElement $xml
+     * @param \SimpleXMLElement $xml
      * @return Poi
      */
-    public static function createFromXML($xml)
+    public static function createFromXML(\SimpleXMLElement $xml)
     {
         $poi = new Poi();
 
-        if (isset($xml->Id)) {
+        if (isset($xml->Id) && $xml->Id != '') {
             $poi->setId((string) $xml->Id);
         }
-        if (isset($xml->Type)) {
+        if (isset($xml->ID) && $xml->ID != '') {
+            $poi->setId((string) $xml->ID);
+        }
+        if (isset($xml->Type) && $xml->Type != '') {
             $poi->setType((string) $xml->Type);
         }
-        if (isset($xml->Name)) {
+        if (isset($xml->Name) && $xml->Name != '') {
             $poi->setOffice((string) $xml->Name);
         }
-        if (isset($xml->Street)) {
+        if (isset($xml->OFFICE) && $xml->OFFICE != '') {
+            $poi->setOffice((string) $xml->OFFICE);
+        }
+        if (isset($xml->Street) && $xml->Street != '') {
             $poi->setStreet((string) $xml->Street);
         }
-        if (isset($xml->Number)) {
+        if (isset($xml->STREET) && $xml->STREET != '') {
+            $poi->setStreet((string) $xml->STREET);
+        }
+        if (isset($xml->Number) && $xml->Number != '') {
             $poi->setNr((string) $xml->Number);
         }
-        if (isset($xml->Zip)) {
+        if (isset($xml->NR) && $xml->Nr != '') {
+            $poi->setNr((string) $xml->NR);
+        }
+        if (isset($xml->Zip) && $xml->Zip != '') {
             $poi->setZip((string) $xml->Zip);
         }
-        if (isset($xml->City)) {
+        if (isset($xml->ZIP) && $xml->ZIP != '') {
+            $poi->setZip((string) $xml->ZIP);
+        }
+        if (isset($xml->City) && $xml->City != '') {
             $poi->setCity((string) $xml->City);
         }
-        if (isset($xml->X)) {
+        if (isset($xml->CITY) && $xml->CITY != '') {
+            $poi->setCity((string) $xml->CITY);
+        }
+        if (isset($xml->X) && $xml->X != '') {
             $poi->setX((int) $xml->X);
         }
-        if (isset($xml->Y)) {
+        if (isset($xml->Y) && $xml->Y != '') {
             $poi->setY((int) $xml->Y);
         }
-        if (isset($xml->Longitude)) {
+        if (isset($xml->Longitude) && $xml->Longitude != '') {
             $poi->setLongitude((float) $xml->Longitude);
         }
-        if (isset($xml->Latitude)) {
+        if (isset($xml->Latitude) && $xml->Latitude != '') {
             $poi->setLatitude((float) $xml->Latitude);
+        }
+        if (isset($xml->Services->Service)) {
+            foreach ($xml->Services->Service as $service) {
+                $poi->addService(Service::createFromXML($service));
+            }
+        }
+
+        if (isset($xml->Hours->Monday)) {
+            $poi->addHour(1, Day::createFromXML($xml->Hours->Monday));
+        }
+        if (isset($xml->Hours->Tuesday)) {
+            $poi->addHour(2, Day::createFromXML($xml->Hours->Tuesday));
+        }
+        if (isset($xml->Hours->Wednesday)) {
+            $poi->addHour(3, Day::createFromXML($xml->Hours->Wednesday));
+        }
+        if (isset($xml->Hours->Thursday)) {
+            $poi->addHour(4, Day::createFromXML($xml->Hours->Thursday));
+        }
+        if (isset($xml->Hours->Friday)) {
+            $poi->addHour(5, Day::createFromXML($xml->Hours->Friday));
+        }
+        if (isset($xml->Hours->Saturday)) {
+            $poi->addHour(6, Day::createFromXML($xml->Hours->Saturday));
+        }
+        if (isset($xml->Hours->Sunday)) {
+            $poi->addHour(7, Day::createFromXML($xml->Hours->Sunday));
+        }
+        if (isset($xml->ClosedFrom) && $xml->ClosedFrom != '') {
+            $poi->setClosedFrom((string) $xml->ClosedFrom);
+        }
+        if (isset($xml->ClosedTo) && $xml->ClosedTo != '') {
+            $poi->setClosedTo((string) $xml->ClosedTo);
+        }
+        if (isset($xml->NOTE) && $xml->NOTE != '') {
+            $poi->setNote((string) $xml->NOTE);
         }
 
         return $poi;

@@ -59,6 +59,24 @@ class Geo6
     }
 
     /**
+     * Build the url to be called
+     *
+     * @param string $method
+     * @param array|null $parameters
+     * @return string
+     */
+    private function buildUrl($method, $parameters = null)
+    {
+        // add credentials
+        $parameters['Function'] = $method;
+        $parameters['Partner'] = $this->getPartner();
+        $parameters['AppId'] = $this->getAppId();
+        $parameters['Format'] = 'xml';
+
+        return self::API_URL . '?' . http_build_query($parameters);
+    }
+
+    /**
      * Make the real call
      *
      * @param string     $method
@@ -67,15 +85,7 @@ class Geo6
      */
     private function doCall($method, $parameters = null)
     {
-        // add credentials
-        $parameters['Function'] = $method;
-        $parameters['Partner'] = $this->getPartner();
-        $parameters['AppId'] = $this->getAppId();
-        $parameters['Format'] = 'xml';
-
-        $url = self::API_URL . '?' . http_build_query($parameters);
-
-        $options[CURLOPT_URL] = $url;
+        $options[CURLOPT_URL] = $this->buildUrl($method, $parameters);
         $options[CURLOPT_USERAGENT] = $this->getUserAgent();
         $options[CURLOPT_FOLLOWLOCATION] = true;
         $options[CURLOPT_SSL_VERIFYPEER] = false;
@@ -100,8 +110,6 @@ class Geo6
 
         // we expect XML so decode it
         $xml = @simplexml_load_string($response);
-
-        var_dump($response);
 
         // validate json
         if ($xml === false || (isset($xml->head) && isset($xml->body))) {
@@ -240,13 +248,47 @@ class Geo6
         return $pois;
     }
 
+    /**
+     * The GetServicePointDetails web service delivers the details for a bpost
+     * pick up point referred to by its identifier.
+     *
+     * @param string $id            Requested point identifier
+     * @param string $language      Language, possible values: nl, fr
+     * @param int    $type          Requested point type, possible values are:
+     *                              1: Post Office
+     *                              2: Post Point
+     *                              4: bpack 24/7
+     * @return Poi
+     */
     public function getServicePointDetails($id, $language = 'nl', $type = 3)
     {
-        // @todo implement me
+        $parameters = array();
+        $parameters['Id'] = (string) $id;
+        $parameters['Language'] = (string) $language;
+        $parameters['Type'] = (int) $type;
+
+        $xml = $this->doCall('info', $parameters);
+
+        if (!isset($xml->Poi->Record)) {
+            throw new Exception('Invalid XML-response');
+        }
+
+        return Poi::createFromXML($xml->Poi->Record);
     }
 
+    /**
+     * @param        $id
+     * @param string $language
+     * @param int    $type
+     * @return string
+     */
     public function getServicePointPage($id, $language = 'nl', $type = 3)
     {
-        // @todo implement me
+        $parameters = array();
+        $parameters['Id'] = (string) $id;
+        $parameters['Language'] = (string) $language;
+        $parameters['Type'] = (int) $type;
+
+        return $this->buildUrl('page', $parameters);
     }
 }

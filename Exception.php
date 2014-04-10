@@ -7,4 +7,5 @@ namespace TijsVerkoyen\Bpost;
  * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
  */
 class Exception extends \Exception
-{}
+{
+}

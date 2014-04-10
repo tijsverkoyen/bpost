@@ -78,8 +78,6 @@ $bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 //$labelInfo1 = new InternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
 //$labelInfo2 = new InternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
 
-// GEO6 webservices
-//$geo6 = new Geo6(GEO6_PARTNER, GEO6_APP_ID);
 
 try {
 //    $response = $bpost->createOrReplaceOrder($order);
@@ -92,7 +90,11 @@ try {
 //    $response = $bpost->retrievePDFLabelsForBox($response['barcode'][0]);
 //    $response = $bpost->retrievePDFLabelsForOrder($orderId);
 
-//    $response = $geo6->getNearestServicePoint('Afrikalaan', '289', '9000');
+    // GEO6 webservices
+//    $geo6 = new Geo6(GEO6_PARTNER, GEO6_APP_ID);
+//    $response = $geo6->getNearestServicePoint('Afrikalaan', '289', '9000', 'nl', 7, 100);
+//    $response = $geo6->getServicePointDetails('220000', 'nl', '1');
+//    $response = $geo6->getServicePointPage('220000', 'nl', '1');
 } catch (Exception $e) {
     var_dump($e);
 }

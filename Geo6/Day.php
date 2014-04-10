@@ -1,14 +1,15 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: tijs
- * Date: 10/04/14
- * Time: 16:42
- */
 
 namespace TijsVerkoyen\Bpost\Geo6;
 
-
+/**
+ * Geo6 class
+ *
+ * @author    Tijs Verkoyen <php-bpost@verkoyen.eu>
+ * @version   3.0.0
+ * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
+ * @license   BSD License
+ */
 class Day
 {
     /**

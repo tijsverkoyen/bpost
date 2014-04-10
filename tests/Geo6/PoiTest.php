@@ -8,6 +8,9 @@ use TijsVerkoyen\Bpost\Geo6\Poi;
 
 class PoiTest extends \PHPUnit_Framework_TestCase
 {
+    /**
+     * Tests Poi::createFromXml()
+     */
     public function testCreateFromXml()
     {
         $data = array(
