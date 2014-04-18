@@ -3,13 +3,13 @@ namespace Bpost;
 
 require_once __DIR__ . '/../../../../../autoload.php';
 
-use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use TijsVerkoyen\Bpost\Bpost\Order\Customer;
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 
-class SenderTest extends \PHPUnit_Framework_TestCase
+class CustomerTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Sender->toXMLArray
+     * Tests Customer->toXMLArray
      */
     public function testToXMLArray()
     {
@@ -37,7 +37,7 @@ class SenderTest extends \PHPUnit_Framework_TestCase
             $data['address']['countryCode']
         );
 
-        $sender = new Sender();
+        $sender = new Customer();
         $sender->setName($data['name']);
         $sender->setCompany($data['company']);
         $sender->setAddress($address);
@@ -54,7 +54,7 @@ class SenderTest extends \PHPUnit_Framework_TestCase
      */
     public function testFaultyProperties()
     {
-        $sender = new Sender();
+        $sender = new Customer();
 
         try {
             $sender->setEmailAddress(str_repeat('a', 51));

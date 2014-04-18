@@ -2,10 +2,10 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
 /**
- * bPost Sender class
+ * bPost Receiver class
  *
  * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
  */
-class Sender extends Customer
+class Receiver extends Customer
 {
 }
