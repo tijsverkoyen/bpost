@@ -16,49 +16,6 @@ use \TijsVerkoyen\Bpost\Geo6;
 // create instance
 $bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 
-// create notification
-//$option =  new Notification('NL', 'tijs@verkoyen.eu');
-
-// create delivery method at home
-//$deliveryMethod = new DeliveryMethodAtHome();
-//$deliveryMethod->setNormal(
-//    array(
-//        'infoDistributed' => $option,
-//        'infoNextDay' => $option,
-//        'infoReminder' => $option,
-//        'automaticSecondPresentation' => '',
-//    )
-//);
-//$deliveryMethod->setDropAtTheDoor();
-//$deliveryMethod->setInsurance(10);
-
-//// create delivery method at shop
-//$deliveryMethod = new DeliveryMethodAtShop();
-//$deliveryMethod->setInfoPugo(1, '1', $option);
-//$deliveryMethod->setInfoDistributed(new Notification('NL', 'foo@bar.com'));
-//$deliveryMethod->setInsurance(10);
-//
-//// create delivery method at 24-7
-//$deliveryMethod = new DeliveryMethodAt247('014473', '123456789');
-//$deliveryMethod->setInsurance(10);
-//$deliveryMethod->setSignature(true);
-//
-//// create delivery method int business
-//$deliveryMethod = new DeliveryMethodIntBusiness();
-//$deliveryMethod->setInsurance(10);
-//
-//// create delivery method int express
-//$deliveryMethod = new DeliveryMethodIntExpress();
-
-// create address
-//$deliveryAddress = new Address('Kerkstraat', '108', '9050', 'Gentbrugge');
-//$deliveryAddress = new Address('Dieselstr.', '24', '85748', 'Garching', 'DE');
-
-// create customer
-//$customer = new Customer('Tijs', 'Verkoyen');
-//$customer->setDeliveryAddress($deliveryAddress);
-
-
 // create order
 $orderId = time();
 $order = new Order($orderId);

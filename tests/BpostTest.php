@@ -6,13 +6,6 @@ require_once __DIR__ . '/../../../autoload.php';
 require_once 'config.php';
 
 use \TijsVerkoyen\Bpost\Bpost;
-use \TijsVerkoyen\Bpost\DeliveryMethodAtHome;
-use \TijsVerkoyen\Bpost\DeliveryMethodIntBusiness;
-use \TijsVerkoyen\Bpost\DeliveryMethodIntExpress;
-use \TijsVerkoyen\Bpost\Address;
-use \TijsVerkoyen\Bpost\Customer;
-use \TijsVerkoyen\Bpost\Order;
-use \TijsVerkoyen\Bpost\InternationalLabelInfo;
 
 /**
  * test case.
