@@ -5,16 +5,11 @@ require_once '../../../autoload.php';
 require_once 'config.php';
 
 use \TijsVerkoyen\Bpost\Bpost;
-use \TijsVerkoyen\Bpost\Notification;
-use \TijsVerkoyen\Bpost\DeliveryMethodAtHome;
-use \TijsVerkoyen\Bpost\DeliveryMethodAtShop;
-use \TijsVerkoyen\Bpost\DeliveryMethodAt247;
-use \TijsVerkoyen\Bpost\DeliveryMethodIntBusiness;
-use \TijsVerkoyen\Bpost\DeliveryMethodIntExpress;
-use \TijsVerkoyen\Bpost\Address;
-use \TijsVerkoyen\Bpost\Customer;
-use \TijsVerkoyen\Bpost\Order;
-use \TijsVerkoyen\Bpost\InternationalLabelInfo;
+use \TijsVerkoyen\Bpost\Bpost\Order;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box;
+use \TijsVerkoyen\Bpost\Bpost\Order\Line as OrderLine;
+use \TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use \TijsVerkoyen\Bpost\Bpost\Order\Address;
 
 use \TijsVerkoyen\Bpost\Geo6;
 
@@ -63,23 +58,41 @@ $bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 //$customer = new Customer('Tijs', 'Verkoyen');
 //$customer->setDeliveryAddress($deliveryAddress);
 
-//$orderId = time();
 
 // create order
-//$order = new Order($orderId);
-//$order->setStatus('OPEN');
-//$order->setCostCenter('Vitashop');
-//$order->addOrderLine('Item 1', 10);
-//$order->addOrderLine('Item 2', 20);
-//$order->setCustomer($customer);
-//$order->setDeliveryMethod($deliveryMethod);
-//$order->setTotal(100);
+$orderId = time();
+$order = new Order($orderId);
+$order->setCostCenter('Cost Center');
 
-//$labelInfo1 = new InternationalLabelInfo(100, 300, 'Something', 'OTHER', 'RTA', true);
-//$labelInfo2 = new InternationalLabelInfo(200, 400, 'Something else', 'GIFT', 'ABANDONED', false);
+// add lines
+$line1 = new OrderLine('Beer', 1);
+$order->addLine($line1);
+$line2 = new OrderLine('Whisky', 100);
+$order->addLine($line2);
 
+// add box
+$address = new Address();
+$address->setStreetName('Afrikalaan');
+$address->setNumber('289');
+$address->setPostalCode('9000');
+$address->setLocality('Gent');
+$address->setCountryCode('BE');
+
+$sender = new Sender();
+$sender->setAddress($address);
+$sender->setName('Tijs Verkoyen');
+$sender->setCompany('Sumo Coders');
+$sender->setPhoneNumber('+32 9 395 02 51');
+$sender->setEmailAddress('bpost@verkoyen.eu');
+
+$box = new Box();
+$box->setSender($sender);
+$box->setRemark('Remark');
+
+$order->addBox($box);
 
 try {
+    // Bpost webservices
 //    $response = $bpost->createOrReplaceOrder($order);
 //    $response = $bpost->fetchOrder($orderId);
 //    $response = $bpost->modifyOrderStatus(660, 'OPEN');
