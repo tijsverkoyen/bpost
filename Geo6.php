@@ -61,7 +61,7 @@ class Geo6
     /**
      * Build the url to be called
      *
-     * @param string $method
+     * @param string     $method
      * @param array|null $parameters
      * @return string
      */

@@ -42,8 +42,13 @@ class FormHandler
     {
         // init vars
         $keysToHash = array(
-            'accountId', 'action', 'costCenter', 'customerCountry',
-            'deliveryMethodOverrides', 'extraSecure', 'orderReference'
+            'accountId',
+            'action',
+            'costCenter',
+            'customerCountry',
+            'deliveryMethodOverrides',
+            'extraSecure',
+            'orderReference'
         );
         $base = 'accountId=' . $this->bpost->getAccountId() . '&';
 
@@ -64,8 +69,8 @@ class FormHandler
     /**
      * Get the parameters
      *
-     * @param  bool  $form
-     * @param  bool  $includeChecksum
+     * @param  bool $form
+     * @param  bool $includeChecksum
      * @return array
      */
     public function getParameters($form = false, $includeChecksum = true)
@@ -186,7 +191,9 @@ class FormHandler
 
             // array
             case 'orderLine':
-                if(!isset($this->parameters[$key])) $this->parameters[$key] = array();
+                if (!isset($this->parameters[$key])) {
+                    $this->parameters[$key] = array();
+                }
                 $this->parameters[$key][] = $value;
                 break;
 
