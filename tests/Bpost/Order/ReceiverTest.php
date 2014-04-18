@@ -3,13 +3,13 @@ namespace Bpost;
 
 require_once __DIR__ . '/../../../../../autoload.php';
 
-use TijsVerkoyen\Bpost\Bpost\Order\Customer;
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
+use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 
-class CustomerTest extends \PHPUnit_Framework_TestCase
+class ReceiverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Customer->toXMLArray
+     * Tests Receiver->toXMLArray
      */
     public function testToXMLArray()
     {
@@ -37,14 +37,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $data['address']['countryCode']
         );
 
-        $customer = new Customer();
-        $customer->setName($data['name']);
-        $customer->setCompany($data['company']);
-        $customer->setAddress($address);
-        $customer->setEmailAddress($data['emailAddress']);
-        $customer->setPhoneNumber($data['phoneNumber']);
+        $receiver = new Receiver();
+        $receiver->setName($data['name']);
+        $receiver->setCompany($data['company']);
+        $receiver->setAddress($address);
+        $receiver->setEmailAddress($data['emailAddress']);
+        $receiver->setPhoneNumber($data['phoneNumber']);
 
-        $xmlArray = $customer->toXMLArray();
+        $xmlArray = $receiver->toXMLArray();
 
         $this->assertEquals($data, $xmlArray);
     }
@@ -54,17 +54,17 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
      */
     public function testFaultyProperties()
     {
-        $customer = new Customer();
+        $receiver = new Receiver();
 
         try {
-            $customer->setEmailAddress(str_repeat('a', 51));
+            $receiver->setEmailAddress(str_repeat('a', 51));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
             $this->assertEquals('Invalid length, maximum is 50.', $e->getMessage());
         }
 
         try {
-            $customer->setPhoneNumber(str_repeat('a', 21));
+            $receiver->setPhoneNumber(str_repeat('a', 21));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
             $this->assertEquals('Invalid length, maximum is 20.', $e->getMessage());
