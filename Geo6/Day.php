@@ -42,7 +42,7 @@ class Day
     /**
      * @param string $amClose
      */
-    public function setAmClose($amClose)
+    private function setAmClose($amClose)
     {
         $this->amClose = $amClose;
     }
@@ -58,7 +58,7 @@ class Day
     /**
      * @param string $amOpen
      */
-    public function setAmOpen($amOpen)
+    private function setAmOpen($amOpen)
     {
         $this->amOpen = $amOpen;
     }
@@ -74,7 +74,7 @@ class Day
     /**
      * @param string $day
      */
-    public function setDay($day)
+    private function setDay($day)
     {
         $this->day = $day;
     }
@@ -117,7 +117,7 @@ class Day
     /**
      * @param string $pmClose
      */
-    public function setPmClose($pmClose)
+    private function setPmClose($pmClose)
     {
         $this->pmClose = $pmClose;
     }
@@ -133,7 +133,7 @@ class Day
     /**
      * @param string $pmOpen
      */
-    public function setPmOpen($pmOpen)
+    private function setPmOpen($pmOpen)
     {
         $this->pmOpen = $pmOpen;
     }

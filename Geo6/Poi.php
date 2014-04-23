@@ -93,14 +93,18 @@ class Poi
     private $note;
 
     /**
+     * Set the city
+     *
      * @param string $city
      */
-    public function setCity($city)
+    private function setCity($city)
     {
         $this->city = $city;
     }
 
     /**
+     * Get the city
+     *
      * @return string
      */
     public function getCity()
@@ -109,14 +113,18 @@ class Poi
     }
 
     /**
+     * Set the closed from time
+     *
      * @param array $closedFrom
      */
-    public function setClosedFrom($closedFrom)
+    private function setClosedFrom($closedFrom)
     {
         $this->closedFrom = $closedFrom;
     }
 
     /**
+     * Get the closed from time
+     *
      * @return array
      */
     public function getClosedFrom()
@@ -125,14 +133,18 @@ class Poi
     }
 
     /**
+     * Set the closed to time
+     *
      * @param array $closedTo
      */
-    public function setClosedTo($closedTo)
+    private function setClosedTo($closedTo)
     {
         $this->closedTo = $closedTo;
     }
 
     /**
+     * Get the closed to time
+     *
      * @return array
      */
     public function getClosedTo()
@@ -152,7 +164,7 @@ class Poi
     /**
      * @param array $hours
      */
-    public function setHours($hours)
+    private function setHours($hours)
     {
         $this->hours = $hours;
     }
@@ -168,7 +180,7 @@ class Poi
     /**
      * @param string $id
      */
-    public function setId($id)
+    private function setId($id)
     {
         $this->id = $id;
     }
@@ -184,7 +196,7 @@ class Poi
     /**
      * @param float $latitude
      */
-    public function setLatitude($latitude)
+    private function setLatitude($latitude)
     {
         $this->latitude = $latitude;
     }
@@ -200,7 +212,7 @@ class Poi
     /**
      * @param float $longitude
      */
-    public function setLongitude($longitude)
+    private function setLongitude($longitude)
     {
         $this->longitude = $longitude;
     }
@@ -216,7 +228,7 @@ class Poi
     /**
      * @param string $note
      */
-    public function setNote($note)
+    private function setNote($note)
     {
         $this->note = $note;
     }
@@ -232,7 +244,7 @@ class Poi
     /**
      * @param string $nr
      */
-    public function setNr($nr)
+    private function setNr($nr)
     {
         $this->nr = $nr;
     }
@@ -248,7 +260,7 @@ class Poi
     /**
      * @param string $office
      */
-    public function setOffice($office)
+    private function setOffice($office)
     {
         $this->office = $office;
     }
@@ -272,7 +284,7 @@ class Poi
     /**
      * @param array $services
      */
-    public function setServices($services)
+    private function setServices($services)
     {
         $this->services = $services;
     }
@@ -288,7 +300,7 @@ class Poi
     /**
      * @param string $street
      */
-    public function setStreet($street)
+    private function setStreet($street)
     {
         $this->street = $street;
     }
@@ -302,14 +314,18 @@ class Poi
     }
 
     /**
+     * Set the type/Byte Code
+     *
      * @param string $type
      */
-    public function setType($type)
+    private function setType($type)
     {
         $this->type = $type;
     }
 
     /**
+     * Get the type/Byte Code
+     *
      * @return string
      */
     public function getType()
@@ -320,7 +336,7 @@ class Poi
     /**
      * @param int $x
      */
-    public function setX($x)
+    private function setX($x)
     {
         $this->x = $x;
     }
@@ -336,7 +352,7 @@ class Poi
     /**
      * @param int $y
      */
-    public function setY($y)
+    private function setY($y)
     {
         $this->y = $y;
     }
@@ -352,7 +368,7 @@ class Poi
     /**
      * @param string $zip
      */
-    public function setZip($zip)
+    private function setZip($zip)
     {
         $this->zip = $zip;
     }
