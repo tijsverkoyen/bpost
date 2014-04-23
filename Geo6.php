@@ -15,7 +15,7 @@ use TijsVerkoyen\Bpost\Geo6\Poi;
 class Geo6
 {
     // internal constant to enable/disable debugging
-    const DEBUG = true;
+    const DEBUG = false;
 
     // URL for the api
     const API_URL = 'http://taxipost.geo6.be/Locator';
