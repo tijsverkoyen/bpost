@@ -190,7 +190,7 @@ class Geo6
      */
     public function getUserAgent()
     {
-        return (string) 'PHP Geo6/' . self::VERSION . ' ' . $this->userAgent;
+        return (string) 'PHP Bpost Geo6/' . self::VERSION . ' ' . $this->userAgent;
     }
 
     /**
