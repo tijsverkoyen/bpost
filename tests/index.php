@@ -30,6 +30,8 @@ use \TijsVerkoyen\Bpost\Geo6;
 
 use \TijsVerkoyen\Bpost\FormHandler;
 
+use \TijsVerkoyen\Bpost\Bpack247;
+
 // create instance
 $bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 
@@ -179,6 +181,17 @@ try {
 //    $formHandler->setParameter('orderReference', $order->getReference());
 //    $formHandler->setParameter('customerCountry', $sender->getAddress()->getCountryCode());
 //    $response = $formHandler->getParameters(true);
+
+    // Bpack 24/7 webservices
+//    $bpack247 = new Bpack247();
+//    $response = $bpack247->getMember('123456789');
+
+//    $customer = new Bpack247\Customer();
+//    $customer->setFirstName('Tijs');
+//    $customer->setLastName('Verkoyen');
+//    $customer->setEmail('bpost@verkoyen.eu');
+
+//    $response = $bpack247->createMember($customer);
 } catch (Exception $e) {
     var_dump($e);
 }
