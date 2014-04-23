@@ -1,8 +1,6 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
 
-use TijsVerkoyen\Bpost\Exception;
-
 /**
  * bPost Signature class
  *

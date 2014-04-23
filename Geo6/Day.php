@@ -143,7 +143,7 @@ class Day
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param  \SimpleXMLElement $xml
      * @return Day
      */
     public static function createFromXML(\SimpleXMLElement $xml)

@@ -48,7 +48,6 @@ class At247 extends National
      */
     private $receiverCompany;
 
-
     /**
      * @param string $memberId
      */

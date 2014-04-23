@@ -3,7 +3,6 @@ namespace Bpost;
 
 require_once __DIR__ . '/../../../../../autoload.php';
 
-use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 
 class PugoAddressTest extends \PHPUnit_Framework_TestCase

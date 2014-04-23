@@ -70,7 +70,7 @@ class AtHome extends National
     }
 
     /**
-     * @param string $product   Possible values are:
+     * @param string $product Possible values are:
      *                          * bpack 24h Pro,
      *                          * bpack 24h business
      *                          * bpack Bus

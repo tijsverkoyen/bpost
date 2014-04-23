@@ -61,8 +61,8 @@ class Geo6
     /**
      * Build the url to be called
      *
-     * @param string     $method
-     * @param array|null $parameters
+     * @param  string     $method
+     * @param  array|null $parameters
      * @return string
      */
     private function buildUrl($method, $parameters = null)
@@ -79,9 +79,9 @@ class Geo6
     /**
      * Make the real call
      *
-     * @param string     $method
-     * @param array|null $parameters
-     * @return  SimpleXMLElement
+     * @param  string           $method
+     * @param  array|null       $parameters
+     * @return SimpleXMLElement
      */
     private function doCall($method, $parameters = null)
     {
@@ -208,17 +208,17 @@ class Geo6
     /**
      * The GetNearestServicePoints web service delivers the nearest bpost pick-up points to a location
      *
-     * @param string $street        Street name
-     * @param string $number        Street number
-     * @param string $zone          Postal code and/or city
-     * @param string $language      Language, possible values are: nl, fr
-     * @param int    $type          Requested point type, possible values are:
+     * @param string $street   Street name
+     * @param string $number   Street number
+     * @param string $zone     Postal code and/or city
+     * @param string $language Language, possible values are: nl, fr
+     * @param int    $type     Requested point type, possible values are:
      *                              1: Post Office
      *                              2: Post Point
      *                              3: (1+2, Post Office + Post Point)
      *                              4: bpack 24/7
      *                              7: (1+2+4, Post Office + Post Point + bpack 24/7)
-     * @param int    $limit
+     * @param  int   $limit
      * @return array
      */
     public function getNearestServicePoint($street, $number, $zone, $language = 'nl', $type = 3, $limit = 10)
@@ -252,9 +252,9 @@ class Geo6
      * The GetServicePointDetails web service delivers the details for a bpost
      * pick up point referred to by its identifier.
      *
-     * @param string $id            Requested point identifier
-     * @param string $language      Language, possible values: nl, fr
-     * @param int    $type          Requested point type, possible values are:
+     * @param string $id       Requested point identifier
+     * @param string $language Language, possible values: nl, fr
+     * @param int    $type     Requested point type, possible values are:
      *                              1: Post Office
      *                              2: Post Point
      *                              4: bpack 24/7
@@ -277,9 +277,9 @@ class Geo6
     }
 
     /**
-     * @param        $id
-     * @param string $language
-     * @param int    $type
+     * @param         $id
+     * @param  string $language
+     * @param  int    $type
      * @return string
      */
     public function getServicePointPage($id, $language = 'nl', $type = 3)

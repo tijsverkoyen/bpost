@@ -368,7 +368,7 @@ class Poi
     /**
      * Create a POI based on an XML-object
      *
-     * @param \SimpleXMLElement $xml
+     * @param  \SimpleXMLElement $xml
      * @return Poi
      */
     public static function createFromXML(\SimpleXMLElement $xml)

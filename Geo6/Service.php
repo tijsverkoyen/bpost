@@ -76,7 +76,7 @@ class Service
     }
 
     /**
-     * @param \SimpleXMLElement $xml
+     * @param  \SimpleXMLElement $xml
      * @return Service
      */
     public static function createFromXML(\SimpleXMLElement $xml)

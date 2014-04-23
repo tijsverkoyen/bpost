@@ -98,7 +98,6 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $xmlArray = $box->toXMLArray();
         $this->assertEquals($data, $xmlArray);
 
-
         $data = array(
             'sender' => array(
                 'name' => 'Tijs Verkoyen',
