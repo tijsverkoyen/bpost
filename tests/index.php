@@ -5,11 +5,25 @@ require_once '../../../autoload.php';
 require_once 'config.php';
 
 use \TijsVerkoyen\Bpost\Bpost;
+
 use \TijsVerkoyen\Bpost\Bpost\Order;
+use \TijsVerkoyen\Bpost\Bpost\Order\Address;
 use \TijsVerkoyen\Bpost\Bpost\Order\Box;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\International;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\AutomaticSecondPresentation;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\CashOnDelivery;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Signature;
+use \TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day as OpeninghourDay;
 use \TijsVerkoyen\Bpost\Bpost\Order\Line as OrderLine;
 use \TijsVerkoyen\Bpost\Bpost\Order\Sender;
-use \TijsVerkoyen\Bpost\Bpost\Order\Address;
+use \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
+use \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 
 use \TijsVerkoyen\Bpost\Geo6;
 
@@ -46,11 +60,106 @@ $box = new Box();
 $box->setSender($sender);
 $box->setRemark('Remark');
 
+// add label
+$address = new Address();
+$address->setStreetName('Kerstraat');
+$address->setNumber('108');
+$address->setPostalCode('9050');
+$address->setLocality('Gentbrugge');
+$address->setCountryCode('BE');
+
+$receiver = new Sender();
+$receiver->setAddress($address);
+$receiver->setName('Tijs Verkoyen');
+$receiver->setCompany('Sumo Coders');
+$receiver->setPhoneNumber('+32 9 395 02 51');
+$receiver->setEmailAddress('bpost@verkoyen.eu');
+
+// options
+$option = new Messaging('infoDistributed', 'NL', 'bpost@verkoyen.eu');
+//$option = new Messaging('infoNextDay', 'NL', 'bpost@verkoyen.eu');
+//$option = new Messaging('infoReminder', 'NL', 'bpost@verkoyen.eu');
+//$option = new Messaging('keepMeInformed', 'NL', 'bpost@verkoyen.eu');
+//$option = new CashOnDelivery(
+//    1251,
+//    'BE19210023508812',
+//    'GEBABEBB'
+//);
+//$option = new Signature();
+//$option = new Insurance('additionalInsurance', 3);
+//$option = new AutomaticSecondPresentation();
+
+// @Home
+$atHome = new AtHome();
+$atHome->setProduct('bpack 24h Pro');
+$atHome->setWeight(2000);
+$atHome->setReceiver($receiver);
+$atHome->addOpeningHour(
+    new OpeninghourDay('Monday', '10:00-17:00')
+);
+$atHome->addOption($option);
+//$box->setNationalBox($atHome);
+
+// @Bpost
+$pugoAddress = new PugoAddress(
+    'Turnhoutsebaan',
+    '468',
+    null,
+    '2110',
+    'Wijnegem',
+    'BE'
+);
+
+$atBpost = new AtBpost();
+$atBpost->setWeight(2000);
+$atBpost->setPugoId('207500');
+$atBpost->setPugoName('WIJNEGEM');
+$atBpost->setPugoAddress($pugoAddress);
+$atBpost->setReceiverName('Tijs Verkoyen');
+$atBpost->setReceiverCompany('Sumo Coders');
+//$box->setNationalBox($atBpost);
+
+// @24/7
+$parcelsDepotAddress = new ParcelsDepotAddress(
+    'Turnhoutsebaan',
+    '468',
+    null,
+    '2110',
+    'Wijnegem',
+    'BE'
+);
+$parcelsDepotAddress->setBox('A');
+
+$at247 = new At247();
+$at247->setParcelsDepotId('014472');
+$at247->setParcelsDepotName('WIJNEGEM');
+$at247->setParcelsDepotAddress($parcelsDepotAddress);
+$at247->setMemberId('188565346');
+$at247->setReceiverName('Tijs Verkoyen');
+$at247->setReceiverCompany('Sumo Coders');
+//$box->setNationalBox($at247);
+
+// international
+$customsInfo = new CustomsInfo();
+$customsInfo->setParcelValue(700);
+$customsInfo->setContentDescription('BOOK');
+$customsInfo->setShipmentType('DOCUMENTS');
+$customsInfo->setParcelReturnInstructions('RTS');
+$customsInfo->setPrivateAddress(false);
+
+$international = new International();
+$international->setProduct('bpack World Express Pro');
+$international->addOption($option);
+$international->setReceiver($receiver);
+$international->setParcelWeight(2000);
+$international->setCustomsInfo($customsInfo);
+$box->setInternationalBox($international);
+
 $order->addBox($box);
 
 try {
     // Bpost webservices
-//    $response = $bpost->createOrReplaceOrder($order);
+    $response = $bpost->createOrReplaceOrder($order);
 //    $response = $bpost->fetchOrder($orderId);
 //    $response = $bpost->modifyOrderStatus(660, 'OPEN');
 //    $response = $bpost->createNationalLabel($orderId, 1);

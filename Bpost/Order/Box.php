@@ -31,7 +31,7 @@ class Box
     /**
      * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\International $internationalBox
      */
-    public function setInternationalBox($internationalBox)
+    public function setInternationalBox(Box\International $internationalBox)
     {
         $this->internationalBox = $internationalBox;
     }
@@ -45,15 +45,15 @@ class Box
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome $nationalBox
+     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\National $nationalBox
      */
-    public function setNationalBox($nationalBox)
+    public function setNationalBox(Box\National $nationalBox)
     {
         $this->nationalBox = $nationalBox;
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome
+     * @return \TijsVerkoyen\Bpost\Bpost\Order\Box\National
      */
     public function getNationalBox()
     {
@@ -79,7 +79,7 @@ class Box
     /**
      * @param \TijsVerkoyen\Bpost\Bpost\Order\Sender $sender
      */
-    public function setSender($sender)
+    public function setSender(Sender $sender)
     {
         $this->sender = $sender;
     }
