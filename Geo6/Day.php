@@ -2,6 +2,8 @@
 
 namespace TijsVerkoyen\Bpost\Geo6;
 
+use TijsVerkoyen\Bpost\Exception;
+
 /**
  * Geo6 class
  *
@@ -108,6 +110,8 @@ class Day
             case 'sunday':
                 return 7;
         }
+
+        throw new Exception('Invalid day.');
     }
 
     /**
