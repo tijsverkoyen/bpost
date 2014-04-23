@@ -69,21 +69,29 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
         $receiver->setEmailAddress($data['atHome']['receiver']['emailAddress']);
         $receiver->setPhoneNumber($data['atHome']['receiver']['phoneNumber']);
 
+        $openingHourDay = new OpeninghourDay('Monday', $data['atHome']['openingHours'][0]['Monday']);
+
+        $messaging = new Messaging(
+            'infoNextDay',
+            $data['atHome']['options'][0]['infoNextDay']['@attributes']['language'],
+            $data['atHome']['options'][0]['infoNextDay']['emailAddress']
+        );
+
         $atHome = new AtHome();
         $atHome->setProduct($data['atHome']['product']);
         $atHome->setWeight($data['atHome']['weight']);
         $atHome->setReceiver($receiver);
         $atHome->setDesiredDeliveryPlace($data['atHome']['desiredDeliveryPlace']);
-        $atHome->addOpeningHour(
-            new OpeninghourDay('Monday', $data['atHome']['openingHours'][0]['Monday'])
-        );
-        $atHome->addOption(
-            new Messaging(
-                'infoNextDay',
-                $data['atHome']['options'][0]['infoNextDay']['@attributes']['language'],
-                $data['atHome']['options'][0]['infoNextDay']['emailAddress']
-            )
-        );
+
+        $atHome->addOpeningHour($openingHourDay);
+
+        // I know, the line below is kinda bogus, but it will make sure all code is tested
+        $atHome->setOpeningHours(array($openingHourDay));
+
+        $atHome->addOption($messaging);
+
+        // I know, the line below is kinda bogus, but it will make sure all code is tested
+        $atHome->setOptions(array($messaging));
 
         $xmlArray = $atHome->toXMLArray();
 

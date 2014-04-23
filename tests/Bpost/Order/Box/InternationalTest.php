@@ -77,18 +77,22 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
         $customsInfo->setParcelReturnInstructions($data['international']['customsInfo']['parcelReturnInstructions']);
         $customsInfo->setPrivateAddress($data['international']['customsInfo']['privateAddress']);
 
+        $messaging = new Messaging(
+            'infoNextDay',
+            $data['international']['options'][0]['infoNextDay']['@attributes']['language'],
+            $data['international']['options'][0]['infoNextDay']['emailAddress']
+        );
+
         $international = new International();
         $international->setProduct($data['international']['product']);
-        $international->addOption(
-            new Messaging(
-                'infoNextDay',
-                $data['international']['options'][0]['infoNextDay']['@attributes']['language'],
-                $data['international']['options'][0]['infoNextDay']['emailAddress']
-            )
-        );
         $international->setReceiver($receiver);
         $international->setParcelWeight($data['international']['parcelWeight']);
         $international->setCustomsInfo($customsInfo);
+
+        $international->addOption($messaging);
+
+        // I know, the line below is kinda bogus, but it will make sure all code is tested
+        $international->setOptions(array($messaging));
 
         $xmlArray = $international->toXMLArray();
 

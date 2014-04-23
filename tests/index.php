@@ -157,9 +157,11 @@ $box->setInternationalBox($international);
 
 $order->addBox($box);
 
+$response = $order->toXMLArray(ACCOUNT_ID);
+
 try {
     // Bpost webservices
-    $response = $bpost->createOrReplaceOrder($order);
+//    $response = $bpost->createOrReplaceOrder($order);
 //    $response = $bpost->fetchOrder($orderId);
 //    $response = $bpost->modifyOrderStatus(660, 'OPEN');
 //    $response = $bpost->createNationalLabel($orderId, 1);
