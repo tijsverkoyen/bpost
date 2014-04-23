@@ -27,6 +27,8 @@ use \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 
 use \TijsVerkoyen\Bpost\Geo6;
 
+use \TijsVerkoyen\Bpost\Bpack247;
+
 // create instance
 $bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 
@@ -157,7 +159,7 @@ $box->setInternationalBox($international);
 
 $order->addBox($box);
 
-$response = $order->toXMLArray(ACCOUNT_ID);
+//
 
 try {
     // Bpost webservices
@@ -176,6 +178,19 @@ try {
 //    $response = $geo6->getNearestServicePoint('Afrikalaan', '289', '9000', 'nl', 7, 100);
 //    $response = $geo6->getServicePointDetails('220000', 'nl', '1');
 //    $response = $geo6->getServicePointPage('220000', 'nl', '1');
+
+    // Bpack 24/7 webservices
+    $bpack247 = new Bpack247();
+//    $response = $bpack247->getMember('123456789');
+
+    $customer = new Bpack247\Customer();
+    $customer->setFirstName('Tijs');
+    $customer->setLastName('Verkoyen');
+    $customer->setEmail('bpost@verkoyen.eu');
+
+    $response = $bpack247->createMember($customer);
+
+
 } catch (Exception $e) {
     var_dump($e);
 }
