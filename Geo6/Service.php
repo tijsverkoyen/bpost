@@ -30,7 +30,7 @@ class Service
     /**
      * @param string $category
      */
-    private function setCategory($category)
+    public function setCategory($category)
     {
         $this->category = $category;
     }
@@ -46,7 +46,7 @@ class Service
     /**
      * @param string $flag
      */
-    private function setFlag($flag)
+    public function setFlag($flag)
     {
         $this->flag = $flag;
     }
@@ -62,7 +62,7 @@ class Service
     /**
      * @param string $name
      */
-    private function setName($name)
+    public function setName($name)
     {
         $this->name = $name;
     }
