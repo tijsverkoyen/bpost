@@ -129,7 +129,7 @@ class Customer
      * Return the object as an array for usage in the XML
      *
      * @param \DomDocument
-     * @param string $prefix
+     * @param  string      $prefix
      * @return \DomElement
      */
     public function toXML(\DomDocument $document, $prefix = null)

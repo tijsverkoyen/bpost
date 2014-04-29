@@ -201,8 +201,8 @@ class Address
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param \DOMDocument $document
-     * @param string       $prefix
+     * @param  \DOMDocument $document
+     * @param  string       $prefix
      * @return \DOMElement
      */
     public function toXML(\DOMDocument $document, $prefix = 'common')

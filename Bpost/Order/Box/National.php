@@ -94,9 +94,9 @@ abstract class National
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param \DomDocument $document
-     * @param string       $prefix
-     * @param string       $type
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @param  string       $type
      * @return \DomElement
      */
     public function toXML(\DOMDocument $document, $prefix = null, $type = null)

@@ -38,7 +38,6 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
         );
         $this->assertEquals($expectedDocument, $actualDocument);
 
-
         $data = array(
             'insured' => array(
                 'additionalInsurance' => array(

@@ -70,7 +70,7 @@ class AtHome extends National
     }
 
     /**
-     * @param string $product   Possible values are:
+     * @param string $product Possible values are:
      *                          * bpack 24h Pro,
      *                          * bpack 24h business
      *                          * bpack Bus
@@ -124,9 +124,9 @@ class AtHome extends National
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param \DomDocument $document
-     * @param string       $prefix
-     * @param string       $type
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @param  string       $type
      * @return \DomElement
      */
     public function toXML(\DOMDocument $document, $prefix = null, $type = null)

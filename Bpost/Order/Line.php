@@ -67,8 +67,8 @@ class Line
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param \DomDocument $document
-     * @param string       $prefix
+     * @param  \DomDocument $document
+     * @param  string       $prefix
      * @return \DOMElement
      */
     public function toXML(\DomDocument $document, $prefix = null)

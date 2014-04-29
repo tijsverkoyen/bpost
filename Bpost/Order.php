@@ -140,8 +140,8 @@ class Order
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param \DOMDocument $document
-     * @param string       $accountId
+     * @param  \DOMDocument $document
+     * @param  string       $accountId
      * @return \DOMElement
      */
     public function toXML(\DOMDocument $document, $accountId)

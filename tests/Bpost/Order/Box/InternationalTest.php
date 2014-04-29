@@ -129,7 +129,6 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
         }
         $international->appendChild($customsInfo);
 
-
         $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['international']['receiver']['address']['streetName'],
