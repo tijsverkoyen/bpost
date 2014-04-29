@@ -8,4 +8,5 @@ namespace TijsVerkoyen\Bpost\Bpost\Order;
  */
 class PugoAddress extends Address
 {
+    const TAG_NAME = 'pugoAddress';
 }

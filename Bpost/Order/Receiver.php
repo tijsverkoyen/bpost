@@ -8,4 +8,5 @@ namespace TijsVerkoyen\Bpost\Bpost\Order;
  */
 class Receiver extends Customer
 {
+    const TAG_NAME = 'receiver';
 }

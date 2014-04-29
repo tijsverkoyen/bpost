@@ -12,28 +12,40 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day as OpeninghourDay;
 class AtHomeTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Address->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Address->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'atHome' => array(
                 'product' => 'bpack 24h Pro',
                 'options' => array(
                     array(
-                        'infoNextDay' => array(
+                        'common:infoNextDay' => array(
                             '@attributes' => array(
                                 'language' => 'NL',
                             ),
-                            'emailAddress' => 'bpost@verkoyen.eu',
+                            'common:emailAddress' => 'bpost@verkoyen.eu',
                         )
                     )
                 ),
                 'weight' => 2000,
                 'openingHours' => array(
-                    array(
-                        'Monday' => '10:00-17:00',
-                    )
+                    'Monday' => '10:00-17:00',
                 ),
                 'desiredDeliveryPlace' => 1234,
                 'receiver' => array(
@@ -53,6 +65,64 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
+        $expectedDocument = self::createDomDocument();
+        $nationalBox = $expectedDocument->createElement('nationalBox');
+        $expectedDocument->appendChild($nationalBox);
+        $atHome = $expectedDocument->createElement('atHome');
+        $nationalBox->appendChild($atHome);
+        $atHome->appendChild($expectedDocument->createElement('product', $data['atHome']['product']));
+        $options = $expectedDocument->createElement('options');
+        foreach ($data['atHome']['options'] as $value) {
+            foreach ($value as $key2 => $value2) {
+                $element = $expectedDocument->createElement($key2);
+                foreach ($value2 as $key3 => $value3) {
+                    if ($key3 == '@attributes') {
+                        foreach ($value3 as $key4 => $value4) {
+                            $element->setAttribute($key4, $value4);
+                        }
+                    } else {
+                        $element->appendChild(
+                            $expectedDocument->createElement($key3, $value3)
+                        );
+                    }
+                }
+
+                $options->appendChild($element);
+            }
+        }
+        $atHome->appendChild($options);
+        $atHome->appendChild($expectedDocument->createElement('weight', $data['atHome']['weight']));
+        $openingHours = $expectedDocument->createElement('openingHours');
+        foreach ($data['atHome']['openingHours'] as $key => $value) {
+            $openingHours->appendChild(
+                $expectedDocument->createElement($key, $value)
+            );
+        }
+        $atHome->appendChild($openingHours);
+        $atHome->appendChild(
+            $expectedDocument->createElement('desiredDeliveryPlace', $data['atHome']['desiredDeliveryPlace'])
+        );
+        $receiver = $expectedDocument->createElement('receiver');
+        $atHome->appendChild($receiver);
+        foreach ($data['atHome']['receiver'] as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $receiver->appendChild($address);
+            } else {
+                $receiver->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+
+        $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['atHome']['receiver']['address']['streetName'],
             $data['atHome']['receiver']['address']['number'],
@@ -69,12 +139,12 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
         $receiver->setEmailAddress($data['atHome']['receiver']['emailAddress']);
         $receiver->setPhoneNumber($data['atHome']['receiver']['phoneNumber']);
 
-        $openingHourDay = new OpeninghourDay('Monday', $data['atHome']['openingHours'][0]['Monday']);
+        $openingHourDay = new OpeninghourDay('Monday', $data['atHome']['openingHours']['Monday']);
 
         $messaging = new Messaging(
             'infoNextDay',
-            $data['atHome']['options'][0]['infoNextDay']['@attributes']['language'],
-            $data['atHome']['options'][0]['infoNextDay']['emailAddress']
+            $data['atHome']['options'][0]['common:infoNextDay']['@attributes']['language'],
+            $data['atHome']['options'][0]['common:infoNextDay']['common:emailAddress']
         );
 
         $atHome = new AtHome();
@@ -93,9 +163,11 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
         // I know, the line below is kinda bogus, but it will make sure all code is tested
         $atHome->setOptions(array($messaging));
 
-        $xmlArray = $atHome->toXMLArray();
+        $actualDocument->appendChild(
+            $atHome->toXML($actualDocument)
+        );
 
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

@@ -95,24 +95,47 @@ class Box
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param \DomDocument $document
+     * @param string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null)
     {
-        $data = array();
-        if ($this->getSender() !== null) {
-            $data['sender'] = $this->getSender()->toXMLArray();
-        }
-        if ($this->getNationalBox() !== null) {
-            $data['nationalBox'] = $this->getNationalBox()->toXMLArray();
-        }
-        if ($this->getInternationalBox() !== null) {
-            $data['internationalBox'] = $this->getInternationalBox()->toXMLArray();
-        }
-        if ($this->getRemark() !== null) {
-            $data['remark'] = $this->getRemark();
+        $tagName = 'box';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
         }
 
-        return $data;
+        $box = $document->createElement($tagName);
+
+        if ($this->getSender() !== null) {
+            $box->appendChild(
+                $this->getSender()->toXML($document, $prefix)
+            );
+        }
+        if ($this->getNationalBox() !== null) {
+            $box->appendChild(
+                $this->getNationalBox()->toXML($document, $prefix)
+            );
+        }
+        if ($this->getInternationalBox() !== null) {
+            $box->appendChild(
+                $this->getInternationalBox()->toXML($document, $prefix)
+            );
+        }
+        if ($this->getRemark() !== null) {
+            $tagName = 'remark';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $box->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getRemark()
+                )
+            );
+        }
+
+        return $box;
     }
 }

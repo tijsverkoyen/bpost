@@ -8,18 +8,48 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
 class DayTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Day->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Day->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'Monday' => '10:00-17:00',
         );
 
-        $day = new Day('Monday', '10:00-17:00');
-        $xmlArray = $day->toXMLArray();
+        $expectedDocument = self::createDomDocument();
+        foreach ($data as $key => $value) {
+            $expectedDocument->appendChild(
+                $expectedDocument->createElement(
+                    $key,
+                    $value
+                )
+            );
+        }
 
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument = self::createDomDocument();
+
+        foreach ($data as $key => $value) {
+            $day = new Day('Monday', '10:00-17:00');
+            $actualDocument->appendChild(
+                $day->toXML($actualDocument, null)
+            );
+        }
+
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

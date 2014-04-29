@@ -10,6 +10,8 @@ use TijsVerkoyen\Bpost\Exception;
  */
 class Customer
 {
+    const TAG_NAME = 'customer';
+
     /**
      * @var string
      */
@@ -126,27 +128,55 @@ class Customer
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param \DomDocument
+     * @param string $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DomDocument $document, $prefix = null)
     {
-        $data = array();
+        $tagName = static::TAG_NAME;
+        if($prefix !== null) $tagName = $prefix . ':' . $tagName;
+
+        $customer = $document->createElement($tagName);
+
         if ($this->getName() !== null) {
-            $data['name'] = $this->getName();
+            $customer->appendChild(
+                $document->createElement(
+                    'common:name',
+                    $this->getName()
+                )
+            );
         }
         if ($this->getCompany() !== null) {
-            $data['company'] = $this->getCompany();
+            $customer->appendChild(
+                $document->createElement(
+                    'common:company',
+                    $this->getCompany()
+                )
+            );
         }
         if ($this->getAddress() !== null) {
-            $data['address'] = $this->getAddress()->toXMLArray();
+            $customer->appendChild(
+                $this->getAddress()->toXML($document)
+            );
         }
         if ($this->getEmailAddress() !== null) {
-            $data['emailAddress'] = $this->getEmailAddress();
+            $customer->appendChild(
+                $document->createElement(
+                    'common:emailAddress',
+                    $this->getEmailAddress()
+                )
+            );
         }
         if ($this->getPhoneNumber() !== null) {
-            $data['phoneNumber'] = $this->getPhoneNumber();
+            $customer->appendChild(
+                $document->createElement(
+                    'common:phoneNumber',
+                    $this->getPhoneNumber()
+                )
+            );
         }
 
-        return $data;
+        return $customer;
     }
 }

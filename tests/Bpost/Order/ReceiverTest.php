@@ -9,9 +9,23 @@ use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 class ReceiverTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Receiver->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Sender->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'name' => 'Tijs Verkoyen',
@@ -28,6 +42,28 @@ class ReceiverTest extends \PHPUnit_Framework_TestCase
             'phoneNumber' => '+32 9 395 02 51',
         );
 
+        $expectedDocument = self::createDomDocument();
+        $sender = $expectedDocument->createElement('receiver');
+        foreach ($data as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $sender->appendChild($address);
+            } else {
+                $sender->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $expectedDocument->appendChild($sender);
+
+        $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['address']['streetName'],
             $data['address']['number'],
@@ -36,17 +72,17 @@ class ReceiverTest extends \PHPUnit_Framework_TestCase
             $data['address']['locality'],
             $data['address']['countryCode']
         );
-
         $receiver = new Receiver();
         $receiver->setName($data['name']);
         $receiver->setCompany($data['company']);
         $receiver->setAddress($address);
         $receiver->setEmailAddress($data['emailAddress']);
         $receiver->setPhoneNumber($data['phoneNumber']);
+        $actualDocument->appendChild(
+            $receiver->toXML($actualDocument, null)
+        );
 
-        $xmlArray = $receiver->toXMLArray();
-
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

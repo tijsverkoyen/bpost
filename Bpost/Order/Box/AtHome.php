@@ -70,7 +70,7 @@ class AtHome extends National
     }
 
     /**
-     * @param string $product Possible values are:
+     * @param string $product   Possible values are:
      *                          * bpack 24h Pro,
      *                          * bpack 24h business
      *                          * bpack Bus
@@ -124,30 +124,52 @@ class AtHome extends National
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param \DomDocument $document
+     * @param string       $prefix
+     * @param string       $type
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $data = parent::toXMLArray();
+        $tagName = 'nationalBox';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+        $nationalElement = $document->createElement($tagName);
+        $boxElement = parent::toXML($document, null, 'atHome');
+        $nationalElement->appendChild($boxElement);
 
         $openingHours = $this->getOpeningHours();
         if (!empty($openingHours)) {
+            $openingHoursElement = $document->createElement('openingHours');
             foreach ($openingHours as $day) {
-                /**
-                 * @var $day Day
-                 */
-                $data['openingHours'][] = $day->toXMLArray();
+                /** @var $day \TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day */
+                $openingHoursElement->appendChild(
+                    $day->toXML($document)
+                );
             }
+            $boxElement->appendChild($openingHoursElement);
         }
 
         if ($this->getDesiredDeliveryPlace() !== null) {
-            $data['desiredDeliveryPlace'] = $this->getDesiredDeliveryPlace();
+            $tagName = 'desiredDeliveryPlace';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getDesiredDeliveryPlace()
+                )
+            );
         }
 
         if ($this->getReceiver() !== null) {
-            $data['receiver'] = $this->getReceiver()->toXMLArray();
+            $boxElement->appendChild(
+                $this->getReceiver()->toXML($document)
+            );
         }
 
-        return array('atHome' => $data);
+        return $nationalElement;
     }
 }

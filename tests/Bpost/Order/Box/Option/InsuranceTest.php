@@ -8,36 +8,63 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 class InsuranceTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Insurance->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
     {
-        $data = array(
-            'insured' => array(
-                'basicInsurance' => array()
-            ),
-        );
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
 
+        return $document;
+    }
+
+    /**
+     * Tests Insurance->toXML
+     */
+    public function testToXML()
+    {
+        $expectedDocument = self::createDomDocument();
+        $insured = $expectedDocument->createElement('insured');
+        $insured->appendChild($expectedDocument->createElement('basicInsurance'));
+        $expectedDocument->appendChild($insured);
+
+        $actualDocument = self::createDomDocument();
         $insurance = new Insurance('basicInsurance');
-        $xmlArray = $insurance->toXMLArray();
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $insurance->toXML($actualDocument)
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
+
 
         $data = array(
             'insured' => array(
                 'additionalInsurance' => array(
                     '@attributes' => array(
-                        'value' => 3
-                    )
-                )
+                        'value' => 3,
+                    ),
+                ),
             ),
         );
 
+        $expectedDocument = self::createDomDocument();
+        $insured = $expectedDocument->createElement('insured');
+        $additionalInsurance = $expectedDocument->createElement('additionalInsurance');
+        $additionalInsurance->setAttribute('value', $data['insured']['additionalInsurance']['@attributes']['value']);
+        $insured->appendChild($additionalInsurance);
+        $expectedDocument->appendChild($insured);
+
+        $actualDocument = self::createDomDocument();
         $insurance = new Insurance(
             'additionalInsurance',
             $data['insured']['additionalInsurance']['@attributes']['value']
         );
-        $xmlArray = $insurance->toXMLArray();
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $insurance->toXML($actualDocument)
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

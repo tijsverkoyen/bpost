@@ -8,9 +8,23 @@ use TijsVerkoyen\Bpost\Bpost\Order\Address;
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Address->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Address->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'streetName' => 'Afrikalaan',
@@ -21,6 +35,16 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             'countryCode' => 'BE',
         );
 
+        $expectedDocument = self::createDomDocument();
+        $address = $expectedDocument->createElement('common:address');
+        foreach ($data as $key => $value) {
+            $address->appendChild(
+                $expectedDocument->createElement($key, $value)
+            );
+        }
+        $expectedDocument->appendChild($address);
+
+        $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['streetName'],
             $data['number'],
@@ -29,10 +53,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $data['locality'],
             $data['countryCode']
         );
+        $actualDocument->appendChild(
+            $address->toXML($actualDocument, null)
+        );
 
-        $xmlArray = $address->toXMLArray();
-
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

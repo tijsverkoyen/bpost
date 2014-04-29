@@ -8,17 +8,35 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Signature;
 class SignatureTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Signature->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
     {
-        $data = array(
-            'signed' => array(),
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Signature->toXML
+     */
+    public function testToXML()
+    {
+        $expectedDocument = self::createDomDocument();
+        $expectedDocument->appendChild(
+            $expectedDocument->createElement('signed')
         );
 
+        $actualDocument = self::createDomDocument();
         $signature = new Signature();
-        $xmlArray = $signature->toXMLArray();
+        $actualDocument->appendChild(
+            $signature->toXML($actualDocument)
+        );
 
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 }

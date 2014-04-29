@@ -9,9 +9,23 @@ use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 class At247Test extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests At247->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests At247->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'at24-7' => array(
@@ -33,6 +47,29 @@ class At247Test extends \PHPUnit_Framework_TestCase
             ),
         );
 
+        $expectedDocument = self::createDomDocument();
+        $nationalBox = $expectedDocument->createElement('nationalBox');
+        $at247 = $expectedDocument->createElement('at24-7');
+        $nationalBox->appendChild($at247);
+        $expectedDocument->appendChild($nationalBox);
+        foreach ($data['at24-7'] as $key => $value) {
+            if ($key == 'parcelsDepotAddress') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $at247->appendChild($address);
+            } else {
+                $at247->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+
+        $actualDocument = self::createDomDocument();
         $parcelsDepotAddress = new ParcelsDepotAddress(
             $data['at24-7']['parcelsDepotAddress']['streetName'],
             $data['at24-7']['parcelsDepotAddress']['number'],
@@ -41,7 +78,6 @@ class At247Test extends \PHPUnit_Framework_TestCase
             $data['at24-7']['parcelsDepotAddress']['locality'],
             $data['at24-7']['parcelsDepotAddress']['countryCode']
         );
-
         $at247 = new At247();
         $at247->setProduct($data['at24-7']['product']);
         $at247->setWeight($data['at24-7']['weight']);
@@ -51,10 +87,11 @@ class At247Test extends \PHPUnit_Framework_TestCase
         $at247->setMemberId($data['at24-7']['memberId']);
         $at247->setReceiverName($data['at24-7']['receiverName']);
         $at247->setReceiverCompany($data['at24-7']['receiverCompany']);
+        $actualDocument->appendChild(
+            $at247->toXML($actualDocument)
+        );
 
-        $xmlArray = $at247->toXMLArray();
-
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

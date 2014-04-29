@@ -9,9 +9,23 @@ use TijsVerkoyen\Bpost\Exception;
 class CustomsInfoTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Day->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Day->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'parcelValue' => '700',
@@ -21,15 +35,29 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             'privateAddress' => false,
         );
 
+        $expectedDocument = self::createDomDocument();
+        $customsInfo = $expectedDocument->createElement('customsInfo');
+        foreach ($data as $key => $value) {
+            if ($key == 'privateAddress') {
+                $value = ($value) ? 'true' : 'false';
+            }
+            $customsInfo->appendChild(
+                $expectedDocument->createElement($key, $value)
+            );
+        }
+        $expectedDocument->appendChild($customsInfo);
+
+        $actualDocument = self::createDomDocument();
         $customsInfo = new CustomsInfo();
         $customsInfo->setParcelValue($data['parcelValue']);
         $customsInfo->setContentDescription($data['contentDescription']);
         $customsInfo->setShipmentType($data['shipmentType']);
         $customsInfo->setParcelReturnInstructions($data['parcelReturnInstructions']);
         $customsInfo->setPrivateAddress($data['privateAddress']);
-        $xmlArray = $customsInfo->toXMLArray();
-
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $customsInfo->toXML($actualDocument, null)
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

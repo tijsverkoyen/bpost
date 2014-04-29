@@ -140,26 +140,73 @@ class Order
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param  string $accountId
-     * @return array
+     * @param \DOMDocument $document
+     * @param string       $accountId
+     * @return \DOMElement
      */
-    public function toXMLArray($accountId)
+    public function toXML(\DOMDocument $document, $accountId)
     {
-        $data = array();
-        $data['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v3/';
-        $data['accountId'] = (string) $accountId;
+        $order = $document->createElement(
+            'tns:order'
+        );
+        $order->setAttribute(
+            'xmlns:common',
+            'http://schema.post.be/shm/deepintegration/v3/common'
+        );
+        $order->setAttribute(
+            'xmlns:tns',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+        $order->setAttribute(
+            'xmlns',
+            'http://schema.post.be/shm/deepintegration/v3/national'
+        );
+        $order->setAttribute(
+            'xmlns:international',
+            'http://schema.post.be/shm/deepintegration/v3/international'
+        );
+        $order->setAttribute(
+            'xmlns:xsi',
+            'http://www.w3.org/2001/XMLSchema-instance'
+        );
+        $order->setAttribute(
+            'xsi:schemaLocation',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+
+        $document->appendChild($order);
+
+        $order->appendChild(
+            $document->createElement(
+                'tns:accountId',
+                (string) $accountId
+            )
+        );
+
         if ($this->getReference() !== null) {
-            $data['reference'] = $this->getReference();
+            $order->appendChild(
+                $document->createElement(
+                    'tns:reference',
+                    $this->getReference()
+                )
+            );
         }
         if ($this->getCostCenter() !== null) {
-            $data['costCenter'] = $this->getCostCenter();
+            $order->appendChild(
+                $document->createElement(
+                    'tns:costCenter',
+                    $this->getCostCenter()
+                )
+            );
         }
 
         $lines = $this->getLines();
         if (!empty($lines)) {
             foreach ($lines as $line) {
                 /** @var $line \TijsVerkoyen\Bpost\Bpost\Order\Line */
-                $data['orderLine'][] = $line->toXMLArray();
+                $order->appendChild(
+                    $line->toXML($document, 'tns')
+                );
             }
         }
 
@@ -167,10 +214,12 @@ class Order
         if (!empty($boxes)) {
             foreach ($boxes as $box) {
                 /** @var $box \TijsVerkoyen\Bpost\Bpost\Order\Box */
-                $data['box'][] = $box->toXMLArray();
+                $order->appendChild(
+                    $box->toXML($document, 'tns')
+                );
             }
         }
 
-        return $data;
+        return $order;
     }
 }

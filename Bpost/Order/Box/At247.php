@@ -65,7 +65,7 @@ class At247 extends National
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\ParcelsDepotAddress $parcelsDepotAddress
+     * @param \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress $parcelsDepotAddress
      */
     public function setParcelsDepotAddress($parcelsDepotAddress)
     {
@@ -73,7 +73,7 @@ class At247 extends National
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Box\ParcelsDepotAddress
+     * @return \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress
      */
     public function getParcelsDepotAddress()
     {
@@ -174,30 +174,87 @@ class At247 extends National
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param \DomDocument $document
+     * @param string       $prefix
+     * @param string       $type
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $data = parent::toXMLArray();
+        $tagName = 'nationalBox';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+        $nationalElement = $document->createElement($tagName);
+        $boxElement = parent::toXML($document, null, 'at24-7');
+        $nationalElement->appendChild($boxElement);
+
         if ($this->getParcelsDepotId() !== null) {
-            $data['parcelsDepotId'] = $this->getParcelsDepotId();
+            $tagName = 'parcelsDepotId';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getParcelsDepotId()
+                )
+            );
         }
         if ($this->getParcelsDepotName() !== null) {
-            $data['parcelsDepotName'] = $this->getParcelsDepotName();
+            $tagName = 'parcelsDepotName';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getParcelsDepotName()
+                )
+            );
         }
         if ($this->getParcelsDepotAddress() !== null) {
-            $data['parcelsDepotAddress'] = $this->getParcelsDepotAddress()->toXMLArray();
+            $boxElement->appendChild(
+                $this->getParcelsDepotAddress()->toXML($document)
+            );
         }
         if ($this->getMemberId() !== null) {
-            $data['memberId'] = $this->getMemberId();
+            $tagName = 'memberId';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getMemberId()
+                )
+            );
         }
         if ($this->getReceiverName() !== null) {
-            $data['receiverName'] = $this->getReceiverName();
+            $tagName = 'receiverName';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getReceiverName()
+                )
+            );
         }
         if ($this->getReceiverCompany() !== null) {
-            $data['receiverCompany'] = $this->getReceiverCompany();
+            $tagName = 'receiverCompany';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getReceiverCompany()
+                )
+            );
         }
 
-        return array('at24-7' => $data);
+        return $nationalElement;
     }
 }
