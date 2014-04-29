@@ -147,33 +147,15 @@ class Bpost
     /**
      * Make the call
      *
-     * @param  string $url   The URL to call.
-     * @param         array  [optional]  $data      The data to pass.
-     * @param         array  [optional]  $headers   The headers to pass.
-     * @param         string [optional] $method    The HTTP-method to use.
-     * @param         bool   [optional]   $expectXML Do we expect XML?
+     * @param  string $url       The URL to call.
+     * @param  string $body      The data to pass.
+     * @param  array  $headers   The headers to pass.
+     * @param  string $method    The HTTP-method to use.
+     * @param  bool   $expectXML Do we expect XML?
      * @return mixed
      */
-    private function doCall($url, $data = null, $headers = array(), $method = 'GET', $expectXML = true)
+    private function doCall($url, $body = null, $headers = array(), $method = 'GET', $expectXML = true)
     {
-        // any data?
-        if ($data !== null) {
-            // init XML
-            $xml = new \DOMDocument('1.0', 'utf-8');
-
-            // set some properties
-            $xml->preserveWhiteSpace = false;
-            $xml->formatOutput = true;
-
-            // build data
-            array_walk($data, array(__CLASS__, 'arrayToXML'), $xml);
-
-            // store body
-            $body = $xml->saveXML();
-        } else {
-            $body = null;
-        }
-
         // build Authorization header
         $headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
 
@@ -228,12 +210,11 @@ class Bpost
         }
 
         // valid HTTP-code
-        if (!in_array($headers['http_code'], array(0, 200))) {
+        if (!in_array($headers['http_code'], array(0, 200, 201))) {
             // internal debugging enabled
             if (self::DEBUG) {
                 echo '<pre>';
                 var_dump($options);
-                var_dump(htmlentities($body));
                 var_dump($response);
                 var_dump($headers);
                 var_dump($this);
@@ -244,7 +225,7 @@ class Bpost
             $xml = @simplexml_load_string($response);
 
             // validate
-            if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
+            if ($xml !== false && (substr($xml->getName(), 0, 7) == 'invalid')
             ) {
                 // internal debugging enabled
                 if (self::DEBUG) {
@@ -256,14 +237,20 @@ class Bpost
                 }
 
                 // message
-                $message = (string) $xml->message;
+                $message = (string) $xml->error;
                 $code = isset($xml->code) ? (int) $xml->code : null;
 
                 // throw exception
                 throw new Exception($message, $code);
             }
 
-            throw new Exception('Invalid response.', $headers['http_code']);
+            if (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) {
+                $message = $response;
+            } else {
+                $message = 'Invalid response.';
+            }
+
+            throw new Exception($message, $headers['http_code']);
         }
 
         // if we don't expect XML we can return the content here
@@ -395,16 +382,34 @@ class Bpost
         $url = '/orders';
 
         // build data
-        $data['order']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        $data['order']['value'] = $order->toXMLArray($this->accountId);
+        $document = new \DOMDocument('1.0', 'utf-8');
+
+        // set some properties
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        $document->appendChild(
+            $order->toXML(
+                $document,
+                ACCOUNT_ID
+            )
+        );
 
         // build headers
         $headers = array(
-            'Content-type: application/vnd.bpost.shm-order-v2+XML'
+            'Content-type: application/vnd.bpost.shm-order-v3+XML'
         );
 
         // make the call
-        return ($this->doCall($url, $data, $headers, 'POST', false) == '');
+        return (
+            $this->doCall(
+                $url,
+                $document->saveXML(),
+                $headers,
+                'POST',
+                false
+            ) == ''
+        );
     }
 
     /**
