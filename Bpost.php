@@ -378,13 +378,9 @@ class Bpost
      */
     public function createOrReplaceOrder(Order $order)
     {
-        // build url
         $url = '/orders';
 
-        // build data
         $document = new \DOMDocument('1.0', 'utf-8');
-
-        // set some properties
         $document->preserveWhiteSpace = false;
         $document->formatOutput = true;
 
@@ -395,12 +391,10 @@ class Bpost
             )
         );
 
-        // build headers
         $headers = array(
             'Content-type: application/vnd.bpost.shm-order-v3+XML'
         );
 
-        // make the call
         return (
             $this->doCall(
                 $url,
@@ -420,7 +414,6 @@ class Bpost
      */
     public function fetchOrder($reference)
     {
-        // build url
         $url = '/orders/' . (string) $reference;
 
         // make the call
@@ -706,8 +699,6 @@ class Bpost
     {
         $allowedStatuses = array('OPEN', 'PENDING', 'CANCELLED', 'COMPLETED', 'ON-HOLD');
         $status = mb_strtoupper((string) $status);
-
-        // validate
         if (!in_array($status, $allowedStatuses)) {
             throw new Exception(
                 'Invalid status (' . $status . '), allowed values are: ' .
@@ -715,27 +706,20 @@ class Bpost
             );
         }
 
-        // build url
         $url = '/orders/' . $reference;
 
-        // build data
         $document = new \DOMDocument('1.0', 'utf-8');
-
-        // set some properties
         $document->preserveWhiteSpace = false;
         $document->formatOutput = true;
 
         $orderUpdate = $document->createElement('orderUpdate');
         $orderUpdate->setAttribute('xmlns', 'http://schema.post.be/shm/deepintegration/v3/');
         $orderUpdate->setAttribute('xmlns:xsi', '"http://www.w3.org/2001/XMLSchema-instance');
-
         $orderUpdate->appendChild(
             $document->createElement('status', $status)
         );
-
         $document->appendChild($orderUpdate);
 
-        // build headers
         $headers = array(
             'Content-type: application/vnd.bpost.shm-orderUpdate-v3+XML'
         );
