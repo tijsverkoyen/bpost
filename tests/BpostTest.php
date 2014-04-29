@@ -165,4 +165,20 @@ class BpostTest extends \PHPUnit_Framework_TestCase
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
     }
+
+    /**
+     * Tests Bpost->createLabelForOrder
+     */
+    public function testCreateLabelForOrder()
+    {
+        $order = $this->createAtHomeOrderObject();
+        $this->bpost->createOrReplaceOrder($order);
+        $response = $this->bpost->createLabelForOrder($order->getReference());
+        $this->assertInternalType('array', $response);
+        foreach ($response as $label) {
+            $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
+        }
+
+        $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
+    }
 }

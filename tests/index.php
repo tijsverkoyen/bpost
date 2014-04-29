@@ -159,12 +159,7 @@ try {
 //    $response = $bpost->createOrReplaceOrder($order);
 //    $response = $bpost->modifyOrderStatus($orderId, 'OPEN');
 //    $response = $bpost->fetchOrder($orderId);
-//    $response = $bpost->createNationalLabel($orderId, 1);
-//    $response = $bpost->createInternationalLabel($orderId, array($labelInfo1, $labelInfo2), true);
-//    $response = $bpost->createOrderAndNationalLabel($order, 5);
-//    $response = $bpost->createOrderAndInternationalLabel(array($labelInfo1, $labelInfo2), $order);
-//    $response = $bpost->retrievePDFLabelsForBox($response['barcode'][0]);
-//    $response = $bpost->retrievePDFLabelsForOrder($orderId);
+//    $response = $bpost->createLabelForOrder($orderId, 'A4');
 
     // GEO6 webservices
 //    $geo6 = new Geo6(GEO6_PARTNER, GEO6_APP_ID);

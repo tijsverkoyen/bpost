@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
+use TijsVerkoyen\Bpost\Bpost\Label;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 
@@ -459,8 +460,74 @@ class Bpost
     }
 
 // labels
+    /**
+     * Get the possible label formats
+     *
+     * @return array
+     */
+    public static function getPossibleLabelFormatValues()
+    {
+        return array(
+            'A4',
+            'A6',
+        );
+    }
+
+    /**
+     * Create the labels for all unprinted boxes in an order.
+     * The service will return labels for all unprinted boxes for that order.
+     * Boxes that were unprinted will get the status PRINTED, the boxes that
+     * had already been printed will remain the same.
+     *
+     * @param  string $reference        The reference for an order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
     public function createLabelForOrder($reference, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
+        $format = strtoupper($format);
+        if (!in_array($format, self::getPossibleLabelFormatValues())) {
+            throw new Exception(
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossibleLabelFormatValues())
+                )
+            );
+        }
+
+        $url = '/orders/' . (string) $reference . '/labels/' . $format;
+        if ($withReturnLabels) {
+            $url .= '/withReturnLabels';
+        }
+
+        if ($asPdf) {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-pdf-v3+XML',
+            );
+        } else {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-image-v3+XML',
+            );
+        }
+
+
+        $xml = $this->doCall(
+            $url,
+            null,
+            $headers
+        );
+
+        $labels = array();
+
+        if (isset($xml->label)) {
+            foreach ($xml->label as $label) {
+                $labels[] = Label::createFromXML($label);
+            }
+        }
+
+        return $labels;
     }
 
     public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
