@@ -286,4 +286,34 @@ class Address
 
         return $address;
     }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Address
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $address = new Address();
+
+        if (isset($xml->streetName) && $xml->streetName != '') {
+            $address->setStreetName((string) $xml->streetName);
+        }
+        if (isset($xml->number) && $xml->number != '') {
+            $address->setNumber((string) $xml->number);
+        }
+        if (isset($xml->box) && $xml->box != '') {
+            $address->setBox((string) $xml->box);
+        }
+        if (isset($xml->postalCode) && $xml->postalCode != '') {
+            $address->setPostalCode((string) $xml->postalCode);
+        }
+        if (isset($xml->locality) && $xml->locality != '') {
+            $address->setLocality((string) $xml->locality);
+        }
+        if (isset($xml->countryCode) && $xml->countryCode != '') {
+            $address->setCountryCode((string) $xml->countryCode);
+        }
+
+        return $address;
+    }
 }

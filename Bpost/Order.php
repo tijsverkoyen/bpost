@@ -2,6 +2,10 @@
 
 namespace TijsVerkoyen\Bpost\Bpost;
 
+use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\Bpost\Order\Box;
+use TijsVerkoyen\Bpost\Bpost\Order\Line;
+
 /**
  * bPost Order class
  *
@@ -217,6 +221,38 @@ class Order
                 $order->appendChild(
                     $box->toXML($document, 'tns')
                 );
+            }
+        }
+
+        return $order;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Order
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        // @todo work with classmaps ...
+        if (!isset($xml->reference)) {
+            throw new Exception('No reference found.');
+        }
+
+        $order = new Order((string) $xml->reference);
+
+        if (isset($xml->costCenter) && $xml->costCenter != '') {
+            $order->setCostCenter((string) $xml->costCenter);
+        }
+        if (isset($xml->orderLine)) {
+            foreach ($xml->orderLine as $orderLine) {
+                $order->addLine(
+                    Line::createFromXML($orderLine)
+                );
+            }
+        }
+        if (isset($xml->box)) {
+            foreach ($xml->box as $box) {
+                $order->addBox(Box::createFromXML($box));
             }
         }
 

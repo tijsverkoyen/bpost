@@ -217,4 +217,25 @@ class Messaging extends Option
 
         return $messaging;
     }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Messaging
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $messaging = new Messaging(
+            $xml->getName(), (string) $xml->attributes()->language
+        );
+
+        $data = $xml->{$xml->getName()};
+        if (isset($data->emailAddress) && $data->emailAddress != '') {
+            $messaging->setEmailAddress((string) $data->emailAddress);
+        }
+        if (isset($data->mobilePhone) && $data->mobilePhone != '') {
+            $messaging->setMobilePhone((string) $data->mobilePhone);
+        }
+
+        return $messaging;
+    }
 }

@@ -142,4 +142,13 @@ abstract class National
 
         return $typeElement;
     }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return National
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        return;
+    }
 }

@@ -1,6 +1,8 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
+use TijsVerkoyen\Bpost\Exception;
+
 /**
  * bPost Box class
  *
@@ -27,6 +29,11 @@ class Box
      * @var string
      */
     private $remark;
+
+    /**
+     * @var string
+     */
+    private $status;
 
     /**
      * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\International $internationalBox
@@ -93,6 +100,46 @@ class Box
     }
 
     /**
+     * @param string $status
+     */
+    public function setStatus($status)
+    {
+        $status = strtoupper($status);
+        if (!in_array($status, self::getPossibleStatusValues())) {
+            throw new Exception(
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossibleStatusValues())
+                )
+            );
+        }
+
+        $this->status = $status;
+    }
+
+    /**
+     * @return string
+     */
+    public function getStatus()
+    {
+        return $this->status;
+    }
+
+    /**
+     * @return array
+     */
+    public static function getPossibleStatusValues()
+    {
+        return array(
+            'OPEN',
+            'PENDING',
+            'CANCELLED',
+            'COMPLETED',
+            'ON-HOLD'
+        );
+    }
+
+    /**
      * Return the object as an array for usage in the XML
      *
      * @param  \DomDocument $document
@@ -134,6 +181,51 @@ class Box
                     $this->getRemark()
                 )
             );
+        }
+
+        return $box;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Box
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $box = new Box();
+        if (isset($xml->sender)) {
+            $box->setSender(
+                Sender::createFromXML(
+                    $xml->sender->children(
+                        'http://schema.post.be/shm/deepintegration/v3/common'
+                    )
+                )
+            );
+        }
+        if (isset($xml->nationalBox)) {
+            $nationalBoxData = $xml->nationalBox->children('http://schema.post.be/shm/deepintegration/v3/national');
+
+            // build classname based on the tag name
+            $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\' . ucfirst($nationalBoxData->getName());
+            if (!method_exists($className, 'createFromXML')) {
+                throw new Exception('Not Implemented');
+            }
+
+            $nationalBox = call_user_func(
+                array($className, 'createFromXML'),
+                $nationalBoxData
+            );
+
+            $box->setNationalBox($nationalBox);
+        }
+        if (isset($xml->internationalBox)) {
+            throw new Exception('Not Implemented');
+        }
+        if (isset($xml->remark) && $xml->remark != '') {
+            $box->setRemark((string) $xml->remark);
+        }
+        if (isset($xml->status) && $xml->status != '') {
+            $box->setStatus((string) $xml->status);
         }
 
         return $box;

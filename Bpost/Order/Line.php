@@ -107,4 +107,21 @@ class Line
 
         return $line;
     }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Line
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $line = new Line();
+        if (isset($xml->text) && $xml->text != '') {
+            $line->setText((string) $xml->text);
+        }
+        if (isset($xml->nbOfItems) && $xml->nbOfItems != '') {
+            $line->setNumberOfItems((int) $xml->nbOfItems);
+        }
+
+        return $line;
+    }
 }

@@ -135,7 +135,9 @@ class Customer
     public function toXML(\DomDocument $document, $prefix = null)
     {
         $tagName = static::TAG_NAME;
-        if($prefix !== null) $tagName = $prefix . ':' . $tagName;
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
 
         $customer = $document->createElement($tagName);
 
@@ -178,5 +180,35 @@ class Customer
         }
 
         return $customer;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @param  Customer          $instance
+     * @return Customer
+     */
+    public static function createFromXMLHelper(\SimpleXMLElement $xml, Customer $instance)
+    {
+        if (isset($xml->name) && $xml->name != '') {
+            $instance->setName((string) $xml->name);
+        }
+        if (isset($xml->company) && $xml->company != '') {
+            $instance->setCompany((string) $xml->company);
+        }
+        if (isset($xml->address)) {
+            $instance->setAddress(
+                Address::createFromXML($xml->address)
+            );
+        }
+        if (isset($xml->emailAddress) && $xml->emailAddress != '') {
+            $instance->setEmailAddress(
+                (string) $xml->emailAddress
+            );
+        }
+        if (isset($xml->phoneNumber) && $xml->phoneNumber != '') {
+            $instance->setPhoneNumber((string) $xml->phoneNumber);
+        }
+
+        return $instance;
     }
 }

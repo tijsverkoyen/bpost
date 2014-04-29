@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order;
+use TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 /**
  * Bpost class
@@ -261,25 +262,6 @@ class Bpost
         // convert into XML
         $xml = simplexml_load_string($response);
 
-        // validate
-        if ($xml->getName() == 'businessException') {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump($response);
-                var_dump($headers);
-                var_dump($this);
-                echo '</pre>';
-            }
-
-            // message
-            $message = (string) $xml->message;
-            $code = (string) $xml->code;
-
-            // throw exception
-            throw new Exception($message, $code);
-        }
-
         // return the response
         return $xml;
     }
@@ -409,283 +391,23 @@ class Bpost
     /**
      * Fetch an order
      *
-     * @param  string $reference
-     * @return array
+     * @param $reference
+     * @return Order
      */
     public function fetchOrder($reference)
     {
         $url = '/orders/' . (string) $reference;
 
-        // make the call
-        $return = self::decodeResponse($this->doCall($url));
+        $headers = array(
+            'Accept: application/vnd.bpost.shm-order-v3+XML',
+        );
+        $xml = $this->doCall(
+            $url,
+            null,
+            $headers
+        );
 
-        // for some reason the order-data is wrapped in an order tag sometimes.
-        if (isset($return['order'])) {
-            if (isset($return['barcode'])) {
-                $barcodes = $return['barcode'];
-            }
-            $return = $return['order'];
-        }
-
-        $order = new Order($return['orderReference']);
-
-        if (isset($barcodes)) {
-            $order->setBarcodes($barcodes);
-        }
-
-        if (isset($return['status'])) {
-            $order->setStatus($return['status']);
-        }
-        if (isset($return['costCenter'])) {
-            $order->setCostCenter($return['costCenter']);
-        }
-
-        // order lines
-        if (isset($return['orderLine']) && !empty($return['orderLine'])) {
-            foreach ($return['orderLine'] as $row) {
-                $order->addOrderLine($row['text'], $row['nbOfItems']);
-            }
-        }
-
-        // customer
-        if (isset($return['customer'])) {
-            // create customer
-            $customer = new Customer($return['customer']['firstName'], $return['customer']['lastName']);
-            if (isset($return['customer']['deliveryAddress'])) {
-                $address = new Address(
-                    $return['customer']['deliveryAddress']['streetName'],
-                    $return['customer']['deliveryAddress']['number'],
-                    $return['customer']['deliveryAddress']['postalCode'],
-                    $return['customer']['deliveryAddress']['locality'],
-                    $return['customer']['deliveryAddress']['countryCode']
-                );
-                if (isset($return['customer']['deliveryAddress']['box'])) {
-                    $address->setBox($return['customer']['deliveryAddress']['box']);
-                }
-                $customer->setDeliveryAddress($address);
-            }
-            if (isset($return['customer']['email'])) {
-                $customer->setEmail($return['customer']['email']);
-            }
-            if (isset($return['customer']['phoneNumber'])) {
-                $customer->setPhoneNumber(
-                    $return['customer']['phoneNumber']
-                );
-            }
-
-            $order->setCustomer($customer);
-        }
-
-        // delivery method
-        if (isset($return['deliveryMethod'])) {
-            // atHome?
-            if (isset($return['deliveryMethod']['atHome'])) {
-                $deliveryMethod = new DeliveryMethodAtHome();
-
-                // options
-                if (isset($return['deliveryMethod']['atHome']['normal']['options']) && !empty($return['deliveryMethod']['atHome']['normal']['options'])) {
-                    $options = array();
-
-                    foreach ($return['deliveryMethod']['atHome']['normal']['options'] as $key => $row) {
-                        $language = 'NL'; // @todo fix me
-                        $emailAddress = null;
-                        $mobilePhone = null;
-                        $fixedPhone = null;
-
-                        if (isset($row['emailAddress'])) {
-                            $emailAddress = $row['emailAddress'];
-                        }
-                        if (isset($row['mobilePhone'])) {
-                            $mobilePhone = $row['mobilePhone'];
-                        }
-                        if (isset($row['fixedPhone'])) {
-                            $fixedPhone = $row['fixedPhone'];
-                        }
-
-                        if ($emailAddress === null && $mobilePhone === null && $fixedPhone === null) {
-                            continue;
-                        }
-
-                        $options[$key] = new Notification($language, $emailAddress, $mobilePhone, $fixedPhone);
-                    }
-
-                    $deliveryMethod->setNormal($options);
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // atShop
-            elseif (isset($return['deliveryMethod']['atShop'])) {
-                $deliveryMethod = new DeliveryMethodAtShop();
-
-                $language = $return['deliveryMethod']['atShop']['infoPugo']['@attributes']['language'];
-                $emailAddress = null;
-                $mobilePhone = null;
-                $fixedPhone = null;
-
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'])) {
-                    $emailAddress = $return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'])) {
-                    $mobilePhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'])) {
-                    $fixedPhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'];
-                }
-
-                $deliveryMethod->setInfoPugo(
-                    $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'],
-                    $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'],
-                    new Notification($language, $emailAddress, $mobilePhone, $fixedPhone)
-                );
-
-                if (isset($return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                $language = $return['deliveryMethod']['atShop']['infoPugo']['@attributes']['language'];
-                $emailAddress = null;
-                $mobilePhone = null;
-                $fixedPhone = null;
-                $pugoId = null;
-                $pugoName = null;
-
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'])) {
-                    $emailAddress = $return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'])) {
-                    $mobilePhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'])) {
-                    $fixedPhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'])) {
-                    $pugoId = $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'])) {
-                    $pugoName = $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'];
-                }
-
-                $deliveryMethod->setInfoPugo(
-                    $pugoId,
-                    $pugoName,
-                    new Notification($language, $emailAddress, $mobilePhone, $fixedPhone)
-                );
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // at24-7
-            elseif (isset($return['deliveryMethod']['at24-7'])) {
-                $deliveryMethod = new DeliveryMethodAt247(
-                    $return['deliveryMethod']['at24-7']['infoParcelsDepot']['parcelsDepotId']
-                );
-                if (isset($return['deliveryMethod']['at24-7']['memberId'])) {
-                    $deliveryMethod->setMemberId($return['deliveryMethod']['at24-7']['memberId']);
-                }
-                if (isset($return['deliveryMethod']['at24-7']['signature']['signature'])) {
-                    $deliveryMethod->setSignature();
-                }
-                if (isset($return['deliveryMethod']['at24-7']['signature']['signature'])) {
-                    $deliveryMethod->setSignature(true);
-                }
-                if (isset($return['deliveryMethod']['at24-7']['insurance']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['at24-7']['insurance']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // intExpress?
-            elseif (isset($return['deliveryMethod']['intExpress'])) {
-                $deliveryMethod = new DeliveryMethodIntBusiness();
-
-                if (isset($return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                // options
-                if (isset($return['deliveryMethod']['intBusiness']['insured']['options']) && !empty($return['deliveryMethod']['intExpress']['insured']['options'])) {
-                    $options = array();
-
-                    foreach ($return['deliveryMethod']['intExpress']['insured']['options'] as $key => $row) {
-                        $language = 'NL'; // @todo fix me
-                        $emailAddress = null;
-                        $mobilePhone = null;
-                        $fixedPhone = null;
-
-                        if (isset($row['emailAddress'])) {
-                            $emailAddress = $row['emailAddress'];
-                        }
-                        if (isset($row['mobilePhone'])) {
-                            $mobilePhone = $row['mobilePhone'];
-                        }
-                        if (isset($row['fixedPhone'])) {
-                            $fixedPhone = $row['fixedPhone'];
-                        }
-
-                        if ($emailAddress === null && $mobilePhone === null && $fixedPhone === null) {
-                            continue;
-                        }
-
-                        $options[$key] = new Notification($language, $emailAddress, $mobilePhone, $fixedPhone);
-                    }
-
-                    $deliveryMethod->setInsured($options);
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // intBusiness?
-            elseif (isset($return['deliveryMethod']['intBusiness'])) {
-                $deliveryMethod = new DeliveryMethodIntBusiness();
-
-                if (isset($return['deliveryMethod']['intBusiness']['insured']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['intBusiness']['insured']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                // options
-                if (isset($return['deliveryMethod']['intBusiness']['insured']['options']) && !empty($return['deliveryMethod']['intBusiness']['insured']['options'])) {
-                    $options = array();
-
-                    foreach ($return['deliveryMethod']['intBusiness']['insured']['options'] as $key => $row) {
-                        $language = 'NL'; // @todo fix me
-                        $emailAddress = null;
-                        $mobilePhone = null;
-                        $fixedPhone = null;
-
-                        if (isset($row['emailAddress'])) {
-                            $emailAddress = $row['emailAddress'];
-                        }
-                        if (isset($row['mobilePhone'])) {
-                            $mobilePhone = $row['mobilePhone'];
-                        }
-                        if (isset($row['fixedPhone'])) {
-                            $fixedPhone = $row['fixedPhone'];
-                        }
-
-                        if ($emailAddress === null && $mobilePhone === null && $fixedPhone === null) {
-                            continue;
-                        }
-
-                        $options[$key] = new Notification($language, $emailAddress, $mobilePhone, $fixedPhone);
-                    }
-
-                    $deliveryMethod->setInsured($options);
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            }
-        }
-
-        // total price
-        if (isset($return['totalPrice'])) {
-            $order->setTotal($return['totalPrice']);
-        }
-
-        return $order;
+        return Order::createFromXML($xml);
     }
 
     /**
@@ -697,12 +419,13 @@ class Bpost
      */
     public function modifyOrderStatus($reference, $status)
     {
-        $allowedStatuses = array('OPEN', 'PENDING', 'CANCELLED', 'COMPLETED', 'ON-HOLD');
-        $status = mb_strtoupper((string) $status);
-        if (!in_array($status, $allowedStatuses)) {
+        $status = strtoupper($status);
+        if (!in_array($status, Box::getPossibleStatusValues())) {
             throw new Exception(
-                'Invalid status (' . $status . '), allowed values are: ' .
-                implode(', ', $allowedStatuses) . '.'
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', Box::getPossibleStatusValues())
+                )
             );
         }
 

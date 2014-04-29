@@ -2,6 +2,8 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Exception;
 
 /**
@@ -171,5 +173,65 @@ class AtHome extends National
         }
 
         return $nationalElement;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return AtHome
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $atHome = new AtHome();
+
+        if (isset($xml->atHome->product) && $xml->atHome->product != '') {
+            $atHome->setProduct(
+                (string) $xml->atHome->product
+            );
+        }
+        if (isset($xml->atHome->options)) {
+            foreach ($xml->atHome->options as $optionData) {
+                $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
+
+                if (in_array($optionData->getName(), array('infoDistributed'))) {
+                    $option = Messaging::createFromXML($optionData);
+                } else {
+                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    if (!method_exists($className, 'createFromXML')) {
+                        throw new Exception('Not Implemented');
+                    }
+                    $option = call_user_func(
+                        array($className, 'createFromXML'),
+                        $optionData
+                    );
+                }
+
+                $atHome->addOption($option);
+            }
+        }
+        if (isset($xml->atHome->weight) && $xml->atHome->weight != '') {
+            $atHome->setWeight(
+                (int) $xml->atHome->weight
+            );
+        }
+        if (isset($xml->atHome->openingHours) && $xml->atHome->openingHours != '') {
+            throw new Exception('Not Implemented');
+            $atHome->setProduct(
+                (string) $xml->atHome->openingHours
+            );
+        }
+        if (isset($xml->atHome->desiredDeliveryPlace) && $xml->atHome->desiredDeliveryPlace != '') {
+            $atHome->setDesiredDeliveryPlace(
+                (string) $xml->atHome->desiredDeliveryPlace
+            );
+        }
+        if (isset($xml->atHome->receiver)) {
+            $atHome->setReceiver(
+                Receiver::createFromXML(
+                    $xml->atHome->receiver->children('http://schema.post.be/shm/deepintegration/v3/common')
+                )
+            );
+        }
+
+        return $atHome;
     }
 }

@@ -9,4 +9,16 @@ namespace TijsVerkoyen\Bpost\Bpost\Order;
 class Receiver extends Customer
 {
     const TAG_NAME = 'receiver';
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Receiver
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $receiver = new Receiver();
+        $receiver = parent::createFromXMLHelper($xml, $receiver);
+
+        return $receiver;
+    }
 }
