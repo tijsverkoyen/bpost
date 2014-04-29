@@ -157,8 +157,8 @@ $order->addBox($box);
 try {
     // Bpost webservices
 //    $response = $bpost->createOrReplaceOrder($order);
+//    $response = $bpost->modifyOrderStatus($orderId, 'OPEN');
 //    $response = $bpost->fetchOrder($orderId);
-//    $response = $bpost->modifyOrderStatus(660, 'OPEN');
 //    $response = $bpost->createNationalLabel($orderId, 1);
 //    $response = $bpost->createInternationalLabel($orderId, array($labelInfo1, $labelInfo2), true);
 //    $response = $bpost->createOrderAndNationalLabel($order, 5);

@@ -127,4 +127,72 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $response = $this->bpost->createOrReplaceOrder($order);
         $this->assertTrue($response);
     }
+
+    /**
+     * Tests Bpost->modifyOrderStatus
+     */
+    public function testModifyOrderStatus()
+    {
+        // create order
+        $orderId = time();
+        $order = new Order($orderId);
+        $order->setCostCenter('Cost Center');
+
+        // add lines
+        $line1 = new OrderLine('Beer', 1);
+        $order->addLine($line1);
+        $line2 = new OrderLine('Whisky', 100);
+        $order->addLine($line2);
+
+        // add box
+        $address = new Address();
+        $address->setStreetName('Afrikalaan');
+        $address->setNumber('289');
+        $address->setPostalCode('9000');
+        $address->setLocality('Gent');
+        $address->setCountryCode('BE');
+
+        $sender = new Sender();
+        $sender->setAddress($address);
+        $sender->setName('Tijs Verkoyen');
+        $sender->setCompany('Sumo Coders');
+        $sender->setPhoneNumber('+32 9 395 02 51');
+        $sender->setEmailAddress('bpost.sender@verkoyen.eu');
+
+        $box = new Box();
+        $box->setSender($sender);
+        $box->setRemark('Remark');
+
+        // add label
+        $address = new Address();
+        $address->setStreetName('Kerkstraat');
+        $address->setNumber('108');
+        $address->setPostalCode('9050');
+        $address->setLocality('Gentbrugge');
+        $address->setCountryCode('BE');
+
+        $receiver = new Receiver();
+        $receiver->setAddress($address);
+        $receiver->setName('Tijs Verkoyen');
+        $receiver->setCompany('Sumo Coders');
+        $receiver->setPhoneNumber('+32 9 395 02 51');
+        $receiver->setEmailAddress('bpost.receiver@verkoyen.eu');
+
+        // options
+        $option = new Messaging('infoDistributed', 'NL', 'bpost@verkoyen.eu');
+
+        // @Home
+        $atHome = new AtHome();
+        $atHome->setProduct('bpack 24h Pro');
+        $atHome->setWeight(2000);
+        $atHome->setReceiver($receiver);
+        $atHome->addOption($option);
+        $box->setNationalBox($atHome);
+
+        $order->addBox($box);
+
+        $this->bpost->createOrReplaceOrder($order);
+        $response = $this->bpost->modifyOrderStatus($orderId, 'OPEN');
+        $this->assertTrue($response);
+    }
 }

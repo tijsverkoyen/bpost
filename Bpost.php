@@ -92,8 +92,8 @@ class Bpost
      * Decode the response
      *
      * @param  SimpleXMLElement $item   The item to decode.
-     * @param  array [optional] $return Just a placeholder.
-     * @param  int   [optional] $i      A internal counter.
+     * @param  array            $return Just a placeholder.
+     * @param  int              $i      A internal counter.
      * @return mixed
      */
     private static function decodeResponse($item, $return = null, $i = 0)
@@ -716,32 +716,50 @@ class Bpost
         }
 
         // build url
-        $url = '/orders/status';
+        $url = '/orders/' . $reference;
 
         // build data
-        $data['orderStatusMap']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        $data['orderStatusMap']['entry']['orderReference'] = (string) $reference;
-        $data['orderStatusMap']['entry']['status'] = $status;
+        $document = new \DOMDocument('1.0', 'utf-8');
+
+        // set some properties
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        $orderUpdate = $document->createElement('orderUpdate');
+        $orderUpdate->setAttribute('xmlns', 'http://schema.post.be/shm/deepintegration/v3/');
+        $orderUpdate->setAttribute('xmlns:xsi', '"http://www.w3.org/2001/XMLSchema-instance');
+
+        $orderUpdate->appendChild(
+            $document->createElement('status', $status)
+        );
+
+        $document->appendChild($orderUpdate);
 
         // build headers
         $headers = array(
-            'X-HTTP-Method-Override: PATCH',
-            'Content-type: application/vnd.bpost.shm-order-status-v2+XML'
+            'Content-type: application/vnd.bpost.shm-orderUpdate-v3+XML'
         );
 
-        // make the call
-        return ($this->doCall($url, $data, $headers, 'PUT', false) == '');
+        return (
+            $this->doCall(
+                $url,
+                $document->saveXML(),
+                $headers,
+                'POST',
+                false
+            ) == ''
+        );
     }
 
 // labels
     /**
      * Create a national label
      *
-     * @param  string                $reference    Order reference: unique ID used in your web shop to assign to an order.
-     * @param  int                   $amount       Amount of labels.
-     * @param  bool       [optional] $withRetour   Should the return labeks be included?
-     * @param  bool       [optional] $returnLabels Should the labels be included?
-     * @param  string     [optional] $labelFormat  Format of the labels, possible values are: A_4, A_5.
+     * @param  string $reference    Order reference: unique ID used in your web shop to assign to an order.
+     * @param  int    $amount       Amount of labels.
+     * @param  bool   $withRetour   Should the return labeks be included?
+     * @param  bool   $returnLabels Should the labels be included?
+     * @param  string $labelFormat  Format of the labels, possible values are: A_4, A_5.
      * @return array
      */
     public function createNationalLabel(
@@ -799,9 +817,9 @@ class Bpost
     /**
      * Create an international label
      *
-     * @param  string                $reference    Order reference: unique ID used in your web shop to assign to an order.
-     * @param  array                 $labelInfo    For each label an object should be present
-     * @param  bool       [optional] $returnLabels Should the labels be included?
+     * @param  string $reference    Order reference: unique ID used in your web shop to assign to an order.
+     * @param  array  $labelInfo    For each label an object should be present
+     * @param  bool   $returnLabels Should the labels be included?
      * @return array
      */
     public function createInternationalLabel($reference, array $labelInfo, $returnLabels = null)
@@ -923,8 +941,8 @@ class Bpost
     /**
      * Retrieve a PDF-label for a box
      *
-     * @param  string              $barcode     The barcode to retrieve
-     * @param  string   [optional] $labelFormat Possible values are: A_4, A_5
+     * @param  string $barcode     The barcode to retrieve
+     * @param  string $labelFormat Possible values are: A_4, A_5
      * @return string
      */
     public function retrievePDFLabelsForBox($barcode, $labelFormat = null)
@@ -958,8 +976,8 @@ class Bpost
     /**
      * Retrieve a PDF-label for an order
      *
-     * @param  string            $reference
-     * @param  string [optional] $labelFormat Possible values are: A_4, A_5
+     * @param  string $reference
+     * @param  string $labelFormat Possible values are: A_4, A_5
      * @return string
      */
     public function retrievePDFLabelsForOrder($reference, $labelFormat = null)
