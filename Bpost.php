@@ -20,7 +20,7 @@ class Bpost
     const API_URL = 'https://api.bpost.be/services/shm';
 
     // current version
-    const VERSION = '1.0.1';
+    const VERSION = '3.0.0';
 
     /**
      * The account id
@@ -82,12 +82,8 @@ class Bpost
      */
     public function __destruct()
     {
-        // is the connection open?
         if ($this->curl !== null) {
-            // close connection
             curl_close($this->curl);
-
-            // reset
             $this->curl = null;
         }
     }
@@ -95,9 +91,9 @@ class Bpost
     /**
      * Decode the response
      *
-     * @param  SimpleXMLElement $item The item to decode.
-     * @param                   array [optional]  $return Just a placeholder.
-     * @param                   int   [optional]    $i      A internal counter.
+     * @param  SimpleXMLElement $item   The item to decode.
+     * @param  array [optional] $return Just a placeholder.
+     * @param  int   [optional] $i      A internal counter.
      * @return mixed
      */
     private static function decodeResponse($item, $return = null, $i = 0)
@@ -736,11 +732,11 @@ class Bpost
     /**
      * Create a national label
      *
-     * @param  string $reference Order reference: unique ID used in your web shop to assign to an order.
-     * @param  int    $amount    Amount of labels.
-     * @param         bool       [optional]   $withRetour   Should the return labeks be included?
-     * @param         bool       [optional]   $returnLabels Should the labels be included?
-     * @param         string     [optional] $labelFormat  Format of the labels, possible values are: A_4, A_5.
+     * @param  string                $reference    Order reference: unique ID used in your web shop to assign to an order.
+     * @param  int                   $amount       Amount of labels.
+     * @param  bool       [optional] $withRetour   Should the return labeks be included?
+     * @param  bool       [optional] $returnLabels Should the labels be included?
+     * @param  string     [optional] $labelFormat  Format of the labels, possible values are: A_4, A_5.
      * @return array
      */
     public function createNationalLabel(
@@ -798,9 +794,9 @@ class Bpost
     /**
      * Create an international label
      *
-     * @param  string $reference Order reference: unique ID used in your web shop to assign to an order.
-     * @param  array  $labelInfo For each label an object should be present
-     * @param         bool       [optional] $returnLabels Should the labels be included?
+     * @param  string                $reference    Order reference: unique ID used in your web shop to assign to an order.
+     * @param  array                 $labelInfo    For each label an object should be present
+     * @param  bool       [optional] $returnLabels Should the labels be included?
      * @return array
      */
     public function createInternationalLabel($reference, array $labelInfo, $returnLabels = null)
@@ -922,8 +918,8 @@ class Bpost
     /**
      * Retrieve a PDF-label for a box
      *
-     * @param  string $barcode The barcode to retrieve
-     * @param         string   [optional] $labelFormat Possible values are: A_4, A_5
+     * @param  string              $barcode     The barcode to retrieve
+     * @param  string   [optional] $labelFormat Possible values are: A_4, A_5
      * @return string
      */
     public function retrievePDFLabelsForBox($barcode, $labelFormat = null)
@@ -957,8 +953,8 @@ class Bpost
     /**
      * Retrieve a PDF-label for an order
      *
-     * @param  string $reference
-     * @param         string [optional] $labelFormat Possible values are: A_4, A_5
+     * @param  string            $reference
+     * @param  string [optional] $labelFormat Possible values are: A_4, A_5
      * @return string
      */
     public function retrievePDFLabelsForOrder($reference, $labelFormat = null)
