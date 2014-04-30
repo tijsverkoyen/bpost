@@ -161,6 +161,9 @@ try {
 //    $response = $bpost->fetchOrder($orderId);
 //    $response = $bpost->createLabelForOrder($orderId, 'A4');
 //    $response = $bpost->createLabelForBox('323212345659900357664050', 'A4');
+//    $response = $bpost->createLabelInBulkForOrders(
+//        array('1398779096', '1398862819'), 'A4'
+//    );
 
     // GEO6 webservices
 //    $geo6 = new Geo6(GEO6_PARTNER, GEO6_APP_ID);

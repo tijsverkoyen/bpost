@@ -561,15 +561,82 @@ class Bpost
     public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
         $url = '/boxes/' . (string) $barcode;
-
         return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
     }
 
+    /**
+     * Create labels in bulk, according to the list of order references and the
+     * list of barcodes. When there is an order reference specified in the
+     * request, the service will return a label of every box of that order. If
+     * a certain box was not yet printed, it will have the status PRINTED
+     *
+     * @param  array  $references       The references for the order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
     public function createLabelInBulkForOrders(
         array $references,
         $format = 'A6',
-        $widthReturnLabels = false,
+        $withReturnLabels = false,
         $asPdf = false
     ) {
+        $format = strtoupper($format);
+        if (!in_array($format, self::getPossibleLabelFormatValues())) {
+            throw new Exception(
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossibleLabelFormatValues())
+                )
+            );
+        }
+
+        $url = '/labels/' . $format;
+
+        if ($withReturnLabels) {
+            $url .= '/withReturnLabels';
+        }
+
+        if ($asPdf) {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-pdf-v3+XML',
+            );
+        } else {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-image-v3+XML',
+            );
+        }
+        $headers[] = 'Content-Type: application/vnd.bpost.shm-labelRequest-v3+XML';
+
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        $batchLabels = $document->createElement('batchLabels');
+        $batchLabels->setAttribute('xmlns', 'http://schema.post.be/shm/deepintegration/v3/');
+        foreach ($references as $reference) {
+            $batchLabels->appendChild(
+                $document->createElement('order', $reference)
+            );
+        }
+        $document->appendChild($batchLabels);
+
+        $xml = $this->doCall(
+            $url,
+            $document->saveXML(),
+            $headers,
+            'POST'
+        );
+
+        $labels = array();
+
+        if (isset($xml->label)) {
+            foreach ($xml->label as $label) {
+                $labels[] = Label::createFromXML($label);
+            }
+        }
+
+        return $labels;
     }
 }

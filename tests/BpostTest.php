@@ -203,4 +203,32 @@ class BpostTest extends \PHPUnit_Framework_TestCase
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
     }
+
+    /**
+     * Tests Bpost->createLabelInBulkForOrders
+     */
+    public function testCreateLabelInBulkForOrders()
+    {
+        $order1 = $this->createAtHomeOrderObject();
+        $this->bpost->createOrReplaceOrder($order1);
+
+        $order2 = $this->createAtHomeOrderObject();
+        $this->bpost->createOrReplaceOrder($order2);
+
+        $this->bpost->setTimeOut(60);
+        $response = $this->bpost->createLabelInBulkForOrders(
+            array(
+                $order1->getReference(),
+                $order2->getReference(),
+            )
+        );
+
+        $this->assertInternalType('array', $response);
+        foreach ($response as $label) {
+            $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
+        }
+
+        $this->bpost->modifyOrderStatus($order1->getReference(), 'CANCELLED');
+        $this->bpost->modifyOrderStatus($order2->getReference(), 'CANCELLED');
+    }
 }
