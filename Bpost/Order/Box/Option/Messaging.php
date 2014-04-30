@@ -176,21 +176,66 @@ class Messaging extends Option
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = 'common')
     {
-        $data = array();
-        $data['@attributes'] = array(
-            'language' => $this->getLanguage(),
-        );
-        if ($this->getEmailAddress() !== null) {
-            $data['emailAddress'] = $this->getEmailAddress();
-        }
-        if ($this->getMobilePhone() !== null) {
-            $data['mobilePhone'] = $this->getMobilePhone();
+        $tagName = $this->getType();
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
         }
 
-        return array($this->getType() => $data);
+        $messaging = $document->createElement($tagName);
+        $messaging->setAttribute('language', $this->getLanguage());
+
+        if ($this->getEmailAddress() !== null) {
+            $tagName = 'emailAddress';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $messaging->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getEmailAddress()
+                )
+            );
+        }
+        if ($this->getMobilePhone() !== null) {
+            $tagName = 'mobilePhone';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $messaging->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getMobilePhone()
+                )
+            );
+        }
+
+        return $messaging;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Messaging
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $messaging = new Messaging(
+            $xml->getName(), (string) $xml->attributes()->language
+        );
+
+        $data = $xml->{$xml->getName()};
+        if (isset($data->emailAddress) && $data->emailAddress != '') {
+            $messaging->setEmailAddress((string) $data->emailAddress);
+        }
+        if (isset($data->mobilePhone) && $data->mobilePhone != '') {
+            $messaging->setMobilePhone((string) $data->mobilePhone);
+        }
+
+        return $messaging;
     }
 }

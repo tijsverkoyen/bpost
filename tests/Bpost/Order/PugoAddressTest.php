@@ -8,9 +8,23 @@ use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 class PugoAddressTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests PugoAddress->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests PugoAddress->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'streetName' => 'Afrikalaan',
@@ -21,6 +35,16 @@ class PugoAddressTest extends \PHPUnit_Framework_TestCase
             'countryCode' => 'BE',
         );
 
+        $expectedDocument = self::createDomDocument();
+        $address = $expectedDocument->createElement('pugoAddress');
+        foreach ($data as $key => $value) {
+            $address->appendChild(
+                $expectedDocument->createElement($key, $value)
+            );
+        }
+        $expectedDocument->appendChild($address);
+
+        $actualDocument = self::createDomDocument();
         $address = new PugoAddress(
             $data['streetName'],
             $data['number'],
@@ -29,10 +53,11 @@ class PugoAddressTest extends \PHPUnit_Framework_TestCase
             $data['locality'],
             $data['countryCode']
         );
+        $actualDocument->appendChild(
+            $address->toXML($actualDocument, null)
+        );
 
-        $xmlArray = $address->toXMLArray();
-
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

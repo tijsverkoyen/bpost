@@ -10,6 +10,8 @@ use TijsVerkoyen\Bpost\Exception;
  */
 class Customer
 {
+    const TAG_NAME = 'customer';
+
     /**
      * @var string
      */
@@ -126,27 +128,87 @@ class Customer
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param \DomDocument
+     * @param  string      $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DomDocument $document, $prefix = null)
     {
-        $data = array();
-        if ($this->getName() !== null) {
-            $data['name'] = $this->getName();
-        }
-        if ($this->getCompany() !== null) {
-            $data['company'] = $this->getCompany();
-        }
-        if ($this->getAddress() !== null) {
-            $data['address'] = $this->getAddress()->toXMLArray();
-        }
-        if ($this->getEmailAddress() !== null) {
-            $data['emailAddress'] = $this->getEmailAddress();
-        }
-        if ($this->getPhoneNumber() !== null) {
-            $data['phoneNumber'] = $this->getPhoneNumber();
+        $tagName = static::TAG_NAME;
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
         }
 
-        return $data;
+        $customer = $document->createElement($tagName);
+
+        if ($this->getName() !== null) {
+            $customer->appendChild(
+                $document->createElement(
+                    'common:name',
+                    $this->getName()
+                )
+            );
+        }
+        if ($this->getCompany() !== null) {
+            $customer->appendChild(
+                $document->createElement(
+                    'common:company',
+                    $this->getCompany()
+                )
+            );
+        }
+        if ($this->getAddress() !== null) {
+            $customer->appendChild(
+                $this->getAddress()->toXML($document)
+            );
+        }
+        if ($this->getEmailAddress() !== null) {
+            $customer->appendChild(
+                $document->createElement(
+                    'common:emailAddress',
+                    $this->getEmailAddress()
+                )
+            );
+        }
+        if ($this->getPhoneNumber() !== null) {
+            $customer->appendChild(
+                $document->createElement(
+                    'common:phoneNumber',
+                    $this->getPhoneNumber()
+                )
+            );
+        }
+
+        return $customer;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @param  Customer          $instance
+     * @return Customer
+     */
+    public static function createFromXMLHelper(\SimpleXMLElement $xml, Customer $instance)
+    {
+        if (isset($xml->name) && $xml->name != '') {
+            $instance->setName((string) $xml->name);
+        }
+        if (isset($xml->company) && $xml->company != '') {
+            $instance->setCompany((string) $xml->company);
+        }
+        if (isset($xml->address)) {
+            $instance->setAddress(
+                Address::createFromXML($xml->address)
+            );
+        }
+        if (isset($xml->emailAddress) && $xml->emailAddress != '') {
+            $instance->setEmailAddress(
+                (string) $xml->emailAddress
+            );
+        }
+        if (isset($xml->phoneNumber) && $xml->phoneNumber != '') {
+            $instance->setPhoneNumber((string) $xml->phoneNumber);
+        }
+
+        return $instance;
     }
 }

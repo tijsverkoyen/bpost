@@ -8,9 +8,23 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 class MessagingTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Messaging->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Messaging->ToXML
+     */
+    public function testToXML()
     {
         $data = array(
             'infoDistributed' => array(
@@ -20,15 +34,29 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
                 'mobilePhone' => '0495151689',
             ),
         );
+
+        $expectedDocument = self::createDomDocument();
+        $infoDistributed = $expectedDocument->createElement('infoDistributed');
+        $infoDistributed->setAttribute('language', $data['infoDistributed']['@attributes']['language']);
+        $infoDistributed->appendChild(
+            $expectedDocument->createElement(
+                'mobilePhone',
+                $data['infoDistributed']['mobilePhone']
+            )
+        );
+        $expectedDocument->appendChild($infoDistributed);
+
+        $actualDocument = self::createDomDocument();
         $messaging = new Messaging(
             'infoDistributed',
             $data['infoDistributed']['@attributes']['language'],
             null,
             $data['infoDistributed']['mobilePhone']
         );
-
-        $xmlArray = $messaging->toXMLArray();
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $messaging->toXML($actualDocument, null)
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
 
         $data = array(
             'infoNextDay' => array(
@@ -38,14 +66,28 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
                 'emailAddress' => 'someone@test.com',
             ),
         );
+
+        $expectedDocument = self::createDomDocument();
+        $infoNextDay = $expectedDocument->createElement('infoNextDay');
+        $infoNextDay->setAttribute('language', $data['infoNextDay']['@attributes']['language']);
+        $infoNextDay->appendChild(
+            $expectedDocument->createElement(
+                'emailAddress',
+                $data['infoNextDay']['emailAddress']
+            )
+        );
+        $expectedDocument->appendChild($infoNextDay);
+
+        $actualDocument = self::createDomDocument();
         $messaging = new Messaging(
             'infoNextDay',
             $data['infoNextDay']['@attributes']['language'],
             $data['infoNextDay']['emailAddress']
         );
-
-        $xmlArray = $messaging->toXMLArray();
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $messaging->toXML($actualDocument, null)
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

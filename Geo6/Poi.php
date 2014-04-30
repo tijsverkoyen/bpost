@@ -399,7 +399,7 @@ class Poi
         if (isset($xml->Number) && $xml->Number != '') {
             $poi->setNr((string) $xml->Number);
         }
-        if (isset($xml->NR) && $xml->Nr != '') {
+        if (isset($xml->NR) && $xml->NR != '') {
             $poi->setNr((string) $xml->NR);
         }
         if (isset($xml->Zip) && $xml->Zip != '') {

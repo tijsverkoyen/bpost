@@ -10,6 +10,8 @@ use TijsVerkoyen\Bpost\Exception;
  */
 class Address
 {
+    const TAG_NAME = 'common:address';
+
     /**
      * @var string
      */
@@ -199,30 +201,119 @@ class Address
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DOMDocument $document
+     * @param  string       $prefix
+     * @return \DOMElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = 'common')
     {
-        $data = array();
+        $tagName = static::TAG_NAME;
+        $address = $document->createElement($tagName);
+        $document->appendChild($address);
+
         if ($this->getStreetName() !== null) {
-            $data['streetName'] = $this->getStreetName();
+            $tagName = 'streetName';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $address->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getStreetName()
+                )
+            );
         }
         if ($this->getNumber() !== null) {
-            $data['number'] = $this->getNumber();
+            $tagName = 'number';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $address->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getNumber()
+                )
+            );
         }
         if ($this->getBox() !== null) {
-            $data['box'] = $this->getBox();
+            $tagName = 'box';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $address->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getBox()
+                )
+            );
         }
         if ($this->getPostalCode() !== null) {
-            $data['postalCode'] = $this->getPostalCode();
+            $tagName = 'postalCode';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $address->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getPostalCode()
+                )
+            );
         }
         if ($this->getLocality() !== null) {
-            $data['locality'] = $this->getLocality();
+            $tagName = 'locality';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $address->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getLocality()
+                )
+            );
         }
         if ($this->getCountryCode() !== null) {
-            $data['countryCode'] = $this->getCountryCode();
+            $tagName = 'countryCode';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $address->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getCountryCode()
+                )
+            );
         }
 
-        return $data;
+        return $address;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Address
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $address = new Address();
+
+        if (isset($xml->streetName) && $xml->streetName != '') {
+            $address->setStreetName((string) $xml->streetName);
+        }
+        if (isset($xml->number) && $xml->number != '') {
+            $address->setNumber((string) $xml->number);
+        }
+        if (isset($xml->box) && $xml->box != '') {
+            $address->setBox((string) $xml->box);
+        }
+        if (isset($xml->postalCode) && $xml->postalCode != '') {
+            $address->setPostalCode((string) $xml->postalCode);
+        }
+        if (isset($xml->locality) && $xml->locality != '') {
+            $address->setLocality((string) $xml->locality);
+        }
+        if (isset($xml->countryCode) && $xml->countryCode != '') {
+            $address->setCountryCode((string) $xml->countryCode);
+        }
+
+        return $address;
     }
 }

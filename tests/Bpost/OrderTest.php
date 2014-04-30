@@ -15,14 +15,25 @@ use TijsVerkoyen\Bpost\Bpost\Order\Sender;
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Order->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Order->toXML
+     */
+    public function testToXML()
     {
         $data = array(
-            '@attributes' => array(
-                'xmlns' => 'http://schema.post.be/shm/deepintegration/v3/',
-            ),
             'accountId' => ACCOUNT_ID,
             'reference' => 'reference ' . time(),
             'costCenter' => 'costcenter ' . time(),
@@ -75,6 +86,115 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
+        $expectedDocument = self::createDomDocument();
+        $order = $expectedDocument->createElement(
+            'tns:order'
+        );
+        $order->setAttribute(
+            'xmlns:common',
+            'http://schema.post.be/shm/deepintegration/v3/common'
+        );
+        $order->setAttribute(
+            'xmlns:tns',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+        $order->setAttribute(
+            'xmlns',
+            'http://schema.post.be/shm/deepintegration/v3/national'
+        );
+        $order->setAttribute(
+            'xmlns:international',
+            'http://schema.post.be/shm/deepintegration/v3/international'
+        );
+        $order->setAttribute(
+            'xmlns:xsi',
+            'http://www.w3.org/2001/XMLSchema-instance'
+        );
+        $order->setAttribute(
+            'xsi:schemaLocation',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+        $expectedDocument->appendChild($order);
+        $order->appendChild(
+            $expectedDocument->createElement('tns:accountId', $data['accountId'])
+        );
+        $order->appendChild(
+            $expectedDocument->createElement('tns:reference', $data['reference'])
+        );
+        $order->appendChild(
+            $expectedDocument->createElement('tns:costCenter', $data['costCenter'])
+        );
+        foreach ($data['orderLine'] as $row) {
+            $line = $expectedDocument->createElement('tns:orderLine');
+            $line->appendChild(
+                $expectedDocument->createElement('tns:text', $row['text'])
+            );
+            $line->appendChild(
+                $expectedDocument->createElement('tns:nbOfItems', $row['nbOfItems'])
+            );
+            $order->appendChild($line);
+        }
+        $box = $expectedDocument->createElement('tns:box');
+        $order->appendChild($box);
+        $sender = $expectedDocument->createElement('tns:sender');
+        foreach ($data['box'][0]['sender'] as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $sender->appendChild($address);
+            } else {
+                $sender->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $box->appendChild($sender);
+        $nationalBox = $expectedDocument->createElement('tns:nationalBox');
+        $at247 = $expectedDocument->createElement('at24-7');
+        $nationalBox->appendChild($at247);
+        $expectedDocument->appendChild($nationalBox);
+        foreach ($data['box'][0]['nationalBox']['at24-7'] as $key => $value) {
+            if (in_array(
+                $key,
+                array(
+                    'parcelsDepotId',
+                    'parcelsDepotName',
+                    'memberId',
+                    'receiverName',
+                    'receiverCompany',
+                )
+            )
+            ) {
+                $key = 'tns:' . $key;
+            }
+
+            if ($key == 'parcelsDepotAddress') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $at247->appendChild($address);
+            } else {
+                $at247->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $box->appendChild($nationalBox);
+        $box->appendChild(
+            $expectedDocument->createElement('tns:remark', $data['box'][0]['remark'])
+        );
+
+        $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['box'][0]['sender']['address']['streetName'],
             $data['box'][0]['sender']['address']['number'],
@@ -137,8 +257,21 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         // I know, the line below is kinda bogus, but it will make sure all code is tested
         $order->setBoxes(array($box));
 
-        $xmlArray = $order->toXMLArray(ACCOUNT_ID);
+        $actualDocument->appendChild(
+            $order->toXML($actualDocument, ACCOUNT_ID)
+        );
 
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
+
+        try {
+            $xml = simplexml_load_string(
+                '<order>
+                </order>'
+            );
+            $order = Order::createFromXML($xml);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertEquals('No reference found.', $e->getMessage());
+        }
     }
 }

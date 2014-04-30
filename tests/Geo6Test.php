@@ -47,7 +47,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
     public function testGetUserAgent()
     {
         $this->geo6->setUserAgent('testing/1.0.0');
-        $this->assertEquals('PHP Geo6/' . Geo6::VERSION . ' testing/1.0.0', $this->geo6->getUserAgent());
+        $this->assertEquals('PHP Bpost Geo6/' . Geo6::VERSION . ' testing/1.0.0', $this->geo6->getUserAgent());
     }
 
     /**

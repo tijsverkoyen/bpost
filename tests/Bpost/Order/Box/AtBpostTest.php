@@ -9,9 +9,23 @@ use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 class AtBpostTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Address->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Address->toXML
+     */
+    public function testToXML()
     {
         $data = array(
             'atBpost' => array(
@@ -31,6 +45,29 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
             ),
         );
 
+        $expectedDocument = self::createDomDocument();
+        $nationalBox = $expectedDocument->createElement('nationalBox');
+        $atBpost = $expectedDocument->createElement('atBpost');
+        $nationalBox->appendChild($atBpost);
+        $expectedDocument->appendChild($nationalBox);
+        foreach ($data['atBpost'] as $key => $value) {
+            if ($key == 'pugoAddress') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = '' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $atBpost->appendChild($address);
+            } else {
+                $atBpost->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+
+        $actualDocument = self::createDomDocument();
         $pugoAddress = new PugoAddress(
             $data['atBpost']['pugoAddress']['streetName'],
             $data['atBpost']['pugoAddress']['number'],
@@ -50,9 +87,9 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
         $atBpost->setReceiverName($data['atBpost']['receiverName']);
         $atBpost->setReceiverCompany($data['atBpost']['receiverCompany']);
 
-        $xmlArray = $atBpost->toXMLArray();
+        $actualDocument->appendChild($atBpost->toXML($actualDocument));
 
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

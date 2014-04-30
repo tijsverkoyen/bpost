@@ -67,18 +67,61 @@ class Line
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DOMElement
      */
-    public function toXMLArray()
+    public function toXML(\DomDocument $document, $prefix = null)
     {
-        $data = array();
-        if ($this->getText() !== null) {
-            $data['text'] = $this->getText();
-        }
-        if ($this->getNumberOfItems() !== null) {
-            $data['nbOfItems'] = $this->getNumberOfItems();
+        $tagName = 'orderLine';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
         }
 
-        return $data;
+        $line = $document->createElement($tagName);
+
+        if ($this->getText() !== null) {
+            $tagName = 'text';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $line->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getText()
+                )
+            );
+        }
+        if ($this->getNumberOfItems() !== null) {
+            $tagName = 'nbOfItems';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $line->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getNumberOfItems()
+                )
+            );
+        }
+
+        return $line;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Line
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $line = new Line();
+        if (isset($xml->text) && $xml->text != '') {
+            $line->setText((string) $xml->text);
+        }
+        if (isset($xml->nbOfItems) && $xml->nbOfItems != '') {
+            $line->setNumberOfItems((int) $xml->nbOfItems);
+        }
+
+        return $line;
     }
 }

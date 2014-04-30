@@ -8,4 +8,5 @@ namespace TijsVerkoyen\Bpost\Bpost\Order;
  */
 class ParcelsDepotAddress extends Address
 {
+    const TAG_NAME = 'parcelsDepotAddress';
 }

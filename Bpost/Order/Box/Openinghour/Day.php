@@ -94,12 +94,17 @@ class Day
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null)
     {
-        return array(
-            $this->getDay() => $this->getValue()
-        );
+        $tagName = $this->getDay();
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+
+        return $document->createElement($tagName, $this->getValue());
     }
 }

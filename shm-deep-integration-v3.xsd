@@ -1,0 +1,1051 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" attributeFormDefault="unqualified"
+           xmlns="http://schema.post.be/shm/deepintegration/v3/"
+           targetNamespace="http://schema.post.be/shm/deepintegration/v3/"
+           xmlns:tns="http://schema.post.be/shm/deepintegration/v3/">
+
+    <xs:simpleType name="AccountIdType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CostCenterType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="WeightInGrams">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EuroCentAmount">
+        <xs:restriction base="xs:int">
+            <xs:minInclusive value="0" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="IbanType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="40" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="BicType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([A-Z]{4}[A-Z]{2}[A-Z0-9]{2}([A-Z0-9]{3})?)" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="EmailAddressType">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="([a-zA-Z0-9_\.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+" />
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PhoneNumberType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="20" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ReceiverNameType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="40" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ReceiverCompany">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="40" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StreetNameType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="40" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StreetNumberType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="8" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="StreetBoxType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="8" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="PostalCodeType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="8" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="LocalityType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="40" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="CountryCode">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[A-Z]{2}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RcCode">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{6}" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="BpackMemberId">
+        <xs:restriction base="xs:string">
+            <xs:pattern value="[0-9]{9}" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Party">
+        <xs:sequence>
+            <xs:element name="name" type="tns:ReceiverNameType" />
+            <xs:element name="company" minOccurs="0" type="tns:ReceiverCompany" />
+            <xs:element name="address" type="tns:AddressType" />
+            <xs:element name="emailAddress" minOccurs="0" type="tns:EmailAddressType" />
+            <xs:element name="phoneNumber" minOccurs="0" type="tns:PhoneNumberType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="AddressType">
+        <xs:sequence>
+            <xs:element name="streetName" type="tns:StreetNameType" />
+            <xs:element name="number" type="tns:StreetNumberType" />
+            <xs:element name="box" minOccurs="0" type="tns:StreetBoxType" />
+            <xs:element name="postalCode" type="tns:PostalCodeType" />
+            <xs:element name="locality" type="tns:LocalityType" />
+            <xs:element name="countryCode" type="tns:CountryCode" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:simpleType name="BoxStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PENDING" />
+            <xs:enumeration value="OPEN" />
+            <xs:enumeration value="CANCELLED" />
+            <xs:enumeration value="ON-HOLD" />
+            <xs:enumeration value="PRINTED" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="SetBoxStatusType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="OPEN" />
+            <xs:enumeration value="CANCELLED" />
+            <xs:enumeration value="ON-HOLD" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Options -->
+    <xs:complexType name="OptionsType">
+        <xs:sequence>
+            <xs:element name="infoDistributed" type="NotificationType" minOccurs="0" />
+            <xs:element name="infoNextDay" type="NotificationType" minOccurs="0" />
+            <xs:element name="infoReminder" type="NotificationType" minOccurs="0" />
+            <xs:element name="keepMeInformed" type="NotificationType" minOccurs="0" />
+            <xs:element name="automaticSecondPresentation" minOccurs="0">
+                <xs:complexType />
+            </xs:element>
+            <xs:element name="insured" type="InsuranceType" minOccurs="0" />
+            <xs:element name="signed" type="SignatureType" minOccurs="0" />
+            <xs:element name="cod" type="CodType" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InsuranceType">
+        <xs:choice>
+            <xs:element name="basicInsurance">
+                <xs:complexType />
+            </xs:element>
+            <xs:element name="additionalInsurance" type="AdditionalInsuranceType" />
+        </xs:choice>
+    </xs:complexType>
+    <xs:complexType name="AdditionalInsuranceType">
+        <xs:attribute name="value" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:integer">
+                    <xs:enumeration value="1" />
+                    <xs:enumeration value="2" />
+                    <xs:enumeration value="3" />
+                    <xs:enumeration value="4" />
+                    <xs:enumeration value="5" />
+                    <xs:enumeration value="6" />
+                    <xs:enumeration value="7" />
+                    <xs:enumeration value="8" />
+                    <xs:enumeration value="9" />
+                    <xs:enumeration value="10" />
+                    <xs:enumeration value="11" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="NotificationType">
+        <xs:choice>
+            <xs:element name="emailAddress" type="tns:EmailAddressType" />
+            <xs:element name="mobilePhone" type="tns:PhoneNumberType" />
+        </xs:choice>
+        <xs:attribute name="language" use="required">
+            <xs:simpleType>
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="EN" />
+                    <xs:enumeration value="NL" />
+                    <xs:enumeration value="FR" />
+                    <xs:enumeration value="DE" />
+                </xs:restriction>
+            </xs:simpleType>
+        </xs:attribute>
+    </xs:complexType>
+    <xs:complexType name="CodType">
+        <xs:sequence>
+            <xs:element name="codAmount" type="tns:EuroCentAmount" />
+            <xs:element name="iban" type="tns:IbanType" />
+            <xs:element name="bic" type="tns:BicType" />
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="SignatureType" />
+
+    <xs:complexType name="NationalBoxType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for a national box. This is a box send from a Belgian address to another Belgian address.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:choice>
+            <xs:element ref="atHome">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        'Home or Office' delivery.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="atBpost">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        'Pick-up point' delivery.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="at24-7">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        'Parcel Machine' delivery.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element ref="bpostOnAppointment">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        'bpost on appointment' delivery.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+
+        </xs:choice>
+    </xs:complexType>
+
+    <xs:element name="atHome">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                'Home or Office' delivery.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:NationalDeliveryMethodType">
+                    <xs:sequence>
+                        <xs:element name="receiver" type="Party">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding information about the receiver of the parcel.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="atBpost">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                'Pick-up point' delivery.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:NationalDeliveryMethodType">
+                    <xs:sequence>
+                        <xs:sequence>
+                            <xs:element name="pugoId" type="RcCode">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        Element holding the unique identifier of the pick-up point.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="pugoName" type="ReceiverNameType">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        Element holding the name of the pick-up point.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="pugoAddress" type="AddressType">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        Element holding the address of the pick-up point.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+
+                            <xs:element name="receiverName" type="ReceiverNameType">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        Element holding the name of the receiver of the parcel.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                            <xs:element name="receiverCompany" type="ReceiverCompany" minOccurs="0">
+                                <xs:annotation>
+                                    <xs:documentation xml:lang="en">
+                                        Element holding the company name of the receiver of the parcel.
+                                    </xs:documentation>
+                                </xs:annotation>
+                            </xs:element>
+                        </xs:sequence>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+    <xs:element name="at24-7">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                'Parcel Machine' delivery.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:NationalDeliveryMethodType">
+                    <xs:sequence>
+                        <xs:element name="parcelsDepotId" type="RcCode">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the unique identifier of the parcel machine.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="parcelsDepotName" type="ReceiverNameType">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the name of the parcel machine.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="parcelsDepotAddress" type="AddressType">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the address of the parcel machine.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="memberId" type="BpackMemberId">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the member id of the receiver of the parcel.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="receiverName" type="ReceiverNameType">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the name of the receiver of the parcel.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="receiverCompany" type="ReceiverCompany" minOccurs="0">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the name of the company of the receiver of the parcel.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="bpostOnAppointment">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                'bpost on appointment' delivery.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:NationalDeliveryMethodType">
+                    <xs:sequence>
+                        <xs:element name="receiver" type="Party">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding information about the receiver of the parcel.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="inNetworkCutOff" type="xs:dateTime">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Latest time at which the parcel should be ready to enter the bpost network.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="NationalDeliveryMethodType" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for a national delivery method.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="product" type="xs:string">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding product information.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="options" type="OptionsType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the options information.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="weight" type="WeightInGrams" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the the weight of the parcel.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="openingHours" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The opening hours of the receiver. Only applicable for B2B items.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Monday" type="OpeningHoursType" minOccurs="0" />
+                        <xs:element name="Tuesday" type="OpeningHoursType" minOccurs="0" />
+                        <xs:element name="Wednesday" type="OpeningHoursType" minOccurs="0" />
+                        <xs:element name="Thursday" type="OpeningHoursType" minOccurs="0" />
+                        <xs:element name="Friday" type="OpeningHoursType" minOccurs="0" />
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="desiredDeliveryPlace" type="DesiredDeliveryPlaceType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation>The desired delivery place of the receiver. Only applicable for B2B items.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!--  OpeningHour -->
+    <xs:simpleType name="OpeningHoursType">
+        <xs:annotation>
+            <xs:documentation>One range (e.g. 09:00-17:00): HH:MM-HH:MM, Two ranges (e.g. 09:00-12:00/13:00-17:30):
+                HH:MM-HH:MM/HH:MM-HH:MM, Closed: -/- or -, Unknown: empty field
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="23" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Delivery place -->
+    <xs:simpleType name="DesiredDeliveryPlaceType">
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="ShipmentType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="SAMPLE" />
+            <xs:enumeration value="GIFT" />
+            <xs:enumeration value="OTHER" />
+            <xs:enumeration value="DOCUMENTS" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ParcelReturnInstructionsType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ABANDONED" />
+            <xs:enumeration value="RTA" />
+            <xs:enumeration value="RTS" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="ContentDescriptionType">
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="50" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="CustomsType">
+        <xs:sequence>
+            <xs:element name="parcelValue" type="EuroCentAmount" />
+            <xs:element name="contentDescription" type="tns:ContentDescriptionType" />
+            <xs:element name="shipmentType" type="tns:ShipmentType" />
+            <xs:element name="parcelReturnInstructions" type="tns:ParcelReturnInstructionsType" />
+            <xs:element name="privateAddress" type="xs:boolean" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InternationalBoxType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for an international box.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:choice>
+                <xs:element name="international" type="tns:InternationalDeliveryMethodType" />
+            </xs:choice>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InternationalDeliveryMethodType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for an international delivery method.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="product" type="xs:string" />
+            <xs:element name="options" type="OptionsType" minOccurs="0" />
+            <xs:element name="receiver" type="Party" />
+            <xs:element name="parcelWeight" type="WeightInGrams" />
+            <xs:element name="customsInfo" type="tns:CustomsType" minOccurs="0" />
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="order" type="tns:OrderType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Element used for creating an order.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="orderInfo" type="tns:OrderInfoType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Element used for the response when fetching an order.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="batchLabels" type="tns:BatchLabelsType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Element used for the request of creating labels in bulk. This element holds the box and/or order
+                information for making the request.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="labels" type="tns:LabelsType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Element for the response when fetching labels.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="productConfiguration" type="tns:ProductConfigurationType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Element used for the response of the product configuration. This element holds information about the
+                delivery method
+                and the product's options and related prices.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="orderUpdate" type="tns:OrderUpdateType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type of request for updating a product (status update).
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="invalidSelection" type="tns:InvalidSelectionType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type of validation error for creating order(s). If invalid options are requested, invalidselection
+                error(s) will be given.
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+    <xs:element name="unknownItems" type="tns:UnknownItemsType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                List of unknown items in a bulk label request
+            </xs:documentation>
+        </xs:annotation>
+    </xs:element>
+
+    <xs:complexType name="OrderUpdateType">
+        <xs:sequence>
+            <xs:element name="status" type="SetBoxStatusType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        New status of an order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="OrderReferenceType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for the reference of an order. This text field should have at least 1 character different from
+                white space and have from 1 to 100 characters.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="100" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="BarcodeType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for the barcode of a box.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string" />
+    </xs:simpleType>
+    <xs:simpleType name="OrderLineTextType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type of order line. This text field should have at least 1 character different from white space and have
+                from 1 to 255 characters.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:minLength value="1" />
+            <xs:maxLength value="255" />
+            <xs:pattern value=".*[^\s].*" />
+        </xs:restriction>
+    </xs:simpleType>
+    <xs:simpleType name="RemarkType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type for remark. This text field should have maximum 50 characters.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:restriction base="xs:string">
+            <xs:maxLength value="50" />
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="BaseOrderType" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Abstract type representing base structure of an order.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="accountId" type="AccountIdType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the account's id information.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="reference" type="tns:OrderReferenceType" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the reference of an order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="costCenter" minOccurs="0" type="CostCenterType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the cost center information of an order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="orderLine" minOccurs="0" maxOccurs="unbounded" type="tns:OrderLineType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the order line information of an order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+    <xs:complexType name="OrderType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing an order for creation. This type extends the base type and keeps additional
+                information about boxes for the order.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="tns:BaseOrderType">
+                <xs:sequence>
+                    <xs:element name="box" maxOccurs="unbounded" type="tns:CreateBoxType">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Element holding the box information of an order when creating an order. Multiple boxes
+                                are allowed.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="OrderInfoType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing an order when fetched. This type extends the base type and keeps additional
+                information about boxes
+                for the order.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="tns:BaseOrderType">
+                <xs:sequence>
+                    <xs:element name="box" maxOccurs="unbounded" type="tns:BoxInfoType">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Element holding the box information of an order when fetching an order. Multiple boxes
+                                are allowed.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="OrderLineType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing an order line.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="text" type="tns:OrderLineTextType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the free text information about an order line.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="nbOfItems" type="xs:int" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the amount of order lines.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="BoxType" abstract="true">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Abstract type representing base structure of a box.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="sender" type="Party" minOccurs="0">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding information about the sender of a box.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:choice>
+                <xs:element name="nationalBox" type="NationalBoxType">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            Element for the national box information.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+                <xs:element name="internationalBox" type="InternationalBoxType">
+                    <xs:annotation>
+                        <xs:documentation xml:lang="en">
+                            Element for the international box information.
+                        </xs:documentation>
+                    </xs:annotation>
+                </xs:element>
+            </xs:choice>
+            <xs:element name="remark" minOccurs="0" type="tns:RemarkType">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element for the remark on a specific box.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CreateBoxType">
+        <xs:complexContent>
+            <xs:annotation>
+                <xs:documentation xml:lang="en">
+                    Type representing a box for creation. This type extends the base type and keeps additional
+                    information about box status.
+                </xs:documentation>
+            </xs:annotation>
+            <xs:extension base="tns:BoxType">
+                <xs:sequence>
+                    <xs:element name="status" type="SetBoxStatusType" minOccurs="0">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Element holding information about the status of a box.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+    <xs:complexType name="BoxInfoType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing a box for fetching. This type extends the base type and keeps additional
+                information about the box barcode and status.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:complexContent>
+            <xs:extension base="tns:BoxType">
+                <xs:sequence>
+                    <xs:element name="barcode" type="tns:BarcodeType">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Element holding the barcode of a box.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="additionalBarcode" type="tns:BarcodeType">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Element holding an additional barcode of a box. For example the barcode used by a
+                                another postal operator outside the bpost network.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                    <xs:element name="status" type="BoxStatusType">
+                        <xs:annotation>
+                            <xs:documentation xml:lang="en">
+                                Element holding the status of a box.
+                            </xs:documentation>
+                        </xs:annotation>
+                    </xs:element>
+                </xs:sequence>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <xs:complexType name="BatchLabelsType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type used for the request of creating labels in bulk.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="box" type="tns:BarcodeType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding information about (a) box(es) for label creation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="order" type="tns:OrderReferenceType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding information about (an) order(s) for label creation.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="UnknownItemsType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing an unknown item when printing labels in bulk.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="box" type="tns:BarcodeType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding information about a box.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+            <xs:element name="order" type="tns:OrderReferenceType" minOccurs="0" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding information about an order.
+                    </xs:documentation>
+                </xs:annotation>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="LabelsType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing the type of a label.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="label" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding information about a label.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="barcode" type="tns:BarcodeType" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding information about a barcode of a label.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="mimeType" type="xs:string">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding information about the mime type of a label.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                        <xs:element name="bytes" type="xs:base64Binary">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the bytes of a label.
+                                </xs:documentation>
+                            </xs:annotation>
+                        </xs:element>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="ProductConfigurationType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing the configuration of a product.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="deliveryMethod" maxOccurs="unbounded">
+                <xs:annotation>
+                    <xs:documentation xml:lang="en">
+                        Element holding the information on how a parcel will be delivered.
+                    </xs:documentation>
+                </xs:annotation>
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="product" maxOccurs="unbounded">
+                            <xs:annotation>
+                                <xs:documentation xml:lang="en">
+                                    Element holding the information of a product.
+                                </xs:documentation>
+                            </xs:annotation>
+                            <xs:complexType>
+                                <xs:sequence>
+                                    <xs:element name="price" maxOccurs="unbounded">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="en">
+                                                The price of the product.
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                        <xs:complexType>
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en">
+                                                    Iso code of the country and their price zones.
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:attribute name="countryIso2Code" type="CountryCode"
+                                                          use="required" />
+                                            <xs:attribute name="priceLessThan2" type="EuroCentAmount"
+                                                          use="required" />
+                                            <xs:attribute name="price2To5" type="EuroCentAmount" use="required" />
+                                            <xs:attribute name="price5To10" type="EuroCentAmount"
+                                                          use="required" />
+                                            <xs:attribute name="price10To20" type="EuroCentAmount"
+                                                          use="required" />
+                                            <xs:attribute name="price20To30" type="EuroCentAmount"
+                                                          use="required" />
+                                        </xs:complexType>
+                                    </xs:element>
+                                    <xs:element name="option" minOccurs="0" maxOccurs="unbounded">
+                                        <xs:annotation>
+                                            <xs:documentation xml:lang="en">
+                                                Options which can be chosen for a certain product.
+                                            </xs:documentation>
+                                        </xs:annotation>
+                                        <xs:complexType>
+                                            <xs:annotation>
+                                                <xs:documentation xml:lang="en">
+                                                    Name and the price of a certain option.
+                                                </xs:documentation>
+                                            </xs:annotation>
+                                            <xs:attribute name="name" type="xs:string" use="required" />
+                                            <xs:attribute name="price" type="EuroCentAmount" use="required" />
+                                        </xs:complexType>
+                                    </xs:element>
+                                </xs:sequence>
+                                <xs:attribute name="name" type="xs:string" use="required" />
+                            </xs:complexType>
+                        </xs:element>
+                    </xs:sequence>
+                    <xs:attribute name="name" type="xs:string" />
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="InvalidSelectionType">
+        <xs:annotation>
+            <xs:documentation xml:lang="en">
+                Type representing an invalid selection when choosing options for a certain product.
+            </xs:documentation>
+        </xs:annotation>
+        <xs:sequence>
+            <xs:element name="error" type="xs:string" maxOccurs="unbounded" />
+        </xs:sequence>
+    </xs:complexType>
+
+</xs:schema>

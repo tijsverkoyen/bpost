@@ -121,17 +121,29 @@ class Insurance extends Option
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null)
     {
-        $data = array();
-        $data[$this->getType()] = array();
+        $tagName = 'insured';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+        $insured = $document->createElement($tagName);
+
+        $tagName = $this->getType();
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+        $insurance = $document->createElement($tagName);
+        $insured->appendChild($insurance);
 
         if ($this->getValue() !== null) {
-            $data[$this->getType()]['@attributes']['value'] = $this->getValue();
+            $insurance->setAttribute('value', $this->getValue());
         }
 
-        return array('insured' => $data);
+        return $insured;
     }
 }

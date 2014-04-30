@@ -89,21 +89,56 @@ class CashOnDelivery extends Option
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null)
     {
-        $data = array();
-        if ($this->getAmount() !== null) {
-            $data['codAmount'] = $this->getAmount();
-        }
-        if ($this->getIban() !== null) {
-            $data['iban'] = $this->getIban();
-        }
-        if ($this->getBic() !== null) {
-            $data['bic'] = $this->getBic();
+        $tagName = 'cod';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
         }
 
-        return array('cod' => $data);
+        $cod = $document->createElement($tagName);
+
+        if ($this->getAmount() !== null) {
+            $tagName = 'codAmount';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $cod->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getAmount()
+                )
+            );
+        }
+        if ($this->getIban() !== null) {
+            $tagName = 'iban';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $cod->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getIban()
+                )
+            );
+        }
+        if ($this->getBic() !== null) {
+            $tagName = 'bic';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $cod->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getBic()
+                )
+            );
+        }
+
+        return $cod;
     }
 }

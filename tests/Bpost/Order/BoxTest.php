@@ -7,14 +7,29 @@ use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\International;
+use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\Order\Sender;
 
 class BoxTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests Box->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
+    {
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests Box->toXML
+     */
+    public function testNationalToXML()
     {
         $data = array(
             'sender' => array(
@@ -53,6 +68,56 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             'remark' => 'remark',
         );
 
+        $expectedDocument = self::createDomDocument();
+        $box = $expectedDocument->createElement('box');
+        $expectedDocument->appendChild($box);
+        $sender = $expectedDocument->createElement('sender');
+        foreach ($data['sender'] as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $sender->appendChild($address);
+            } else {
+                $sender->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $nationalBox = $expectedDocument->createElement('nationalBox');
+        $atHome = $expectedDocument->createElement('atHome');
+        $nationalBox->appendChild($atHome);
+        $atHome->appendChild($expectedDocument->createElement('product', $data['nationalBox']['atHome']['product']));
+        $atHome->appendChild($expectedDocument->createElement('weight', $data['nationalBox']['atHome']['weight']));
+        $receiver = $expectedDocument->createElement('receiver');
+        $atHome->appendChild($receiver);
+        foreach ($data['nationalBox']['atHome']['receiver'] as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $receiver->appendChild($address);
+            } else {
+                $receiver->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $box->appendChild($sender);
+        $box->appendChild($nationalBox);
+        $box->appendChild($expectedDocument->createElement('remark', $data['remark']));
+
+        $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['sender']['address']['streetName'],
             $data['sender']['address']['number'],
@@ -78,7 +143,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $data['nationalBox']['atHome']['receiver']['address']['countryCode']
         );
 
-        $receiver = new Sender();
+        $receiver = new Receiver();
         $receiver->setAddress($address);
         $receiver->setName($data['nationalBox']['atHome']['receiver']['name']);
         $receiver->setCompany($data['nationalBox']['atHome']['receiver']['company']);
@@ -95,8 +160,18 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->setNationalBox($atHome);
         $box->setRemark($data['remark']);
 
-        $xmlArray = $box->toXMLArray();
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $box->toXML($actualDocument, null)
+        );
+
+        $this->assertEquals($expectedDocument, $actualDocument);
+    }
+
+    /**
+     * Tests Box->toXML
+     */
+    public function testInternationalToXML()
+    {
 
         $data = array(
             'sender' => array(
@@ -133,7 +208,60 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             ),
             'remark' => 'remark',
         );
+        $expectedDocument = self::createDomDocument();
+        $box = $expectedDocument->createElement('box');
+        $expectedDocument->appendChild($box);
+        $sender = $expectedDocument->createElement('sender');
+        foreach ($data['sender'] as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $sender->appendChild($address);
+            } else {
+                $sender->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $nationalBox = $expectedDocument->createElement('internationalBox');
+        $atHome = $expectedDocument->createElement('international:international');
+        $nationalBox->appendChild($atHome);
+        $atHome->appendChild(
+            $expectedDocument->createElement(
+                'international:product',
+                $data['internationalBox']['international']['product']
+            )
+        );
+        $receiver = $expectedDocument->createElement('international:receiver');
+        $atHome->appendChild($receiver);
+        foreach ($data['internationalBox']['international']['receiver'] as $key => $value) {
+            $key = 'common:' . $key;
+            if ($key == 'common:address') {
+                $address = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $key2 = 'common:' . $key2;
+                    $address->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $receiver->appendChild($address);
+            } else {
+                $receiver->appendChild(
+                    $expectedDocument->createElement($key, $value)
+                );
+            }
+        }
+        $box->appendChild($sender);
+        $box->appendChild($nationalBox);
+        $box->appendChild($expectedDocument->createElement('remark', $data['remark']));
 
+        $actualDocument = self::createDomDocument();
         $address = new Address(
             $data['sender']['address']['streetName'],
             $data['sender']['address']['number'],
@@ -159,7 +287,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $data['internationalBox']['international']['receiver']['address']['countryCode']
         );
 
-        $receiver = new Sender();
+        $receiver = new Receiver();
         $receiver->setAddress($address);
         $receiver->setName($data['internationalBox']['international']['receiver']['name']);
         $receiver->setCompany($data['internationalBox']['international']['receiver']['company']);
@@ -175,7 +303,28 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->setInternationalBox($international);
         $box->setRemark($data['remark']);
 
-        $xmlArray = $box->toXMLArray();
-        $this->assertEquals($data, $xmlArray);
+        $actualDocument->appendChild(
+            $box->toXML($actualDocument, null)
+        );
+
+        $this->assertEquals($expectedDocument, $actualDocument);
+    }
+
+    /**
+     * Test validation in the setters
+     */
+    public function testFaultyProperties()
+    {
+        $box = new Box();
+
+        try {
+            $box->setStatus(str_repeat('a', 10));
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertEquals(
+                'Invalid value, possible values are: ' . implode(', ', Box::getPossibleStatusValues()) . '.',
+                $e->getMessage()
+            );
+        }
     }
 }

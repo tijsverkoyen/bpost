@@ -1,33 +1,15 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
+use TijsVerkoyen\Bpost\Bpost\Label;
+use TijsVerkoyen\Bpost\Bpost\Order;
+use TijsVerkoyen\Bpost\Bpost\Order\Box;
+
 /**
  * Bpost class
  *
- * This source file can be used to communicate with the Bpost Shipping Manager API
- *
- * The class is documented in the file itself. If you find any bugs help me out and report them. Reporting can be done by sending an email to php-bpost-bugs[at]verkoyen[dot]eu.
- * If you report a bug, make sure you give me enough information (include your code).
- *
- * Changelog since 1.0.1
- * - better errorhandling
- *
- * Changelog since 1.0.0
- * - added a class to handle the form.
- *
- * License
- * Copyright (c), Tijs Verkoyen. All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without modification, are permitted provided that the following conditions are met:
- *
- * 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the following disclaimer.
- * 2. Redistributions in binary form must reproduce the above copyright notice, this list of conditions and the following disclaimer in the documentation and/or other materials provided with the distribution.
- * 3. The name of the author may not be used to endorse or promote products derived from this software without specific prior written permission.
- *
- * This software is provided by the author "as is" and any express or implied warranties, including, but not limited to, the implied warranties of merchantability and fitness for a particular purpose are disclaimed. In no event shall the author be liable for any direct, indirect, incidental, special, exemplary, or consequential damages (including, but not limited to, procurement of substitute goods or services; loss of use, data, or profits; or business interruption) however caused and on any theory of liability, whether in contract, strict liability, or tort (including negligence or otherwise) arising in any way out of the use of this software, even if advised of the possibility of such damage.
- *
  * @author    Tijs Verkoyen <php-bpost@verkoyen.eu>
- * @version   1.0.1
+ * @version   3.0.0
  * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
  * @license   BSD License
  */
@@ -40,7 +22,7 @@ class Bpost
     const API_URL = 'https://api.bpost.be/services/shm';
 
     // current version
-    const VERSION = '1.0.1';
+    const VERSION = '3.0.0';
 
     /**
      * The account id
@@ -75,7 +57,7 @@ class Bpost
      *
      * @var int
      */
-    private $timeOut = 10;
+    private $timeOut = 30;
 
     /**
      * The user agent
@@ -102,164 +84,18 @@ class Bpost
      */
     public function __destruct()
     {
-        // is the connection open?
         if ($this->curl !== null) {
-            // close connection
             curl_close($this->curl);
-
-            // reset
             $this->curl = null;
-        }
-    }
-
-    /**
-     * Callback-method for elements in the return-array
-     *
-     * @param mixed       $input The value.
-     * @param string      $key   string    The key.
-     * @param DOMDocument $xml   Some data.
-     */
-    private static function arrayToXML(&$input, $key, $xml)
-    {
-        // wierd stuff
-        if (in_array($key, array('orderLine', 'internationalLabelInfo'))) {
-            foreach ($input as $row) {
-                $element = new \DOMElement($key);
-                $xml->appendChild($element);
-
-                // loop properties
-                foreach ($row as $name => $value) {
-                    if (is_bool($value)) {
-                        $value = ($value) ? 'true' : 'false';
-                    }
-
-                    $node = new \DOMElement($name, $value);
-                    $element->appendChild($node);
-                }
-            }
-
-            return;
-        }
-
-        // skip attributes
-        if ($key == '@attributes') {
-            return;
-        }
-
-        // create element
-        $element = new \DOMElement($key);
-
-        // append
-        $xml->appendChild($element);
-
-        // no value? just stop here
-        if ($input === null) {
-            return;
-        }
-
-        // is it an array and are there attributes
-        if (is_array($input) && isset($input['@attributes'])) {
-            // loop attributes
-            foreach ((array) $input['@attributes'] as $name => $value) {
-                $element->setAttribute($name, $value);
-            }
-
-            // reset value
-            if (count($input) == 2 && isset($input['value'])) {
-                $input = $input['value'];
-            } // reset the input if it is a single value
-            elseif (count($input) == 1) {
-                return;
-            }
-        }
-
-        // the input isn't an array
-        if (!is_array($input)) {
-            // boolean
-            if (is_bool($input)) {
-                $element->appendChild(new \DOMText(($input) ? 'true' : 'false'));
-            } // integer
-            elseif (is_int($input)) {
-                $element->appendChild(new \DOMText($input));
-            } // floats
-            elseif (is_double($input)) {
-                $element->appendChild(new \DOMText($input));
-            } elseif (is_float($input)) {
-                $element->appendChild(new \DOMText($input));
-            } // a string?
-            elseif (is_string($input)) {
-                // characters that require a cdata wrapper
-                $illegalCharacters = array('&', '<', '>', '"', '\'');
-
-                // default we dont wrap with cdata tags
-                $wrapCdata = false;
-
-                // find illegal characters in input string
-                foreach ($illegalCharacters as $character) {
-                    if (stripos($input, $character) !== false) {
-                        // wrap input with cdata
-                        $wrapCdata = true;
-
-                        // no need to search further
-                        break;
-                    }
-                }
-
-                // check if value contains illegal chars, if so wrap in CDATA
-                if ($wrapCdata) {
-                    $element->appendChild(new \DOMCdataSection($input));
-                } // just regular element
-                else {
-                    $element->appendChild(new \DOMText($input));
-                }
-            } // fallback
-            else {
-                if (self::DEBUG) {
-                    echo 'Unknown type';
-                    var_dump($input);
-                    exit();
-                }
-
-                $element->appendChild(new \DOMText($input));
-            }
-        } // the value is an array
-        else {
-            // init var
-            $isNonNumeric = false;
-
-            // loop all elements
-            foreach ($input as $index => $value) {
-                // non numeric string as key?
-                if (!is_numeric($index)) {
-                    // reset var
-                    $isNonNumeric = true;
-
-                    // stop searching
-                    break;
-                }
-            }
-
-            // is there are named keys they should be handles as elements
-            if ($isNonNumeric) {
-                array_walk($input, array(__CLASS__, 'arrayToXML'), $element);
-            } // numeric elements means this a list of items
-            else {
-                // handle the value as an element
-                foreach ($input as $value) {
-                    if (is_array($value)) {
-                        array_walk($value, array(__CLASS__, 'arrayToXML'), $element);
-                    }
-                }
-            }
         }
     }
 
     /**
      * Decode the response
      *
-     * @param  SimpleXMLElement $item The item to decode.
-     * @param                   array [optional]  $return Just a placeholder.
-     * @param                   int   [optional]    $i      A internal counter.
+     * @param  SimpleXMLElement $item   The item to decode.
+     * @param  array            $return Just a placeholder.
+     * @param  int              $i      A internal counter.
      * @return mixed
      */
     private static function decodeResponse($item, $return = null, $i = 0)
@@ -313,33 +149,15 @@ class Bpost
     /**
      * Make the call
      *
-     * @param  string $url   The URL to call.
-     * @param         array  [optional]  $data      The data to pass.
-     * @param         array  [optional]  $headers   The headers to pass.
-     * @param         string [optional] $method    The HTTP-method to use.
-     * @param         bool   [optional]   $expectXML Do we expect XML?
+     * @param  string $url       The URL to call.
+     * @param  string $body      The data to pass.
+     * @param  array  $headers   The headers to pass.
+     * @param  string $method    The HTTP-method to use.
+     * @param  bool   $expectXML Do we expect XML?
      * @return mixed
      */
-    private function doCall($url, $data = null, $headers = array(), $method = 'GET', $expectXML = true)
+    private function doCall($url, $body = null, $headers = array(), $method = 'GET', $expectXML = true)
     {
-        // any data?
-        if ($data !== null) {
-            // init XML
-            $xml = new \DOMDocument('1.0', 'utf-8');
-
-            // set some properties
-            $xml->preserveWhiteSpace = false;
-            $xml->formatOutput = true;
-
-            // build data
-            array_walk($data, array(__CLASS__, 'arrayToXML'), $xml);
-
-            // store body
-            $body = $xml->saveXML();
-        } else {
-            $body = null;
-        }
-
         // build Authorization header
         $headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
 
@@ -354,13 +172,6 @@ class Bpost
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
         $options[CURLOPT_HTTPHEADER] = $headers;
 
-        // PUT
-        if ($method == 'PUT') {
-            $options[CURLOPT_CUSTOMREQUEST] = 'PUT';
-            if ($body != null) {
-                $options[CURLOPT_POSTFIELDS] = $body;
-            }
-        }
         if ($method == 'POST') {
             $options[CURLOPT_POST] = true;
             $options[CURLOPT_POSTFIELDS] = $body;
@@ -394,12 +205,11 @@ class Bpost
         }
 
         // valid HTTP-code
-        if (!in_array($headers['http_code'], array(0, 200))) {
+        if (!in_array($headers['http_code'], array(0, 200, 201))) {
             // internal debugging enabled
             if (self::DEBUG) {
                 echo '<pre>';
                 var_dump($options);
-                var_dump(htmlentities($body));
                 var_dump($response);
                 var_dump($headers);
                 var_dump($this);
@@ -410,7 +220,7 @@ class Bpost
             $xml = @simplexml_load_string($response);
 
             // validate
-            if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
+            if ($xml !== false && (substr($xml->getName(), 0, 7) == 'invalid')
             ) {
                 // internal debugging enabled
                 if (self::DEBUG) {
@@ -422,14 +232,23 @@ class Bpost
                 }
 
                 // message
-                $message = (string) $xml->message;
+                $message = (string) $xml->error;
                 $code = isset($xml->code) ? (int) $xml->code : null;
 
                 // throw exception
                 throw new Exception($message, $code);
             }
 
-            throw new Exception('Invalid response.', $headers['http_code']);
+            if (
+                (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) ||
+                ($headers['http_code'] == '404')
+            ) {
+                $message = $response;
+            } else {
+                $message = 'Invalid response.';
+            }
+
+            throw new Exception($message, $headers['http_code']);
         }
 
         // if we don't expect XML we can return the content here
@@ -439,25 +258,6 @@ class Bpost
 
         // convert into XML
         $xml = simplexml_load_string($response);
-
-        // validate
-        if ($xml->getName() == 'businessException') {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump($response);
-                var_dump($headers);
-                var_dump($this);
-                echo '</pre>';
-            }
-
-            // message
-            $message = (string) $xml->message;
-            $code = (string) $xml->code;
-
-            // throw exception
-            throw new Exception($message, $code);
-        }
 
         // return the response
         return $xml;
@@ -557,303 +357,54 @@ class Bpost
      */
     public function createOrReplaceOrder(Order $order)
     {
-        // build url
         $url = '/orders';
 
-        // build data
-        $data['order']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        $data['order']['value'] = $order->toXMLArray($this->accountId);
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
 
-        // build headers
-        $headers = array(
-            'Content-type: application/vnd.bpost.shm-order-v2+XML'
+        $document->appendChild(
+            $order->toXML(
+                $document,
+                ACCOUNT_ID
+            )
         );
 
-        // make the call
-        return ($this->doCall($url, $data, $headers, 'POST', false) == '');
+        $headers = array(
+            'Content-type: application/vnd.bpost.shm-order-v3+XML'
+        );
+
+        return (
+            $this->doCall(
+                $url,
+                $document->saveXML(),
+                $headers,
+                'POST',
+                false
+            ) == ''
+        );
     }
 
     /**
      * Fetch an order
      *
-     * @param  string $reference
-     * @return array
+     * @param $reference
+     * @return Order
      */
     public function fetchOrder($reference)
     {
-        // build url
         $url = '/orders/' . (string) $reference;
 
-        // make the call
-        $return = self::decodeResponse($this->doCall($url));
+        $headers = array(
+            'Accept: application/vnd.bpost.shm-order-v3+XML',
+        );
+        $xml = $this->doCall(
+            $url,
+            null,
+            $headers
+        );
 
-        // for some reason the order-data is wrapped in an order tag sometimes.
-        if (isset($return['order'])) {
-            if (isset($return['barcode'])) {
-                $barcodes = $return['barcode'];
-            }
-            $return = $return['order'];
-        }
-
-        $order = new Order($return['orderReference']);
-
-        if (isset($barcodes)) {
-            $order->setBarcodes($barcodes);
-        }
-
-        if (isset($return['status'])) {
-            $order->setStatus($return['status']);
-        }
-        if (isset($return['costCenter'])) {
-            $order->setCostCenter($return['costCenter']);
-        }
-
-        // order lines
-        if (isset($return['orderLine']) && !empty($return['orderLine'])) {
-            foreach ($return['orderLine'] as $row) {
-                $order->addOrderLine($row['text'], $row['nbOfItems']);
-            }
-        }
-
-        // customer
-        if (isset($return['customer'])) {
-            // create customer
-            $customer = new Customer($return['customer']['firstName'], $return['customer']['lastName']);
-            if (isset($return['customer']['deliveryAddress'])) {
-                $address = new Address(
-                    $return['customer']['deliveryAddress']['streetName'],
-                    $return['customer']['deliveryAddress']['number'],
-                    $return['customer']['deliveryAddress']['postalCode'],
-                    $return['customer']['deliveryAddress']['locality'],
-                    $return['customer']['deliveryAddress']['countryCode']
-                );
-                if (isset($return['customer']['deliveryAddress']['box'])) {
-                    $address->setBox($return['customer']['deliveryAddress']['box']);
-                }
-                $customer->setDeliveryAddress($address);
-            }
-            if (isset($return['customer']['email'])) {
-                $customer->setEmail($return['customer']['email']);
-            }
-            if (isset($return['customer']['phoneNumber'])) {
-                $customer->setPhoneNumber(
-                    $return['customer']['phoneNumber']
-                );
-            }
-
-            $order->setCustomer($customer);
-        }
-
-        // delivery method
-        if (isset($return['deliveryMethod'])) {
-            // atHome?
-            if (isset($return['deliveryMethod']['atHome'])) {
-                $deliveryMethod = new DeliveryMethodAtHome();
-
-                // options
-                if (isset($return['deliveryMethod']['atHome']['normal']['options']) && !empty($return['deliveryMethod']['atHome']['normal']['options'])) {
-                    $options = array();
-
-                    foreach ($return['deliveryMethod']['atHome']['normal']['options'] as $key => $row) {
-                        $language = 'NL'; // @todo fix me
-                        $emailAddress = null;
-                        $mobilePhone = null;
-                        $fixedPhone = null;
-
-                        if (isset($row['emailAddress'])) {
-                            $emailAddress = $row['emailAddress'];
-                        }
-                        if (isset($row['mobilePhone'])) {
-                            $mobilePhone = $row['mobilePhone'];
-                        }
-                        if (isset($row['fixedPhone'])) {
-                            $fixedPhone = $row['fixedPhone'];
-                        }
-
-                        if ($emailAddress === null && $mobilePhone === null && $fixedPhone === null) {
-                            continue;
-                        }
-
-                        $options[$key] = new Notification($language, $emailAddress, $mobilePhone, $fixedPhone);
-                    }
-
-                    $deliveryMethod->setNormal($options);
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // atShop
-            elseif (isset($return['deliveryMethod']['atShop'])) {
-                $deliveryMethod = new DeliveryMethodAtShop();
-
-                $language = $return['deliveryMethod']['atShop']['infoPugo']['@attributes']['language'];
-                $emailAddress = null;
-                $mobilePhone = null;
-                $fixedPhone = null;
-
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'])) {
-                    $emailAddress = $return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'])) {
-                    $mobilePhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'])) {
-                    $fixedPhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'];
-                }
-
-                $deliveryMethod->setInfoPugo(
-                    $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'],
-                    $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'],
-                    new Notification($language, $emailAddress, $mobilePhone, $fixedPhone)
-                );
-
-                if (isset($return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['atShop']['insurance']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                $language = $return['deliveryMethod']['atShop']['infoPugo']['@attributes']['language'];
-                $emailAddress = null;
-                $mobilePhone = null;
-                $fixedPhone = null;
-                $pugoId = null;
-                $pugoName = null;
-
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'])) {
-                    $emailAddress = $return['deliveryMethod']['atShop']['infoPugo'][0]['emailAddress'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'])) {
-                    $mobilePhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['mobilePhone'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'])) {
-                    $fixedPhone = $return['deliveryMethod']['atShop']['infoPugo'][0]['fixedPhone'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'])) {
-                    $pugoId = $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoId'];
-                }
-                if (isset($return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'])) {
-                    $pugoName = $return['deliveryMethod']['atShop']['infoPugo'][0]['pugoName'];
-                }
-
-                $deliveryMethod->setInfoPugo(
-                    $pugoId,
-                    $pugoName,
-                    new Notification($language, $emailAddress, $mobilePhone, $fixedPhone)
-                );
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // at24-7
-            elseif (isset($return['deliveryMethod']['at24-7'])) {
-                $deliveryMethod = new DeliveryMethodAt247(
-                    $return['deliveryMethod']['at24-7']['infoParcelsDepot']['parcelsDepotId']
-                );
-                if (isset($return['deliveryMethod']['at24-7']['memberId'])) {
-                    $deliveryMethod->setMemberId($return['deliveryMethod']['at24-7']['memberId']);
-                }
-                if (isset($return['deliveryMethod']['at24-7']['signature']['signature'])) {
-                    $deliveryMethod->setSignature();
-                }
-                if (isset($return['deliveryMethod']['at24-7']['signature']['signature'])) {
-                    $deliveryMethod->setSignature(true);
-                }
-                if (isset($return['deliveryMethod']['at24-7']['insurance']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['at24-7']['insurance']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // intExpress?
-            elseif (isset($return['deliveryMethod']['intExpress'])) {
-                $deliveryMethod = new DeliveryMethodIntBusiness();
-
-                if (isset($return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['intExpress']['insured']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                // options
-                if (isset($return['deliveryMethod']['intBusiness']['insured']['options']) && !empty($return['deliveryMethod']['intExpress']['insured']['options'])) {
-                    $options = array();
-
-                    foreach ($return['deliveryMethod']['intExpress']['insured']['options'] as $key => $row) {
-                        $language = 'NL'; // @todo fix me
-                        $emailAddress = null;
-                        $mobilePhone = null;
-                        $fixedPhone = null;
-
-                        if (isset($row['emailAddress'])) {
-                            $emailAddress = $row['emailAddress'];
-                        }
-                        if (isset($row['mobilePhone'])) {
-                            $mobilePhone = $row['mobilePhone'];
-                        }
-                        if (isset($row['fixedPhone'])) {
-                            $fixedPhone = $row['fixedPhone'];
-                        }
-
-                        if ($emailAddress === null && $mobilePhone === null && $fixedPhone === null) {
-                            continue;
-                        }
-
-                        $options[$key] = new Notification($language, $emailAddress, $mobilePhone, $fixedPhone);
-                    }
-
-                    $deliveryMethod->setInsured($options);
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            } // intBusiness?
-            elseif (isset($return['deliveryMethod']['intBusiness'])) {
-                $deliveryMethod = new DeliveryMethodIntBusiness();
-
-                if (isset($return['deliveryMethod']['intBusiness']['insured']['additionalInsurance']['@attributes']['value'])) {
-                    $deliveryMethod->setInsurance(
-                        (int) $return['deliveryMethod']['intBusiness']['insured']['additionalInsurance']['@attributes']['value']
-                    );
-                }
-
-                // options
-                if (isset($return['deliveryMethod']['intBusiness']['insured']['options']) && !empty($return['deliveryMethod']['intBusiness']['insured']['options'])) {
-                    $options = array();
-
-                    foreach ($return['deliveryMethod']['intBusiness']['insured']['options'] as $key => $row) {
-                        $language = 'NL'; // @todo fix me
-                        $emailAddress = null;
-                        $mobilePhone = null;
-                        $fixedPhone = null;
-
-                        if (isset($row['emailAddress'])) {
-                            $emailAddress = $row['emailAddress'];
-                        }
-                        if (isset($row['mobilePhone'])) {
-                            $mobilePhone = $row['mobilePhone'];
-                        }
-                        if (isset($row['fixedPhone'])) {
-                            $fixedPhone = $row['fixedPhone'];
-                        }
-
-                        if ($emailAddress === null && $mobilePhone === null && $fixedPhone === null) {
-                            continue;
-                        }
-
-                        $options[$key] = new Notification($language, $emailAddress, $mobilePhone, $fixedPhone);
-                    }
-
-                    $deliveryMethod->setInsured($options);
-                }
-
-                $order->setDeliveryMethod($deliveryMethod);
-            }
-        }
-
-        // total price
-        if (isset($return['totalPrice'])) {
-            $order->setTotal($return['totalPrice']);
-        }
-
-        return $order;
+        return Order::createFromXML($xml);
     }
 
     /**
@@ -865,289 +416,219 @@ class Bpost
      */
     public function modifyOrderStatus($reference, $status)
     {
-        $allowedStatuses = array('OPEN', 'PENDING', 'CANCELLED', 'COMPLETED', 'ON-HOLD');
-        $status = mb_strtoupper((string) $status);
-
-        // validate
-        if (!in_array($status, $allowedStatuses)) {
+        $status = strtoupper($status);
+        if (!in_array($status, Box::getPossibleStatusValues())) {
             throw new Exception(
-                'Invalid status (' . $status . '), allowed values are: ' .
-                implode(', ', $allowedStatuses) . '.'
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', Box::getPossibleStatusValues())
+                )
             );
         }
 
-        // build url
-        $url = '/orders/status';
+        $url = '/orders/' . $reference;
 
-        // build data
-        $data['orderStatusMap']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        $data['orderStatusMap']['entry']['orderReference'] = (string) $reference;
-        $data['orderStatusMap']['entry']['status'] = $status;
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
 
-        // build headers
+        $orderUpdate = $document->createElement('orderUpdate');
+        $orderUpdate->setAttribute('xmlns', 'http://schema.post.be/shm/deepintegration/v3/');
+        $orderUpdate->setAttribute('xmlns:xsi', '"http://www.w3.org/2001/XMLSchema-instance');
+        $orderUpdate->appendChild(
+            $document->createElement('status', $status)
+        );
+        $document->appendChild($orderUpdate);
+
         $headers = array(
-            'X-HTTP-Method-Override: PATCH',
-            'Content-type: application/vnd.bpost.shm-order-status-v2+XML'
+            'Content-type: application/vnd.bpost.shm-orderUpdate-v3+XML'
         );
 
-        // make the call
-        return ($this->doCall($url, $data, $headers, 'PUT', false) == '');
+        return (
+            $this->doCall(
+                $url,
+                $document->saveXML(),
+                $headers,
+                'POST',
+                false
+            ) == ''
+        );
     }
 
 // labels
     /**
-     * Create a national label
+     * Get the possible label formats
      *
-     * @param  string $reference Order reference: unique ID used in your web shop to assign to an order.
-     * @param  int    $amount    Amount of labels.
-     * @param         bool       [optional]   $withRetour   Should the return labeks be included?
-     * @param         bool       [optional]   $returnLabels Should the labels be included?
-     * @param         string     [optional] $labelFormat  Format of the labels, possible values are: A_4, A_5.
      * @return array
      */
-    public function createNationalLabel(
-        $reference,
-        $amount,
-        $withRetour = null,
-        $returnLabels = null,
-        $labelFormat = null
+    public static function getPossibleLabelFormatValues()
+    {
+        return array(
+            'A4',
+            'A6',
+        );
+    }
+
+    /**
+     * Generic method to centralize handling of labels
+     *
+     * @param  string $url
+     * @param  string $format
+     * @param  bool   $withReturnLabels
+     * @param  bool   $asPdf
+     * @return array
+     */
+    protected function getLabel($url, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    {
+        $format = strtoupper($format);
+        if (!in_array($format, self::getPossibleLabelFormatValues())) {
+            throw new Exception(
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossibleLabelFormatValues())
+                )
+            );
+        }
+
+        $url .= '/labels/' . $format;
+        if ($withReturnLabels) {
+            $url .= '/withReturnLabels';
+        }
+
+        if ($asPdf) {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-pdf-v3+XML',
+            );
+        } else {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-image-v3+XML',
+            );
+        }
+
+        $xml = $this->doCall(
+            $url,
+            null,
+            $headers
+        );
+
+        $labels = array();
+
+        if (isset($xml->label)) {
+            foreach ($xml->label as $label) {
+                $labels[] = Label::createFromXML($label);
+            }
+        }
+
+        return $labels;
+    }
+
+    /**
+     * Create the labels for all unprinted boxes in an order.
+     * The service will return labels for all unprinted boxes for that order.
+     * Boxes that were unprinted will get the status PRINTED, the boxes that
+     * had already been printed will remain the same.
+     *
+     * @param  string $reference        The reference for an order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
+    public function createLabelForOrder($reference, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    {
+        $url = '/orders/' . (string) $reference;
+
+        return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
+    }
+
+    /**
+     * Create a label for a known barcode.
+     *
+     * @param  string $barcode          The barcode of the parcel
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
+    public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    {
+        $url = '/boxes/' . (string) $barcode;
+        return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
+    }
+
+    /**
+     * Create labels in bulk, according to the list of order references and the
+     * list of barcodes. When there is an order reference specified in the
+     * request, the service will return a label of every box of that order. If
+     * a certain box was not yet printed, it will have the status PRINTED
+     *
+     * @param  array  $references       The references for the order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
+    public function createLabelInBulkForOrders(
+        array $references,
+        $format = 'A6',
+        $withReturnLabels = false,
+        $asPdf = false
     ) {
-        $allowedLabelFormats = array('A_4', 'A_5');
-
-        // validate
-        if ($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats)) {
+        $format = strtoupper($format);
+        if (!in_array($format, self::getPossibleLabelFormatValues())) {
             throw new Exception(
-                'Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' .
-                implode(', ', $allowedLabelFormats) . '.'
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossibleLabelFormatValues())
+                )
             );
         }
 
-        // build url
-        $url = '/labels';
+        $url = '/labels/' . $format;
 
-        if ($labelFormat !== null) {
-            $url .= '?labelFormat=' . $labelFormat;
+        if ($withReturnLabels) {
+            $url .= '/withReturnLabels';
         }
 
-        // build data
-        $data['orderRefLabelAmountMap']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        $data['orderRefLabelAmountMap']['entry']['orderReference'] = (string) $reference;
-        $data['orderRefLabelAmountMap']['entry']['labelAmount'] = (int) $amount;
-        if ($withRetour !== null) {
-            $data['orderRefLabelAmountMap']['entry']['withRetour'] = (bool) $withRetour;
+        if ($asPdf) {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-pdf-v3+XML',
+            );
+        } else {
+            $headers = array(
+                'Accept: application/vnd.bpost.shm-label-image-v3+XML',
+            );
         }
-        if ($returnLabels !== null) {
-            $data['orderRefLabelAmountMap']['entry']['returnLabels'] = ($returnLabels) ? '1' : '0';
-        }
+        $headers[] = 'Content-Type: application/vnd.bpost.shm-labelRequest-v3+XML';
 
-        // build headers
-        $headers = array(
-            'Content-type: application/vnd.bpost.shm-nat-label-v2+XML'
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        $batchLabels = $document->createElement('batchLabels');
+        $batchLabels->setAttribute('xmlns', 'http://schema.post.be/shm/deepintegration/v3/');
+        foreach ($references as $reference) {
+            $batchLabels->appendChild(
+                $document->createElement('order', $reference)
+            );
+        }
+        $document->appendChild($batchLabels);
+
+        $xml = $this->doCall(
+            $url,
+            $document->saveXML(),
+            $headers,
+            'POST'
         );
 
-        // make the call
-        $return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
+        $labels = array();
 
-        // validate
-        if (!isset($return['entry'])) {
-            throw new Exception('Invalid response.');
-        }
-
-        // return
-        return $return['entry'];
-    }
-
-    /**
-     * Create an international label
-     *
-     * @param  string $reference Order reference: unique ID used in your web shop to assign to an order.
-     * @param  array  $labelInfo For each label an object should be present
-     * @param         bool       [optional] $returnLabels Should the labels be included?
-     * @return array
-     */
-    public function createInternationalLabel($reference, array $labelInfo, $returnLabels = null)
-    {
-        // build url
-        $url = '/labels';
-
-        // build data
-        $data['internationalLabelInfos']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-
-        foreach ($labelInfo as $row) {
-            if (!($row instanceof InternationalLabelInfo)) {
-                throw new Exception(
-                    'Invalid value for labelInfo, should be an instance of InternationalLabelInfo'
-                );
+        if (isset($xml->label)) {
+            foreach ($xml->label as $label) {
+                $labels[] = Label::createFromXML($label);
             }
-
-            $data['internationalLabelInfos']['internationalLabelInfo'][] = $row->toXMLArray();
         }
 
-        $data['internationalLabelInfos']['orderReference'] = (string) $reference;
-        if ($returnLabels !== null) {
-            $data['internationalLabelInfos']['returnLabels'] = (bool) $returnLabels;
-        }
-
-        // build headers
-        $headers = array(
-            'Content-type: application/vnd.bpost.shm-int-label-v2+XML'
-        );
-
-        // make the call
-        $return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
-
-        // validate
-        if (!isset($return['entry'])) {
-            throw new Exception('Invalid response.');
-        }
-
-        // return
-        return $return['entry'];
-    }
-
-    /**
-     * Create an order and the labels
-     *
-     * @param  Order $order
-     * @param  int   $amount
-     * @return array
-     */
-    public function createOrderAndNationalLabel(Order $order, $amount)
-    {
-        // build url
-        $url = '/orderAndLabels';
-
-        // build data
-        $data['orderWithLabelAmount']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        $data['orderWithLabelAmount']['order'] = $order->toXMLArray($this->accountId);
-        $data['orderWithLabelAmount']['labelAmount'] = (int) $amount;
-
-        // build headers
-        $headers = array(
-            'Content-type: application/vnd.bpost.shm-orderAndNatLabels-v2+XML'
-        );
-
-        // make the call
-        $return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
-
-        // validate
-        if (!isset($return['entry'])) {
-            throw new Exception('Invalid response.');
-        }
-
-        // return
-        return $return['entry'];
-    }
-
-    /**
-     * Create an order and an international label
-     *
-     * @param  array $labelInfo The label info
-     * @param  Order $order     The order
-     * @return array
-     */
-    public function createOrderAndInternationalLabel(array $labelInfo, Order $order)
-    {
-        // build url
-        $url = '/orderAndLabels';
-
-        // build data
-        $data['orderInternationalLabelInfos']['@attributes']['xmlns'] = 'http://schema.post.be/shm/deepintegration/v2/';
-        foreach ($labelInfo as $row) {
-            if (!($row instanceof InternationalLabelInfo)) {
-                throw new Exception(
-                    'Invalid value for labelInfo, should be an instance of InternationalLabelInfo'
-                );
-            }
-
-            $data['orderInternationalLabelInfos']['internationalLabelInfo'][] = $row->toXMLArray();
-        }
-        $data['orderInternationalLabelInfos']['order'] = $order->toXMLArray($this->accountId);
-
-        // build headers
-        $headers = array(
-            'Content-type: application/vnd.bpost.shm-orderAndIntLabels-v2+XML'
-        );
-
-        // make the call
-        $return = self::decodeResponse($this->doCall($url, $data, $headers, 'POST'));
-
-        // validate
-        if (!isset($return['entry'])) {
-            throw new Exception('Invalid response.');
-        }
-
-        // return
-        return $return['entry'];
-    }
-
-    /**
-     * Retrieve a PDF-label for a box
-     *
-     * @param  string $barcode The barcode to retrieve
-     * @param         string   [optional] $labelFormat Possible values are: A_4, A_5
-     * @return string
-     */
-    public function retrievePDFLabelsForBox($barcode, $labelFormat = null)
-    {
-        $allowedLabelFormats = array('A_4', 'A_5');
-
-        // validate
-        if ($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats)) {
-            throw new Exception(
-                'Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' .
-                implode(', ', $allowedLabelFormats) . '.'
-            );
-        }
-
-        // build url
-        $url = '/labels/' . (string) $barcode . '/pdf';
-
-        if ($labelFormat !== null) {
-            $url .= '?labelFormat=' . $labelFormat;
-        }
-
-        // build headers
-        $headers = array(
-            'Accept: application/vnd.bpost.shm-pdf-v2+XML'
-        );
-
-        // make the call
-        return (string) $this->doCall($url, null, $headers);
-    }
-
-    /**
-     * Retrieve a PDF-label for an order
-     *
-     * @param  string $reference
-     * @param         string [optional] $labelFormat Possible values are: A_4, A_5
-     * @return string
-     */
-    public function retrievePDFLabelsForOrder($reference, $labelFormat = null)
-    {
-        $allowedLabelFormats = array('A_4', 'A_5');
-
-        // validate
-        if ($labelFormat !== null && !in_array($labelFormat, $allowedLabelFormats)) {
-            throw new Exception(
-                'Invalid value for labelFormat (' . $labelFormat . '), allowed values are: ' .
-                implode(', ', $allowedLabelFormats) . '.'
-            );
-        }
-
-        // build url
-        $url = '/orders/' . (string) $reference . '/pdf';
-
-        if ($labelFormat !== null) {
-            $url .= '?labelFormat=' . $labelFormat;
-        }
-
-        // build headers
-        $headers = array(
-            'Accept: application/vnd.bpost.shm-pdf-v2+XML'
-        );
-
-        // make the call
-        return (string) $this->doCall($url, null, $headers);
+        return $labels;
     }
 }

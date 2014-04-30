@@ -21,6 +21,7 @@ use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Signature;
 use \TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day as OpeninghourDay;
 use \TijsVerkoyen\Bpost\Bpost\Order\Line as OrderLine;
+use \TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use \TijsVerkoyen\Bpost\Bpost\Order\Sender;
 use \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 use \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
@@ -56,7 +57,7 @@ $sender->setAddress($address);
 $sender->setName('Tijs Verkoyen');
 $sender->setCompany('Sumo Coders');
 $sender->setPhoneNumber('+32 9 395 02 51');
-$sender->setEmailAddress('bpost@verkoyen.eu');
+$sender->setEmailAddress('bpost.sender@verkoyen.eu');
 
 $box = new Box();
 $box->setSender($sender);
@@ -64,18 +65,18 @@ $box->setRemark('Remark');
 
 // add label
 $address = new Address();
-$address->setStreetName('Kerstraat');
+$address->setStreetName('Kerkstraat');
 $address->setNumber('108');
 $address->setPostalCode('9050');
 $address->setLocality('Gentbrugge');
 $address->setCountryCode('BE');
 
-$receiver = new Sender();
+$receiver = new Receiver();
 $receiver->setAddress($address);
 $receiver->setName('Tijs Verkoyen');
 $receiver->setCompany('Sumo Coders');
 $receiver->setPhoneNumber('+32 9 395 02 51');
-$receiver->setEmailAddress('bpost@verkoyen.eu');
+$receiver->setEmailAddress('bpost.receiver@verkoyen.eu');
 
 // options
 $option = new Messaging('infoDistributed', 'NL', 'bpost@verkoyen.eu');
@@ -96,11 +97,8 @@ $atHome = new AtHome();
 $atHome->setProduct('bpack 24h Pro');
 $atHome->setWeight(2000);
 $atHome->setReceiver($receiver);
-$atHome->addOpeningHour(
-    new OpeninghourDay('Monday', '10:00-17:00')
-);
 $atHome->addOption($option);
-//$box->setNationalBox($atHome);
+$box->setNationalBox($atHome);
 
 // @Bpost
 $pugoAddress = new PugoAddress(
@@ -151,27 +149,23 @@ $customsInfo->setPrivateAddress(false);
 
 $international = new International();
 $international->setProduct('bpack World Express Pro');
-$international->addOption($option);
 $international->setReceiver($receiver);
 $international->setParcelWeight(2000);
 $international->setCustomsInfo($customsInfo);
-$box->setInternationalBox($international);
+//$box->setInternationalBox($international);
 
 $order->addBox($box);
-
-//
 
 try {
     // Bpost webservices
 //    $response = $bpost->createOrReplaceOrder($order);
+//    $response = $bpost->modifyOrderStatus($orderId, 'OPEN');
 //    $response = $bpost->fetchOrder($orderId);
-//    $response = $bpost->modifyOrderStatus(660, 'OPEN');
-//    $response = $bpost->createNationalLabel($orderId, 1);
-//    $response = $bpost->createInternationalLabel($orderId, array($labelInfo1, $labelInfo2), true);
-//    $response = $bpost->createOrderAndNationalLabel($order, 5);
-//    $response = $bpost->createOrderAndInternationalLabel(array($labelInfo1, $labelInfo2), $order);
-//    $response = $bpost->retrievePDFLabelsForBox($response['barcode'][0]);
-//    $response = $bpost->retrievePDFLabelsForOrder($orderId);
+//    $response = $bpost->createLabelForOrder('1398779096', 'A4');
+//    $response = $bpost->createLabelForBox('323212345659900357664050', 'A4');
+//    $response = $bpost->createLabelInBulkForOrders(
+//        array('1398779096', '1398862819'), 'A4'
+//    );
 
     // GEO6 webservices
 //    $geo6 = new Geo6(GEO6_PARTNER, GEO6_APP_ID);
@@ -189,16 +183,9 @@ try {
     $customer->setEmail('bpost@verkoyen.eu');
 
     $response = $bpack247->createMember($customer);
-
-
 } catch (Exception $e) {
     var_dump($e);
 }
-
-// output pdf
-//header('Content-Type: application/pdf');
-//echo base64_decode($response);
-//exit;
 
 // output
 var_dump($response);

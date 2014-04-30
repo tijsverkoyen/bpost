@@ -153,27 +153,75 @@ class AtBpost extends National
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @param  string       $type
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $data = parent::toXMLArray();
+        $tagName = 'nationalBox';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+        $nationalElement = $document->createElement($tagName);
+        $boxElement = parent::toXML($document, null, 'atBpost');
+        $nationalElement->appendChild($boxElement);
+
         if ($this->getPugoId() !== null) {
-            $data['pugoId'] = $this->getPugoId();
+            $tagName = 'pugoId';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getPugoId()
+                )
+            );
         }
         if ($this->getPugoName() !== null) {
-            $data['pugoName'] = $this->getPugoName();
+            $tagName = 'pugoName';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getPugoName()
+                )
+            );
         }
         if ($this->getPugoAddress() !== null) {
-            $data['pugoAddress'] = $this->getPugoAddress()->toXMLArray();
+            $boxElement->appendChild(
+                $this->getPugoAddress()->toXML($document, null)
+            );
         }
         if ($this->getReceiverName() !== null) {
-            $data['receiverName'] = $this->getReceiverName();
+            $tagName = 'receiverName';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getReceiverName()
+                )
+            );
         }
         if ($this->getReceiverCompany() !== null) {
-            $data['receiverCompany'] = $this->getReceiverCompany();
+            $tagName = 'receiverCompany';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $boxElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getReceiverCompany()
+                )
+            );
         }
 
-        return array('atBpost' => $data);
+        return $nationalElement;
     }
 }

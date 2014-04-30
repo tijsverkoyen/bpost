@@ -94,26 +94,61 @@ abstract class National
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @param  string       $type
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $data = array();
+        $typeElement = $document->createElement($type);
+
         if ($this->getProduct() !== null) {
-            $data['product'] = $this->getProduct();
+            $tagName = 'product';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $typeElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getProduct()
+                )
+            );
         }
 
         $options = $this->getOptions();
         if (!empty($options)) {
+            $optionsElement = $document->createElement('options');
             foreach ($options as $option) {
-                $data['options'][] = $option->toXMLArray();
+                $optionsElement->appendChild(
+                    $option->toXML($document)
+                );
             }
+            $typeElement->appendChild($optionsElement);
         }
 
         if ($this->getWeight() !== null) {
-            $data['weight'] = $this->getWeight();
+            $tagName = 'weight';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $typeElement->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getWeight()
+                )
+            );
         }
 
-        return $data;
+        return $typeElement;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return National
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        return;
     }
 }

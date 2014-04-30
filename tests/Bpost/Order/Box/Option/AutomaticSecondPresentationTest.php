@@ -8,17 +8,35 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\AutomaticSecondPresentation;
 class AutomaticSecondPresentationTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * Tests AutomaticSecondPresentation->toXMLArray
+     * Create a generic DOM Document
+     *
+     * @return \DOMDocument
      */
-    public function testToXMLArray()
+    private static function createDomDocument()
     {
-        $data = array(
-            'automaticSecondPresentation' => array(),
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * Tests AutomaticSecondPresentation->toXML
+     */
+    public function testToXML()
+    {
+        $expectedDocument = self::createDomDocument();
+        $expectedDocument->appendChild(
+            $expectedDocument->createElement('automaticSecondPresentation')
         );
 
+        $actualDocument = self::createDomDocument();
         $automaticSecondPresentation = new AutomaticSecondPresentation();
-        $xmlArray = $automaticSecondPresentation->toXMLArray();
+        $actualDocument->appendChild(
+            $automaticSecondPresentation->toXML($actualDocument)
+        );
 
-        $this->assertEquals($data, $xmlArray);
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 }

@@ -150,34 +150,62 @@ class International
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null)
     {
-        $data = array();
+        $tagName = 'internationalBox';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+
+        $internationalBox = $document->createElement($tagName);
+        $international = $document->createElement('international:international');
+        $internationalBox->appendChild($international);
+
         if ($this->getProduct() !== null) {
-            $data['product'] = $this->getProduct();
+            $international->appendChild(
+                $document->createElement(
+                    'international:product',
+                    $this->getProduct()
+                )
+            );
         }
 
         $options = $this->getOptions();
         if (!empty($options)) {
+            $optionsElement = $document->createElement('international:options');
             foreach ($options as $option) {
-                $data['options'][] = $option->toXMLArray();
+                $optionsElement->appendChild(
+                    $option->toXML($document)
+                );
             }
+            $international->appendChild($optionsElement);
         }
 
         if ($this->getReceiver() !== null) {
-            $data['receiver'] = $this->getReceiver()->toXMLArray();
+            $international->appendChild(
+                $this->getReceiver()->toXML($document, 'international')
+            );
         }
 
         if ($this->getParcelWeight() !== null) {
-            $data['parcelWeight'] = $this->getParcelWeight();
+            $international->appendChild(
+                $document->createElement(
+                    'international:parcelWeight',
+                    $this->getParcelWeight()
+                )
+            );
         }
 
         if ($this->getCustomsInfo() !== null) {
-            $data['customsInfo'] = $this->getCustomsInfo()->toXMLArray();
+            $international->appendChild(
+                $this->getCustomsInfo()->toXML($document, 'international')
+            );
         }
 
-        return array('international' => $data);
+        return $internationalBox;
     }
 }

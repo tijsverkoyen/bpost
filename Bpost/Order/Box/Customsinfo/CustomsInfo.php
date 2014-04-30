@@ -173,28 +173,85 @@ class CustomsInfo
     /**
      * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DomDocument $document
+     * @param  string       $prefix
+     * @return \DomElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document, $prefix = null)
     {
-        $data = array();
+        $tagName = 'customsInfo';
+        if ($prefix !== null) {
+            $tagName = $prefix . ':' . $tagName;
+        }
+
+        $customsInfo = $document->createElement($tagName);
+
         if ($this->getParcelValue() !== null) {
-            $data['parcelValue'] = $this->getParcelValue();
+            $tagName = 'parcelValue';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $customsInfo->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getParcelValue()
+                )
+            );
         }
         if ($this->getContentDescription() !== null) {
-            $data['contentDescription'] = $this->getContentDescription();
+            $tagName = 'contentDescription';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $customsInfo->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getContentDescription()
+                )
+            );
         }
         if ($this->getShipmentType() !== null) {
-            $data['shipmentType'] = $this->getShipmentType();
+            $tagName = 'shipmentType';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $customsInfo->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getShipmentType()
+                )
+            );
         }
         if ($this->getPossibleParcelReturnInstructionValues() !== null) {
-            $data['parcelReturnInstructions'] = $this->getParcelReturnInstructions();
+            $tagName = 'parcelReturnInstructions';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $customsInfo->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getParcelReturnInstructions()
+                )
+            );
         }
         if ($this->getPrivateAddress() !== null) {
-            $data['privateAddress'] = $this->getPrivateAddress();
+            $tagName = 'privateAddress';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            if ($this->getPrivateAddress()) {
+                $value = 'true';
+            } else {
+                $value = 'false';
+            }
+            $customsInfo->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $value
+                )
+            );
         }
 
-        return $data;
+        return $customsInfo;
     }
-
 }
