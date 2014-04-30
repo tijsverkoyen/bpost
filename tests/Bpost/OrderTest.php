@@ -262,5 +262,16 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expectedDocument, $actualDocument);
+
+        try {
+            $xml = simplexml_load_string(
+                '<order>
+                </order>'
+            );
+            $order = Order::createFromXML($xml);
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertEquals('No reference found.', $e->getMessage());
+        }
     }
 }

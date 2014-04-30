@@ -109,4 +109,41 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
         }
     }
+
+    /**
+     * Tests Address->createFromXML
+     */
+    public function testCreateFromXML()
+    {
+        $data = array(
+            'streetName' => 'Afrikalaan',
+            'number' => '289',
+            'box' => '3',
+            'postalCode' => '9000',
+            'locality' => 'Gent',
+            'countryCode' => 'BE',
+        );
+
+        $document = self::createDomDocument();
+        $addressElement = $document->createElement('address');
+        foreach ($data as $key => $value) {
+            $addressElement->appendChild(
+                $document->createElement($key, $value)
+            );
+        }
+        $document->appendChild($addressElement);
+
+        $address = Address::createFromXML(
+            simplexml_load_string(
+                $document->saveXML()
+            )
+        );
+
+        $this->assertEquals($data['streetName'], $address->getStreetName());
+        $this->assertEquals($data['number'], $address->getNumber());
+        $this->assertEquals($data['box'], $address->getBox());
+        $this->assertEquals($data['postalCode'], $address->getPostalCode());
+        $this->assertEquals($data['locality'], $address->getLocality());
+        $this->assertEquals($data['countryCode'], $address->getCountryCode());
+    }
 }

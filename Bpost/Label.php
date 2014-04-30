@@ -86,7 +86,7 @@ class Label
     /**
      * @return array
      */
-    public function getPossibleMimeTypeValues()
+    public static function getPossibleMimeTypeValues()
     {
         return array(
             'image/png',

@@ -140,6 +140,7 @@ class Bpost
                 }
             }
         } else {
+            var_dump($item);
             throw new Exception('Invalid item.');
         }
 

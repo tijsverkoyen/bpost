@@ -232,7 +232,12 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $nationalBox = $expectedDocument->createElement('internationalBox');
         $atHome = $expectedDocument->createElement('international:international');
         $nationalBox->appendChild($atHome);
-        $atHome->appendChild($expectedDocument->createElement('international:product', $data['internationalBox']['international']['product']));
+        $atHome->appendChild(
+            $expectedDocument->createElement(
+                'international:product',
+                $data['internationalBox']['international']['product']
+            )
+        );
         $receiver = $expectedDocument->createElement('international:receiver');
         $atHome->appendChild($receiver);
         foreach ($data['internationalBox']['international']['receiver'] as $key => $value) {
@@ -303,5 +308,23 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expectedDocument, $actualDocument);
+    }
+
+    /**
+     * Test validation in the setters
+     */
+    public function testFaultyProperties()
+    {
+        $box = new Box();
+
+        try {
+            $box->setStatus(str_repeat('a', 10));
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertEquals(
+                'Invalid value, possible values are: ' . implode(', ', Box::getPossibleStatusValues()) . '.',
+                $e->getMessage()
+            );
+        }
     }
 }
