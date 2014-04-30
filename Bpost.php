@@ -140,7 +140,6 @@ class Bpost
                 }
             }
         } else {
-            var_dump($item);
             throw new Exception('Invalid item.');
         }
 
@@ -247,7 +246,10 @@ class Bpost
                 throw new Exception($message, $code);
             }
 
-            if (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) {
+            if (
+                (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) ||
+                ($headers['http_code'] == '404')
+            ) {
                 $message = $response;
             } else {
                 $message = 'Invalid response.';
@@ -475,18 +477,15 @@ class Bpost
     }
 
     /**
-     * Create the labels for all unprinted boxes in an order.
-     * The service will return labels for all unprinted boxes for that order.
-     * Boxes that were unprinted will get the status PRINTED, the boxes that
-     * had already been printed will remain the same.
+     * Generic method to centralize handling of labels
      *
-     * @param  string $reference        The reference for an order
-     * @param  string $format           The desired format, allowed values are: A4, A6
-     * @param  bool   $withReturnLabels Should return labels be returned?
-     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @param  string $url
+     * @param  string $format
+     * @param  bool   $withReturnLabels
+     * @param  bool   $asPdf
      * @return array
      */
-    public function createLabelForOrder($reference, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    protected function getLabel($url, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
         $format = strtoupper($format);
         if (!in_array($format, self::getPossibleLabelFormatValues())) {
@@ -498,7 +497,7 @@ class Bpost
             );
         }
 
-        $url = '/orders/' . (string) $reference . '/labels/' . $format;
+        $url .= '/labels/' . $format;
         if ($withReturnLabels) {
             $url .= '/withReturnLabels';
         }
@@ -531,8 +530,39 @@ class Bpost
         return $labels;
     }
 
+    /**
+     * Create the labels for all unprinted boxes in an order.
+     * The service will return labels for all unprinted boxes for that order.
+     * Boxes that were unprinted will get the status PRINTED, the boxes that
+     * had already been printed will remain the same.
+     *
+     * @param  string $reference        The reference for an order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
+    public function createLabelForOrder($reference, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    {
+        $url = '/orders/' . (string) $reference;
+
+        return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
+    }
+
+    /**
+     * Create a label for a known barcode.
+     *
+     * @param  string $barcode          The barcode of the parcel
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @return array
+     */
     public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
+        $url = '/boxes/' . (string) $barcode;
+
+        return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
     }
 
     public function createLabelInBulkForOrders(

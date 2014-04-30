@@ -160,6 +160,7 @@ try {
 //    $response = $bpost->modifyOrderStatus($orderId, 'OPEN');
 //    $response = $bpost->fetchOrder($orderId);
 //    $response = $bpost->createLabelForOrder($orderId, 'A4');
+//    $response = $bpost->createLabelForBox('323212345659900357664050', 'A4');
 
     // GEO6 webservices
 //    $geo6 = new Geo6(GEO6_PARTNER, GEO6_APP_ID);
