@@ -57,7 +57,7 @@ class Bpost
      *
      * @var int
      */
-    private $timeOut = 10;
+    private $timeOut = 30;
 
     /**
      * The user agent
@@ -172,13 +172,6 @@ class Bpost
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
         $options[CURLOPT_HTTPHEADER] = $headers;
 
-        // PUT
-        if ($method == 'PUT') {
-            $options[CURLOPT_CUSTOMREQUEST] = 'PUT';
-            if ($body != null) {
-                $options[CURLOPT_POSTFIELDS] = $body;
-            }
-        }
         if ($method == 'POST') {
             $options[CURLOPT_POST] = true;
             $options[CURLOPT_POSTFIELDS] = $body;
@@ -511,7 +504,6 @@ class Bpost
                 'Accept: application/vnd.bpost.shm-label-image-v3+XML',
             );
         }
-
 
         $xml = $this->doCall(
             $url,

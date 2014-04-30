@@ -159,7 +159,7 @@ try {
 //    $response = $bpost->createOrReplaceOrder($order);
 //    $response = $bpost->modifyOrderStatus($orderId, 'OPEN');
 //    $response = $bpost->fetchOrder($orderId);
-//    $response = $bpost->createLabelForOrder($orderId, 'A4');
+//    $response = $bpost->createLabelForOrder('1398779096', 'A4');
 //    $response = $bpost->createLabelForBox('323212345659900357664050', 'A4');
 //    $response = $bpost->createLabelInBulkForOrders(
 //        array('1398779096', '1398862819'), 'A4'
@@ -173,11 +173,6 @@ try {
 } catch (Exception $e) {
     var_dump($e);
 }
-
-// output pdf
-//header('Content-Type: application/pdf');
-//echo base64_decode($response);
-//exit;
 
 // output
 var_dump($response);
