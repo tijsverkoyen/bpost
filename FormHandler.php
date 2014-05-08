@@ -40,7 +40,6 @@ class FormHandler
      */
     private function getChecksum()
     {
-        // init vars
         $keysToHash = array(
             'accountId',
             'action',
@@ -48,18 +47,18 @@ class FormHandler
             'customerCountry',
             'deliveryMethodOverrides',
             'extraSecure',
-            'orderReference'
+            'orderReference',
+            'orderWeight',
         );
         $base = 'accountId=' . $this->bpost->getAccountId() . '&';
 
-        // loop keys
         foreach ($keysToHash as $key) {
             if (isset($this->parameters[$key])) {
                 $base .= $key . '=' . $this->parameters[$key] . '&';
             }
         }
 
-        // add passhphrase
+        // add passphrase
         $base .= $this->bpost->getPassPhrase();
 
         // return the hash
@@ -69,8 +68,8 @@ class FormHandler
     /**
      * Get the parameters
      *
-     * @param  bool  $form
-     * @param  bool  $includeChecksum
+     * @param  bool $form
+     * @param  bool $includeChecksum
      * @return array
      */
     public function getParameters($form = false, $includeChecksum = true)
@@ -161,6 +160,7 @@ class FormHandler
             // maximum 40 chars
             case 'customerFirstName':
             case 'customerLastName':
+            case 'customerCompany':
             case 'customerStreet':
             case 'customerCity':
                 if (mb_strlen($value) > 40) {
@@ -197,6 +197,13 @@ class FormHandler
                 $this->parameters[$key][] = $value;
                 break;
 
+            // unknown
+            case 'deliveryMethodOverrides':
+            case 'extra':
+            case 'extraSecure':
+            case 'confirmUrl':
+            case 'cancelUrl':
+            case 'errorUrl':
             default:
                 $this->parameters[$key] = $value;
         }
