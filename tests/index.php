@@ -28,6 +28,8 @@ use \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 
 use \TijsVerkoyen\Bpost\Geo6;
 
+use \TijsVerkoyen\Bpost\FormHandler;
+
 // create instance
 $bpost = new Bpost(ACCOUNT_ID, PASSPHRASE);
 
@@ -170,9 +172,18 @@ try {
 //    $response = $geo6->getNearestServicePoint('Afrikalaan', '289', '9000', 'nl', 7, 100);
 //    $response = $geo6->getServicePointDetails('220000', 'nl', '1');
 //    $response = $geo6->getServicePointPage('220000', 'nl', '1');
+
+    // Form handler
+//    $formHandler = new FormHandler(ACCOUNT_ID, PASSPHRASE);
+//    $formHandler->setParameter('action', 'START');
+//    $formHandler->setParameter('orderReference', $order->getReference());
+//    $formHandler->setParameter('customerCountry', $sender->getAddress()->getCountryCode());
+//    $response = $formHandler->getParameters(true);
 } catch (Exception $e) {
     var_dump($e);
 }
+
+
 
 // output
 var_dump($response);
