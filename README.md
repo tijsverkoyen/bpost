@@ -17,4 +17,4 @@ each method is documented with PHPDoc.
 
 ## Sites using this class
 
-* [Each site based on the Web Retail Shop Platform](http://www.webretailcompany.com)
+* [Each site based on the Web Retail Shop Platform](http://www.webretailcompany.be)
