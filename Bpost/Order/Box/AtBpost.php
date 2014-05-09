@@ -1,7 +1,9 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 
 /**
  * bPost AtBpost class
@@ -170,9 +172,6 @@ class AtBpost extends National
 
         if ($this->getPugoId() !== null) {
             $tagName = 'pugoId';
-            if ($prefix !== null) {
-                $tagName = $prefix . ':' . $tagName;
-            }
             $boxElement->appendChild(
                 $document->createElement(
                     $tagName,
@@ -182,9 +181,6 @@ class AtBpost extends National
         }
         if ($this->getPugoName() !== null) {
             $tagName = 'pugoName';
-            if ($prefix !== null) {
-                $tagName = $prefix . ':' . $tagName;
-            }
             $boxElement->appendChild(
                 $document->createElement(
                     $tagName,
@@ -194,14 +190,11 @@ class AtBpost extends National
         }
         if ($this->getPugoAddress() !== null) {
             $boxElement->appendChild(
-                $this->getPugoAddress()->toXML($document, null)
+                $this->getPugoAddress()->toXML($document, 'common')
             );
         }
         if ($this->getReceiverName() !== null) {
             $tagName = 'receiverName';
-            if ($prefix !== null) {
-                $tagName = $prefix . ':' . $tagName;
-            }
             $boxElement->appendChild(
                 $document->createElement(
                     $tagName,
@@ -211,9 +204,6 @@ class AtBpost extends National
         }
         if ($this->getReceiverCompany() !== null) {
             $tagName = 'receiverCompany';
-            if ($prefix !== null) {
-                $tagName = $prefix . ':' . $tagName;
-            }
             $boxElement->appendChild(
                 $document->createElement(
                     $tagName,
@@ -223,5 +213,84 @@ class AtBpost extends National
         }
 
         return $nationalElement;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return AtBpost
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $atBpost = new AtBpost();
+
+        if (isset($xml->atBpost->product) && $xml->atBpost->product != '') {
+            $atBpost->setProduct(
+                (string) $xml->atBpost->product
+            );
+        }
+        if (isset($xml->atBpost->options)) {
+            foreach ($xml->atBpost->options as $optionData) {
+                $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
+
+                if (in_array(
+                    $optionData->getName(),
+                    array(
+                        'infoDistributed',
+                        'infoNextDay',
+                        'infoReminder',
+                        'keepMeInformed',
+                    )
+                )
+                ) {
+                    $option = Messaging::createFromXML($optionData);
+                } else {
+                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    if (!method_exists($className, 'createFromXML')) {
+                        throw new Exception('Not Implemented');
+                    }
+                    $option = call_user_func(
+                        array($className, 'createFromXML'),
+                        $optionData
+                    );
+                }
+
+                $atBpost->addOption($option);
+            }
+        }
+        if (isset($xml->atBpost->weight) && $xml->atBpost->weight != '') {
+            $atBpost->setWeight(
+                (int) $xml->atBpost->weight
+            );
+        }
+        if (isset($xml->atBpost->receiverName) && $xml->atBpost->receiverName != '') {
+            $atBpost->setReceiverName(
+                (string) $xml->atBpost->receiverName
+            );
+        }
+        if (isset($xml->atBpost->receiverCompany) && $xml->atBpost->receiverCompany != '') {
+            $atBpost->setReceiverCompany(
+                (string) $xml->atBpost->receiverCompany
+            );
+        }
+        if (isset($xml->atBpost->pugoId) && $xml->atBpost->pugoId != '') {
+            $atBpost->setPugoId(
+                (string) $xml->atBpost->pugoId
+            );
+        }
+        if (isset($xml->atBpost->pugoName) && $xml->atBpost->pugoName != '') {
+            $atBpost->setPugoName(
+                (string) $xml->atBpost->pugoName
+            );
+        }
+        if (isset($xml->atBpost->pugoAddress)) {
+            $pugoAddressData = $xml->atBpost->pugoAddress->children(
+                'http://schema.post.be/shm/deepintegration/v3/common'
+            );
+            $atBpost->setPugoAddress(
+                PugoAddress::createFromXML($pugoAddressData)
+            );
+        }
+
+        return $atBpost;
     }
 }
