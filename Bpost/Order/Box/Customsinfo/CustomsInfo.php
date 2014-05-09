@@ -254,4 +254,41 @@ class CustomsInfo
 
         return $customsInfo;
     }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return CustomsInfo
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $customsInfo = new CustomsInfo();
+
+        if (isset($xml->parcelValue) && $xml->parcelValue != '') {
+            $customsInfo->setParcelValue(
+                (int) $xml->parcelValue
+            );
+        }
+        if (isset($xml->contentDescription) && $xml->contentDescription != '') {
+            $customsInfo->setContentDescription(
+                (string) $xml->contentDescription
+            );
+        }
+        if (isset($xml->shipmentType) && $xml->shipmentType != '') {
+            $customsInfo->setShipmentType(
+                (string) $xml->shipmentType
+            );
+        }
+        if (isset($xml->parcelReturnInstructions) && $xml->parcelReturnInstructions != '') {
+            $customsInfo->setParcelReturnInstructions(
+                (string) $xml->parcelReturnInstructions
+            );
+        }
+        if (isset($xml->privateAddress) && $xml->privateAddress != '') {
+            $customsInfo->setPrivateAddress(
+                ((string) $xml->privateAddress == 'true')
+            );
+        }
+
+        return $customsInfo;
+    }
 }

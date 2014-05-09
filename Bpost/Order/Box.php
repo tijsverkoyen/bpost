@@ -223,7 +223,22 @@ class Box
             $box->setNationalBox($nationalBox);
         }
         if (isset($xml->internationalBox)) {
-            throw new Exception('Not Implemented');
+            $internationalBoxData = $xml->internationalBox->children('http://schema.post.be/shm/deepintegration/v3/international');
+
+            // build classname based on the tag name
+            $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\' . ucfirst($internationalBoxData->getName());
+
+            if (!method_exists($className, 'createFromXML')) {
+                var_dump($className);
+                throw new Exception('Not Implemented');
+            }
+
+            $internationalBox = call_user_func(
+                array($className, 'createFromXML'),
+                $internationalBoxData
+            );
+
+            $box->setInternationalBox($internationalBox);
         }
         if (isset($xml->remark) && $xml->remark != '') {
             $box->setRemark((string) $xml->remark);

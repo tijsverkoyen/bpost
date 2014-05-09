@@ -2,6 +2,8 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
+use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 
 /**
  * bPost International class
@@ -207,5 +209,60 @@ class International
         }
 
         return $internationalBox;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return International
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $international = new International();
+
+        if (isset($xml->international->product) && $xml->international->product != '') {
+            $international->setProduct(
+                (string) $xml->international->product
+            );
+        }
+        if (isset($xml->international->options)) {
+            foreach ($xml->international->options as $optionData) {
+                $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
+
+                if (in_array($optionData->getName(), array('infoDistributed'))) {
+                    $option = Messaging::createFromXML($optionData);
+                } else {
+                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    if (!method_exists($className, 'createFromXML')) {
+                        throw new Exception('Not Implemented');
+                    }
+                    $option = call_user_func(
+                        array($className, 'createFromXML'),
+                        $optionData
+                    );
+                }
+
+                $international->addOption($option);
+            }
+        }
+        if (isset($xml->international->parcelWeight) && $xml->international->parcelWeight != '') {
+            $international->setParcelWeight(
+                (int) $xml->international->parcelWeight
+            );
+        }
+        if (isset($xml->international->receiver)) {
+            $receiverData = $xml->international->receiver->children(
+                'http://schema.post.be/shm/deepintegration/v3/common'
+            );
+            $international->setReceiver(
+                Receiver::createFromXML($receiverData)
+            );
+        }
+        if (isset($xml->international->customsInfo)) {
+            $international->setCustomsInfo(
+                CustomsInfo::createFromXML($xml->international->customsInfo)
+            );
+        }
+
+        return $international;
     }
 }
