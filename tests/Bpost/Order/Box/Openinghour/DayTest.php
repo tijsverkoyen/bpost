@@ -50,6 +50,31 @@ class DayTest extends \PHPUnit_Framework_TestCase
         }
 
         $this->assertEquals($expectedDocument, $actualDocument);
+
+        $data = array(
+            'Monday' => '10:00-17:00',
+        );
+
+        $expectedDocument = self::createDomDocument();
+        foreach ($data as $key => $value) {
+            $expectedDocument->appendChild(
+                $expectedDocument->createElement(
+                    'foo:'. $key,
+                    $value
+                )
+            );
+        }
+
+        $actualDocument = self::createDomDocument();
+
+        foreach ($data as $key => $value) {
+            $day = new Day('Monday', '10:00-17:00');
+            $actualDocument->appendChild(
+                $day->toXML($actualDocument, 'foo')
+            );
+        }
+
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

@@ -64,6 +64,40 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
             $insurance->toXML($actualDocument)
         );
         $this->assertEquals($expectedDocument, $actualDocument);
+
+        $expectedDocument = self::createDomDocument();
+        $insured = $expectedDocument->createElement('insured');
+        $insured->appendChild($expectedDocument->createElement('basicInsurance'));
+        $expectedDocument->appendChild($insured);
+
+        $actualDocument = self::createDomDocument();
+        $insurance = new Insurance('basicInsurance');
+        $actualDocument->appendChild(
+            $insurance->toXML($actualDocument)
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
+
+        $data = array(
+            'insured' => array(
+                'additionalInsurance' => array(
+                    '@attributes' => array(
+                        'value' => 3,
+                    ),
+                ),
+            ),
+        );
+
+        $expectedDocument = self::createDomDocument();
+        $insured = $expectedDocument->createElement('foo:insured');
+        $insured->appendChild($expectedDocument->createElement('foo:basicInsurance'));
+        $expectedDocument->appendChild($insured);
+
+        $actualDocument = self::createDomDocument();
+        $insurance = new Insurance('basicInsurance');
+        $actualDocument->appendChild(
+            $insurance->toXML($actualDocument, 'foo')
+        );
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 
     /**

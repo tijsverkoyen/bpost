@@ -58,6 +58,100 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             $customsInfo->toXML($actualDocument, null)
         );
         $this->assertEquals($expectedDocument, $actualDocument);
+
+        $data = array(
+            'parcelValue' => '700',
+            'contentDescription' => 'BOOK',
+            'shipmentType' => 'DOCUMENTS',
+            'parcelReturnInstructions' => 'RTS',
+            'privateAddress' => true,
+        );
+
+        $expectedDocument = self::createDomDocument();
+        $customsInfo = $expectedDocument->createElement('customsInfo');
+        foreach ($data as $key => $value) {
+            if ($key == 'privateAddress') {
+                $value = ($value) ? 'true' : 'false';
+            }
+            $customsInfo->appendChild(
+                $expectedDocument->createElement($key, $value)
+            );
+        }
+        $expectedDocument->appendChild($customsInfo);
+
+        $actualDocument = self::createDomDocument();
+        $customsInfo = new CustomsInfo();
+        $customsInfo->setParcelValue($data['parcelValue']);
+        $customsInfo->setContentDescription($data['contentDescription']);
+        $customsInfo->setShipmentType($data['shipmentType']);
+        $customsInfo->setParcelReturnInstructions($data['parcelReturnInstructions']);
+        $customsInfo->setPrivateAddress($data['privateAddress']);
+        $actualDocument->appendChild($customsInfo->toXML($actualDocument));
+        $this->assertEquals($expectedDocument, $actualDocument);
+    }
+
+    /**
+     * Tests CustomsInfo->createFromXML
+     */
+    public function testCreateFromXML()
+    {
+        $data = array(
+            'parcelValue' => '700',
+            'contentDescription' => 'BOOK',
+            'shipmentType' => 'DOCUMENTS',
+            'parcelReturnInstructions' => 'RTS',
+            'privateAddress' => false,
+        );
+
+        $document = self::createDomDocument();
+        $customsInfo = $document->createElement('CustomsInfo');
+        foreach ($data as $key => $value) {
+            $customsInfo->appendChild(
+                $document->createElement($key, $value)
+            );
+        }
+        $document->appendChild($customsInfo);
+
+        $customsInfo = CustomsInfo::createFromXML(
+            simplexml_load_string(
+                $document->saveXML()
+            )
+        );
+
+        $this->assertEquals($data['parcelValue'], $customsInfo->getParcelValue());
+        $this->assertEquals($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
+        $this->assertEquals($data['contentDescription'], $customsInfo->getContentDescription());
+        $this->assertEquals($data['shipmentType'], $customsInfo->getShipmentType());
+        $this->assertEquals($data['privateAddress'], $customsInfo->getPrivateAddress());
+
+        $data = array(
+            'parcelValue' => '700',
+            'contentDescription' => 'BOOK',
+            'shipmentType' => 'DOCUMENTS',
+            'parcelReturnInstructions' => 'RTS',
+            'privateAddress' => 'true',
+        );
+
+        $document = self::createDomDocument();
+        $customsInfo = $document->createElement('CustomsInfo');
+        foreach ($data as $key => $value) {
+            $customsInfo->appendChild(
+                $document->createElement($key, $value)
+            );
+        }
+        $document->appendChild($customsInfo);
+
+        $customsInfo = CustomsInfo::createFromXML(
+            simplexml_load_string(
+                $document->saveXML()
+            )
+        );
+
+        $this->assertEquals($data['parcelValue'], $customsInfo->getParcelValue());
+        $this->assertEquals($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
+        $this->assertEquals($data['contentDescription'], $customsInfo->getContentDescription());
+        $this->assertEquals($data['shipmentType'], $customsInfo->getShipmentType());
+        $this->assertEquals(($data['privateAddress'] == 'true'), $customsInfo->getPrivateAddress());
     }
 
     /**

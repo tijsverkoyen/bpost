@@ -38,5 +38,18 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertEquals($expectedDocument, $actualDocument);
+
+        $expectedDocument = self::createDomDocument();
+        $expectedDocument->appendChild(
+            $expectedDocument->createElement('foo:signed')
+        );
+
+        $actualDocument = self::createDomDocument();
+        $signature = new Signature();
+        $actualDocument->appendChild(
+            $signature->toXML($actualDocument, 'foo')
+        );
+
+        $this->assertEquals($expectedDocument, $actualDocument);
     }
 }

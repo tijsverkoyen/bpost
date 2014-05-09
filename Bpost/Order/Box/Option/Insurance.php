@@ -106,9 +106,7 @@ class Insurance extends Option
 
     /**
      * @param string      $type
-     * @param string      $language
-     * @param string|null $emailAddress
-     * @param string|null $mobilePhone
+     * @param string\null $value
      */
     public function __construct($type, $value = null)
     {

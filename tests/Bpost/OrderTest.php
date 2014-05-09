@@ -247,7 +247,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $order->toXML($actualDocument, ACCOUNT_ID)
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertEquals($expectedDocument, $actualDocument);
 
         try {
             $xml = simplexml_load_string(

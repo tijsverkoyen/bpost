@@ -78,6 +78,14 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('TijsVerkoyen\Bpost\Geo6\Poi', $response);
         $this->assertEquals($response->getId(), $id);
         $this->assertEquals($response->getType(), $type);
+
+        try {
+            $response = $this->geo6->getServicePointDetails('0');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertEquals('No match for id : 0 and type : 3', $e->getMessage());
+        }
+
     }
 
     /**

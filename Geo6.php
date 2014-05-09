@@ -108,9 +108,14 @@ class Geo6
         // we expect XML so decode it
         $xml = @simplexml_load_string($response);
 
-        // validate json
+        // validate xml
         if ($xml === false || (isset($xml->head) && isset($xml->body))) {
-            throw new Exception('Invalid XML-response');
+            throw new Exception('Invalid XML-response.');
+        }
+
+        // catch generic errors
+        if (isset($xml['type']) && (string) $xml['type'] == 'TaxipostLocatorError') {
+            throw new Exception((string) $xml->txt);
         }
 
         // return
@@ -259,7 +264,7 @@ class Geo6
         $xml = $this->doCall('info', $parameters);
 
         if (!isset($xml->Poi->Record)) {
-            throw new Exception('Invalid XML-response');
+            throw new Exception('Invalid XML-response.');
         }
 
         return Poi::createFromXML($xml->Poi->Record);
