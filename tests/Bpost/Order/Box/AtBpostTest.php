@@ -54,7 +54,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
             if ($key == 'pugoAddress') {
                 $address = $expectedDocument->createElement($key);
                 foreach ($value as $key2 => $value2) {
-                    $key2 = '' . $key2;
+                    $key2 = 'common:' . $key2;
                     $address->appendChild(
                         $expectedDocument->createElement($key2, $value2)
                     );

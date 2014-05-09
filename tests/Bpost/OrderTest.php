@@ -160,20 +160,6 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $nationalBox->appendChild($at247);
         $expectedDocument->appendChild($nationalBox);
         foreach ($data['box'][0]['nationalBox']['at24-7'] as $key => $value) {
-            if (in_array(
-                $key,
-                array(
-                    'parcelsDepotId',
-                    'parcelsDepotName',
-                    'memberId',
-                    'receiverName',
-                    'receiverCompany',
-                )
-            )
-            ) {
-                $key = 'tns:' . $key;
-            }
-
             if ($key == 'parcelsDepotAddress') {
                 $address = $expectedDocument->createElement($key);
                 foreach ($value as $key2 => $value2) {
@@ -261,7 +247,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             $order->toXML($actualDocument, ACCOUNT_ID)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
 
         try {
             $xml = simplexml_load_string(
