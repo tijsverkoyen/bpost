@@ -68,8 +68,8 @@ class FormHandler
     /**
      * Get the parameters
      *
-     * @param  bool $form
-     * @param  bool $includeChecksum
+     * @param  bool  $form
+     * @param  bool  $includeChecksum
      * @return array
      */
     public function getParameters($form = false, $includeChecksum = true)

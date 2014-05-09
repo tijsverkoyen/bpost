@@ -13,9 +13,6 @@ use TijsVerkoyen\Bpost\Bpack247\Customer;
  */
 class Bpack247
 {
-    // internal constant to enable/disable debugging
-    const DEBUG = false;
-
     // URL for the api
     const API_URL = 'http://www.bpack247.be/BpostRegistrationWebserviceREST/servicecontroller.svc';
 
@@ -106,50 +103,17 @@ class Bpack247
 
         // error?
         if ($errorNumber != '') {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump(htmlentities($response));
-                var_dump($this);
-                echo '</pre>';
-            }
-
             throw new Exception($errorMessage, $errorNumber);
         }
 
         // valid HTTP-code
         if (!in_array($headers['http_code'], array(0, 200))) {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump($options);
-                var_dump(htmlentities($body));
-                var_dump($response);
-                var_dump($headers);
-                var_dump($this);
-                echo '</pre>';
-            }
-
-            // convert into XML
             $xml = @simplexml_load_string($response);
 
-            // validate
             if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
             ) {
-                // internal debugging enabled
-                if (self::DEBUG) {
-                    echo '<pre>';
-                    var_dump($response);
-                    var_dump($headers);
-                    var_dump($this);
-                    echo '</pre>';
-                }
-
-                // message
                 $message = (string) $xml->message;
                 $code = isset($xml->code) ? (int) $xml->code : null;
-
-                // throw exception
                 throw new Exception($message, $code);
             }
 
@@ -161,35 +125,13 @@ class Bpack247
 
         // validate
         if ($xml->getName() == 'businessException') {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump($response);
-                var_dump($headers);
-                var_dump($this);
-                echo '</pre>';
-            }
-
-            // message
             $message = (string) $xml->message;
             $code = (string) $xml->code;
-
-            // throw exception
             throw new Exception($message, $code);
         }
 
         // return the response
         return $xml;
-    }
-
-    /**
-     * Get the account id
-     *
-     * @return string
-     */
-    public function getAccountId()
-    {
-        return $this->accountId;
     }
 
     /**
@@ -200,16 +142,6 @@ class Bpack247
     private function getAuthorizationHeader()
     {
         return base64_encode($this->accountId . ':' . $this->passPhrase);
-    }
-
-    /**
-     * Get the passPhrase
-     *
-     * @return string
-     */
-    public function getPassPhrase()
-    {
-        return $this->passPhrase;
     }
 
     /**

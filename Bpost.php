@@ -15,9 +15,6 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box;
  */
 class Bpost
 {
-    // internal constant to enable/disable debugging
-    const DEBUG = false;
-
     // URL for the api
     const API_URL = 'https://api.bpost.be/services/shm';
 
@@ -193,44 +190,17 @@ class Bpost
 
         // error?
         if ($errorNumber != '') {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump(htmlentities($response));
-                var_dump($this);
-                echo '</pre>';
-            }
-
             throw new Exception($errorMessage, $errorNumber);
         }
 
         // valid HTTP-code
         if (!in_array($headers['http_code'], array(0, 200, 201))) {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump($options);
-                var_dump($response);
-                var_dump($headers);
-                var_dump($this);
-                echo '</pre>';
-            }
-
             // convert into XML
             $xml = @simplexml_load_string($response);
 
             // validate
             if ($xml !== false && (substr($xml->getName(), 0, 7) == 'invalid')
             ) {
-                // internal debugging enabled
-                if (self::DEBUG) {
-                    echo '<pre>';
-                    var_dump($response);
-                    var_dump($headers);
-                    var_dump($this);
-                    echo '</pre>';
-                }
-
                 // message
                 $message = (string) $xml->error;
                 $code = isset($xml->code) ? (int) $xml->code : null;
@@ -553,6 +523,7 @@ class Bpost
     public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
         $url = '/boxes/' . (string) $barcode;
+
         return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
     }
 

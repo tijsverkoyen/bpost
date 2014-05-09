@@ -14,9 +14,6 @@ use TijsVerkoyen\Bpost\Geo6\Poi;
  */
 class Geo6
 {
-    // internal constant to enable/disable debugging
-    const DEBUG = false;
-
     // URL for the api
     const API_URL = 'http://taxipost.geo6.be/Locator';
 
@@ -113,14 +110,6 @@ class Geo6
 
         // validate json
         if ($xml === false || (isset($xml->head) && isset($xml->body))) {
-            // internal debugging enabled
-            if (self::DEBUG) {
-                echo '<pre>';
-                var_dump($response);
-                var_dump($this);
-                echo '</pre>';
-            }
-
             throw new Exception('Invalid XML-response');
         }
 
