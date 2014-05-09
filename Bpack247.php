@@ -2,7 +2,6 @@
 namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Bpack247\Customer;
-use TijsVerkoyen\Bpost\Exception;
 
 /**
  * bPost Bpack24/7 class
@@ -15,20 +14,48 @@ use TijsVerkoyen\Bpost\Exception;
 class Bpack247
 {
     // internal constant to enable/disable debugging
-    const DEBUG = true;
+    const DEBUG = false;
 
     // URL for the api
     const API_URL = 'http://www.bpack247.be/BpostRegistrationWebserviceREST/servicecontroller.svc';
 
     // current version
-    const VERSION = '3';
+    const VERSION = '3.0.0';
+
+    /**
+     * The account id
+     *
+     * @var string
+     */
+    private $accountId;
+
+    /**
+     * A cURL instance
+     *
+     * @var resource
+     */
+    private $curl;
+
+    /**
+     * The passPhrase
+     *
+     * @var string
+     */
+    private $passPhrase;
+
+    /**
+     * The port to use.
+     *
+     * @var int
+     */
+    private $port;
 
     /**
      * The timeout
      *
      * @var int
      */
-    private $timeOut = 10;
+    private $timeOut = 30;
 
     /**
      * The user agent
@@ -38,174 +65,17 @@ class Bpack247
     private $userAgent;
 
     /**
-     * Callback-method for elements in the return-array
-     *
-     * @param mixed       $input The value.
-     * @param string      $key   string    The key.
-     * @param DOMDocument $xml   Some data.
-     */
-    private static function arrayToXML(&$input, $key, $xml)
-    {
-        // wierd stuff
-        if (in_array($key, array('orderLine', 'internationalLabelInfo'))) {
-            foreach ($input as $row) {
-                $element = new \DOMElement($key);
-                $xml->appendChild($element);
-
-                // loop properties
-                foreach ($row as $name => $value) {
-                    if (is_bool($value)) {
-                        $value = ($value) ? 'true' : 'false';
-                    }
-
-                    $node = new \DOMElement($name, $value);
-                    $element->appendChild($node);
-                }
-            }
-
-            return;
-        }
-
-        // skip attributes
-        if ($key == '@attributes') {
-            return;
-        }
-
-        // create element
-        $element = new \DOMElement($key);
-
-        // append
-        $xml->appendChild($element);
-
-        // no value? just stop here
-        if ($input === null) {
-            return;
-        }
-
-        // is it an array and are there attributes
-        if (is_array($input) && isset($input['@attributes'])) {
-            // loop attributes
-            foreach ((array) $input['@attributes'] as $name => $value) {
-                $element->setAttribute($name, $value);
-            }
-
-            // reset value
-            if (count($input) == 2 && isset($input['value'])) {
-                $input = $input['value'];
-            } // reset the input if it is a single value
-            elseif (count($input) == 1) {
-                return;
-            }
-        }
-
-        // the input isn't an array
-        if (!is_array($input)) {
-            // boolean
-            if (is_bool($input)) {
-                $element->appendChild(new \DOMText(($input) ? 'true' : 'false'));
-            } // integer
-            elseif (is_int($input)) {
-                $element->appendChild(new \DOMText($input));
-            } // floats
-            elseif (is_double($input)) {
-                $element->appendChild(new \DOMText($input));
-            } elseif (is_float($input)) {
-                $element->appendChild(new \DOMText($input));
-            } // a string?
-            elseif (is_string($input)) {
-                // characters that require a cdata wrapper
-                $illegalCharacters = array('&', '<', '>', '"', '\'');
-
-                // default we dont wrap with cdata tags
-                $wrapCdata = false;
-
-                // find illegal characters in input string
-                foreach ($illegalCharacters as $character) {
-                    if (stripos($input, $character) !== false) {
-                        // wrap input with cdata
-                        $wrapCdata = true;
-
-                        // no need to search further
-                        break;
-                    }
-                }
-
-                // check if value contains illegal chars, if so wrap in CDATA
-                if ($wrapCdata) {
-                    $element->appendChild(new \DOMCdataSection($input));
-                } // just regular element
-                else {
-                    $element->appendChild(new \DOMText($input));
-                }
-            } // fallback
-            else {
-                if (self::DEBUG) {
-                    echo 'Unknown type';
-                    var_dump($input);
-                    exit();
-                }
-
-                $element->appendChild(new \DOMText($input));
-            }
-        } // the value is an array
-        else {
-            // init var
-            $isNonNumeric = false;
-
-            // loop all elements
-            foreach ($input as $index => $value) {
-                // non numeric string as key?
-                if (!is_numeric($index)) {
-                    // reset var
-                    $isNonNumeric = true;
-
-                    // stop searching
-                    break;
-                }
-            }
-
-            // is there are named keys they should be handles as elements
-            if ($isNonNumeric) {
-                array_walk($input, array(__CLASS__, 'arrayToXML'), $element);
-            } // numeric elements means this a list of items
-            else {
-                // handle the value as an element
-                foreach ($input as $value) {
-                    if (is_array($value)) {
-                        array_walk($value, array(__CLASS__, 'arrayToXML'), $element);
-                    }
-                }
-            }
-        }
-    }
-
-    /**
      * Make the call
      *
-     * @param  string            $url       The URL to call.
-     * @param  array  [optional] $data      The data to pass.
-     * @param  string [optional] $method    The HTTP-method to use.
+     * @param  string $url    The URL to call.
+     * @param  string $body   The data to pass.
+     * @param  string $method The HTTP-method to use.
      * @return mixed
      */
-    private function doCall($url, $data = null, $method = 'GET')
+    private function doCall($url, $body = null, $method = 'GET')
     {
-        // any data?
-        if ($data !== null) {
-            // init XML
-            $xml = new \DOMDocument('1.0', 'utf-8');
-
-            // set some properties
-            $xml->preserveWhiteSpace = false;
-            $xml->formatOutput = true;
-
-            // build data
-            array_walk($data, array(__CLASS__, 'arrayToXML'), $xml);
-
-            // store body
-            $body = $xml->saveXML();
-        } else {
-            $body = null;
-        }
+        // build Authorization header
+        $headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
 
         // set options
         $options[CURLOPT_URL] = self::API_URL . $url;
@@ -213,6 +83,7 @@ class Bpack247
         $options[CURLOPT_RETURNTRANSFER] = true;
         $options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
+        $options[CURLOPT_HTTPHEADER] = $headers;
 
         if ($method == 'POST') {
             $options[CURLOPT_POST] = true;
@@ -312,6 +183,36 @@ class Bpack247
     }
 
     /**
+     * Get the account id
+     *
+     * @return string
+     */
+    public function getAccountId()
+    {
+        return $this->accountId;
+    }
+
+    /**
+     * Generate the secret string for the Authorization header
+     *
+     * @return string
+     */
+    private function getAuthorizationHeader()
+    {
+        return base64_encode($this->accountId . ':' . $this->passPhrase);
+    }
+
+    /**
+     * Get the passPhrase
+     *
+     * @return string
+     */
+    public function getPassPhrase()
+    {
+        return $this->passPhrase;
+    }
+
+    /**
      * Set the timeout
      * After this time the request will stop. You should handle any errors triggered by this.
      *
@@ -355,44 +256,52 @@ class Bpack247
         $this->userAgent = (string) $userAgent;
     }
 
+    /**
+     * Create Bpost instance
+     *
+     * @param string $accountId
+     * @param string $passPhrase
+     */
+    public function __construct($accountId, $passPhrase)
+    {
+        $this->accountId = (string) $accountId;
+        $this->passPhrase = (string) $passPhrase;
+    }
+
     // webservice methods
     public function createMember(Customer $customer)
     {
-        // build url
         $url = '/customer';
 
-        // build data
-        $data['Customer']['@attributes'] = array(
-            'xmlns' => 'http://schema.post.be/ServiceController/customer',
-        );
-        $data['Customer']['value'] = $customer->toXMLArray();
+        $document = new \DOMDocument('1.0', 'utf-8');
+        $document->preserveWhiteSpace = false;
+        $document->formatOutput = true;
 
-        // make the call
-        return $this->doCall($url, $data, 'POST');
-
-
-        $data = array(
-            ''
+        $document->appendChild(
+            $customer->toXML(
+                $document
+            )
         );
 
-        $xml = $this->doCall('/customer', $customer->toXMLArray(), 'POST');
-
-        var_dump($xml);
+        return $this->doCall(
+            $url,
+            $document->saveXML(),
+            'POST'
+        );
     }
 
-
+    /**
+     * Retrieve member information
+     *
+     * @param  string   $id
+     * @return Customer
+     */
     public function getMember($id)
     {
-        $xml = $this->doCall('lightcustomer/' . $id);
+        $xml = $this->doCall(
+            '/customer/' . $id
+        );
 
-        var_dump($xml);
-        exit;
-
-        if (!isset($xml->Poi->Record)) {
-            throw new Exception('Invalid XML-response');
-        }
-
-        return Poi::createFromXML($xml->Poi->Record);
-
+        return Customer::createFromXML($xml);
     }
 }

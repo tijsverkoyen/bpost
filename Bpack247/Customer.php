@@ -1,13 +1,26 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpack247;
 
+use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
+
 /**
- * bPost Order class
+ * bPost Customer class
  *
  * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
  */
 class Customer
 {
+    /**
+     * @var bool
+     */
+    private $activated;
+
+    /**
+     * @var string
+     */
+    private $userID;
+
     /**
      * @var string
      */
@@ -17,6 +30,11 @@ class Customer
      * @var string
      */
     private $lastName;
+
+    /**
+     * @var string
+     */
+    private $companyName;
 
     /**
      * @var string
@@ -47,6 +65,16 @@ class Customer
      * @var string
      */
     private $postalCode;
+
+    /**
+     * @var array
+     */
+    private $packStations = array();
+
+    /**
+     * @var string
+     */
+    private $town;
 
     /**
      * @var string
@@ -92,6 +120,38 @@ class Customer
      * @var string
      */
     private $userName;
+
+    /**
+     * @param boolean $activated
+     */
+    public function setActivated($activated)
+    {
+        $this->activated = $activated;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getActivated()
+    {
+        return $this->activated;
+    }
+
+    /**
+     * @param string $companyName
+     */
+    public function setCompanyName($companyName)
+    {
+        $this->companyName = $companyName;
+    }
+
+    /**
+     * @return string
+     */
+    public function getCompanyName()
+    {
+        return $this->companyName;
+    }
 
     /**
      * @param \DateTime $dateOfBirth
@@ -254,6 +314,30 @@ class Customer
     }
 
     /**
+     * @param CustomerPackStation $packStation
+     */
+    public function addPackStation(CustomerPackStation $packStation)
+    {
+        $this->packStations[] = $packStation;
+    }
+
+    /**
+     * @param array $packStations
+     */
+    public function setPackStations($packStations)
+    {
+        $this->packStations = $packStations;
+    }
+
+    /**
+     * @return array
+     */
+    public function getPackStations()
+    {
+        return $this->packStations;
+    }
+
+    /**
      * @param string $postalCode
      */
     public function setPostalCode($postalCode)
@@ -274,6 +358,15 @@ class Customer
      */
     public function setPreferredLanguage($preferredLanguage)
     {
+        if (!in_array($preferredLanguage, self::getPossiblePreferredLanguageValues())) {
+            throw new Exception(
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossiblePreferredLanguageValues())
+                )
+            );
+        }
+
         $this->preferredLanguage = $preferredLanguage;
     }
 
@@ -334,6 +427,15 @@ class Customer
      */
     public function setTitle($title)
     {
+        if (!in_array($title, self::getPossibleTitleValues())) {
+            throw new Exception(
+                sprintf(
+                    'Invalid value, possible values are: %1$s.',
+                    implode(', ', self::getPossibleTitleValues())
+                )
+            );
+        }
+
         $this->title = $title;
     }
 
@@ -357,6 +459,22 @@ class Customer
     }
 
     /**
+     * @param string $town
+     */
+    public function setTown($town)
+    {
+        $this->town = $town;
+    }
+
+    /**
+     * @return string
+     */
+    public function getTown()
+    {
+        return $this->town;
+    }
+
+    /**
      * @param boolean $useInformationForThirdParty
      */
     public function setUseInformationForThirdParty($useInformationForThirdParty)
@@ -370,6 +488,22 @@ class Customer
     public function getUseInformationForThirdParty()
     {
         return $this->useInformationForThirdParty;
+    }
+
+    /**
+     * @param string $userID
+     */
+    public function setUserID($userID)
+    {
+        $this->userID = $userID;
+    }
+
+    /**
+     * @return string
+     */
+    public function getUserID()
+    {
+        return $this->userID;
     }
 
     /**
@@ -389,45 +523,205 @@ class Customer
     }
 
     /**
-     * Return the object as an array for usage in the API
+     * Return the object as an array for usage in the XML
      *
-     * @return array
+     * @param  \DOMDocument $document
+     * @return \DOMElement
      */
-    public function toXMLArray()
+    public function toXML(\DOMDocument $document)
     {
-        $data = array();
+        $customer = $document->createElement(
+            'Customer'
+        );
+        $customer->setAttribute(
+            'xmlns',
+            'http://schema.post.be/ServiceController/customer'
+        );
+        $customer->setAttribute(
+            'xmlns:xsi',
+            'http://www.w3.org/2001/XMLSchema-instance'
+        );
+        $customer->setAttribute(
+            'xsi:schemaLocation',
+            'http://schema.post.be/ServiceController/customer'
+        );
+
+        $document->appendChild($customer);
 
         if ($this->getFirstName() !== null) {
-            $data['FirstName'] = $this->getFirstName();
+            $customer->appendChild(
+                $document->createElement(
+                    'FirstName',
+                    $this->getFirstName()
+                )
+            );
         }
         if ($this->getLastName() !== null) {
-            $data['LastName'] = $this->getLastName();
+            $customer->appendChild(
+                $document->createElement(
+                    'LastName',
+                    $this->getLastName()
+                )
+            );
         }
         if ($this->getStreet() !== null) {
-            $data['Street'] = $this->getStreet();
+            $customer->appendChild(
+                $document->createElement(
+                    'Street',
+                    $this->getStreet()
+                )
+            );
         }
         if ($this->getNumber() !== null) {
-            $data['Number'] = $this->getNumber();
+            $customer->appendChild(
+                $document->createElement(
+                    'Number',
+                    $this->getNumber()
+                )
+            );
         }
         if ($this->getEmail() !== null) {
-            $data['Email'] = $this->getEmail();
+            $customer->appendChild(
+                $document->createElement(
+                    'Email',
+                    $this->getEmail()
+                )
+            );
         }
         if ($this->getMobilePrefix() !== null) {
-            $data['MobilePrefix'] = $this->getMobilePrefix();
+            $customer->appendChild(
+                $document->createElement(
+                    'MobilePrefix',
+                    $this->getMobilePrefix()
+                )
+            );
         }
         if ($this->getMobileNumber() !== null) {
-            $data['MobileNumber'] = $this->getMobileNumber();
+            $customer->appendChild(
+                $document->createElement(
+                    'MobileNumber',
+                    $this->getMobileNumber()
+                )
+            );
         }
         if ($this->getPostalCode() !== null) {
-            $data['PostalCode'] = $this->getPostalCode();
+            $customer->appendChild(
+                $document->createElement(
+                    'PostalCode',
+                    $this->getPostalCode()
+                )
+            );
         }
         if ($this->getPreferredLanguage() !== null) {
-            $data['PreferredLanguage'] = $this->getPreferredLanguage();
+            $customer->appendChild(
+                $document->createElement(
+                    'PreferredLanguage',
+                    $this->getPreferredLanguage()
+                )
+            );
         }
         if ($this->getTitle() !== null) {
-            $data['Title'] = $this->getTitle();
+            $customer->appendChild(
+                $document->createElement(
+                    'Title',
+                    $this->getTitle()
+                )
+            );
         }
 
-        return $data;
+        return $customer;
+    }
+
+    /**
+     * @param  \SimpleXMLElement $xml
+     * @return Customer
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        // @todo work with classmaps ...
+        if (!isset($xml->UserID)) {
+            throw new Exception('No UserId found.');
+        }
+
+        $customer = new Customer();
+
+        if (isset($xml->UserID) && $xml->UserID != '') {
+            $customer->setUserID((string) $xml->UserID);
+        }
+        if (isset($xml->FirstName) && $xml->FirstName != '') {
+            $customer->setFirstName((string) $xml->FirstName);
+        }
+        if (isset($xml->LastName) && $xml->LastName != '') {
+            $customer->setLastName((string) $xml->LastName);
+        }
+        if (isset($xml->Street) && $xml->Street != '') {
+            $customer->setStreet((string) $xml->Street);
+        }
+        if (isset($xml->Number) && $xml->Number != '') {
+            $customer->setNumber((string) $xml->Number);
+        }
+        if (isset($xml->CompanyName) && $xml->CompanyName != '') {
+            $customer->setCompanyName((string) $xml->CompanyName);
+        }
+        if (isset($xml->DateOfBirth) && $xml->DateOfBirth != '') {
+            $dateTime = new \DateTime((string) $xml->DateOfBirth);
+            $customer->setDateOfBirth($dateTime);
+        }
+        if (isset($xml->DeliveryCode) && $xml->DeliveryCode != '') {
+            $customer->setDeliveryCode(
+                (string) $xml->DeliveryCode
+            );
+        }
+        if (isset($xml->Email) && $xml->Email != '') {
+            $customer->setEmail((string) $xml->Email);
+        }
+        if (isset($xml->MobilePrefix) && $xml->MobilePrefix != '') {
+            $customer->setMobilePrefix(
+                trim((string) $xml->MobilePrefix)
+            );
+        }
+        if (isset($xml->MobileNumber) && $xml->MobileNumber != '') {
+            $customer->setMobileNumber(
+                (string) $xml->MobileNumber
+            );
+        }
+        if (isset($xml->Postalcode) && $xml->Postalcode != '') {
+            $customer->setPostalCode(
+                (string) $xml->Postalcode
+            );
+        }
+        if (isset($xml->PreferredLanguage) && $xml->PreferredLanguage != '') {
+            $customer->setPreferredLanguage(
+                (string) $xml->PreferredLanguage
+            );
+        }
+        if (isset($xml->ReceivePromotions) && $xml->ReceivePromotions != '') {
+            $receivePromotions = in_array((string) $xml->ReceivePromotions, array('true', '1'));
+            $customer->setReceivePromotions($receivePromotions);
+        }
+        if (isset($xml->actived) && $xml->actived != '') {
+            $activated = in_array((string) $xml->actived, array('true', '1'));
+            $customer->setActivated($activated);
+        }
+        if (isset($xml->Title) && $xml->Title != '') {
+            $title = (string) $xml->Title;
+            $title = ucfirst(strtolower($title));
+            if (substr($title, -1) != '.') {
+                $title .= '.';
+            }
+
+            $customer->setTitle($title);
+        }
+        if (isset($xml->Town) && $xml->Town != '') {
+            $customer->setTown((string) $xml->Town);
+        }
+
+        if (isset($xml->PackStations->CustomerPackStation)) {
+            foreach ($xml->PackStations->CustomerPackStation as $packStation) {
+                $customer->addPackStation(CustomerPackStation::createFromXML($packStation));
+            }
+        }
+
+        return $customer;
     }
 }
