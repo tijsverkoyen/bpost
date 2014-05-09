@@ -207,6 +207,10 @@ class Box
 
             // build classname based on the tag name
             $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\' . ucfirst($nationalBoxData->getName());
+            if ($nationalBoxData->getName() == 'at24-7') {
+                $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\at247';
+            }
+
             if (!method_exists($className, 'createFromXML')) {
                 throw new Exception('Not Implemented');
             }
