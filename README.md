@@ -3,11 +3,12 @@
 ## About
 
 PHP bPost is a (wrapper)class to communicate with the
-[bPost Shipping API](http://bpost.be).
+[bPost Webservices](http://bpost.be).
 
 ## License
 
-PHP bPost is [BSD](http://classes.verkoyen.eu/overview/bsd) licensed.
+PHP bPost is [BSD](https://github.com/tijsverkoyen/bpost/blob/master/LICENSE.md)
+licensed.
 
 ## Documentation
 
