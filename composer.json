@@ -1,0 +1,21 @@
+{
+	"name": "tijsverkoyen/bpost",
+	"type": "library",
+	"description": "PHP bPost is a (wrapper)class to communicate with the bPost Webservices.",
+	"homepage": "https://github.com/tijsverkoyen/bpost",
+	"license": "BSD",
+	"authors": [
+		{
+			"name": "Tijs Verkoyen",
+			"email": "bpost@verkoyen.eu",
+			"role": "Developer"
+		}
+	],
+	"require": {
+		"php": ">=5.3.0",
+		"ext-curl": "*"
+	},
+	"autoload": {
+		"classmap": [""]
+	}
+}
