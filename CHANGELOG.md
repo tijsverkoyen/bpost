@@ -1,3 +1,7 @@
+# Changelog since 3.0.0
+
+* Introduction of the Track & Trace-services
+
 # Changelog since 1.0.1
 
 * Made the classes compliant with PSR

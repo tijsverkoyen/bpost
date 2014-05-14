@@ -30,6 +30,8 @@ use \TijsVerkoyen\Bpost\Geo6;
 
 use \TijsVerkoyen\Bpost\FormHandler;
 
+use \TijsVerkoyen\Bpost\TrackAndTrace;
+
 use \TijsVerkoyen\Bpost\Bpack247;
 
 // create instance
@@ -198,6 +200,18 @@ try {
 //    $formHandler->setParameter('orderReference', $order->getReference());
 //    $formHandler->setParameter('customerCountry', $sender->getAddress()->getCountryCode());
 //    $response = $formHandler->getParameters(true);
+
+    // Track & Trace
+//    $trackAndTrace = new TrackAndTrace();
+//    $response = $trackAndTrace->getDeepLink(
+//        array(
+//            'CD100665184BE',
+//            '323211133759900963104040',
+//            '323211133759900961801040',
+//        ),
+//        'nl',
+//        TRACKANDTRACE_PASSPHRASE
+//    );
 } catch (Exception $e) {
     var_dump($e);
 }
