@@ -1,3 +1,8 @@
+# Changelog since 3.0.0
+
+* Bugfix: removed usage of undefined constant, see https://github.com/tijsverkoyen/bpost/pull/8
+
+
 # Changelog since 1.0.1
 
 * Made the classes compliant with PSR

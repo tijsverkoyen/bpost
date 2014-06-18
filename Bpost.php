@@ -19,7 +19,7 @@ class Bpost
     const API_URL = 'https://api.bpost.be/services/shm';
 
     // current version
-    const VERSION = '3.0.0';
+    const VERSION = '3.0.1';
 
     /**
      * The account id
