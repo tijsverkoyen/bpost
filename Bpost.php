@@ -336,7 +336,7 @@ class Bpost
         $document->appendChild(
             $order->toXML(
                 $document,
-                ACCOUNT_ID
+                $this->accountId
             )
         );
 
