@@ -80,12 +80,16 @@ class Bpack247
         $options[CURLOPT_RETURNTRANSFER] = true;
         $options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
         $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
-        $options[CURLOPT_HTTPHEADER] = $headers;
-
+       
         if ($method == 'POST') {
+            $headers[] = 'Content-Type: application/xml';
+            
             $options[CURLOPT_POST] = true;
             $options[CURLOPT_POSTFIELDS] = $body;
         }
+
+         $options[CURLOPT_HTTPHEADER] = $headers;
+
 
         // init
         $this->curl = curl_init();
@@ -112,8 +116,10 @@ class Bpack247
 
             if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
             ) {
-                $message = (string) $xml->message;
-                $code = isset($xml->code) ? (int) $xml->code : null;
+                // $message = (string) $xml->message;
+                // $code = isset($xml->code) ? (int) $xml->code : null;
+                $message = (string)$xml->Message;
+                $code = isset($xml->Code) ? (int)$xml->Code : null;
                 throw new Exception($message, $code);
             }
 
@@ -226,14 +232,18 @@ class Bpack247
      * Retrieve member information
      *
      * @param  string   $id
-     * @return Customer
+     * @param  boolean  $as_xml [optional]
+     * @return TijsVerkoyenBpostBpack247Customer
      */
-    public function getMember($id)
+    public function getMember($id, $as_xml = false)
     {
         $xml = $this->doCall(
-            '/customer/' . $id
+            '/customer/'.$id
         );
 
-        return Customer::createFromXML($xml);
+        if ($as_xml)
+            return $xml;
+        
+        return TijsVerkoyenBpostBpack247Customer::createFromXML($xml);
     }
 }
