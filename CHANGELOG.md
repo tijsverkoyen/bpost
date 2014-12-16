@@ -1,3 +1,7 @@
+# Changelog since 3.0.1
+
+* Allowed SaturdayDelivery, see https://github.com/tijsverkoyen/bpost/pull/11
+
 # Changelog since 3.0.0
 
 * Bugfix: removed usage of undefined constant, see https://github.com/tijsverkoyen/bpost/pull/8
