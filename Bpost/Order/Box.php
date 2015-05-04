@@ -133,6 +133,7 @@ class Box
         return array(
             'OPEN',
             'PENDING',
+            'PRINTED',
             'CANCELLED',
             'COMPLETED',
             'ON-HOLD'
