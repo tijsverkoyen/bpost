@@ -211,7 +211,7 @@ class Bpost
 
             if (
                 (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) ||
-                ($headers['http_code'] == '404')
+                (in_array($headers['http_code'], array(400, 404)))
             ) {
                 $message = $response;
             } else {
