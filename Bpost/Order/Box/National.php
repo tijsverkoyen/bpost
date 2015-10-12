@@ -9,7 +9,7 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
  * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
  * @license   BSD License
  */
-abstract class National
+abstract class National implements IBox
 {
     /**
      * @var string
