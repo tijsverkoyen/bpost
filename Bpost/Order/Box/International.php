@@ -13,7 +13,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
  * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
  * @license   BSD License
  */
-class International
+class International implements IBox
 {
     /**
      * @var string

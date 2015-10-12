@@ -66,7 +66,7 @@ class Order
     }
 
     /**
-     * @return array
+     * @return Box[]
      */
     public function getBoxes()
     {
@@ -108,7 +108,7 @@ class Order
     }
 
     /**
-     * @return array
+     * @return Line[]
      */
     public function getLines()
     {

@@ -136,7 +136,8 @@ class Box
             'PRINTED',
             'CANCELLED',
             'COMPLETED',
-            'ON-HOLD'
+            'ON-HOLD',
+            'PRINTED'
         );
     }
 
