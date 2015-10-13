@@ -5,6 +5,7 @@ use Exception;
 use TijsVerkoyen\Bpost\Bpost\Label;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
+use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 /**
  * Bpost class
@@ -380,6 +381,28 @@ class Bpost
         );
 
         return Order::createFromXML($xml);
+    }
+
+    /**
+     * Get the products configuration
+     *
+     * @return ProductConfiguration
+     */
+    public function fetchProductConfig()
+    {
+        $url = '/productconfig';
+
+        $headers = array(
+            'Accept: application/vnd.bpost.shm-productConfiguration-v3.1+XML',
+        );
+        /** @var \SimpleXMLElement $xml */
+        $xml = $this->doCall(
+            $url,
+            null,
+            $headers
+        );
+
+        return ProductConfiguration::createFromXML($xml);
     }
 
     /**
