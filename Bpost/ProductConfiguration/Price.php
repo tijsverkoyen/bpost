@@ -3,6 +3,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
+use TijsVerkoyen\Bpost\Exception;
 
 class Price
 {
@@ -41,6 +42,27 @@ class Price
         $price->setPrice20To30($attributes['price20To30']);
 
         return $price;
+    }
+
+    /**
+     * @param int $weight
+     *
+     * @return int
+     * @throws Exception
+     */
+    public function getPriceByWeight($weight) {
+        if ($weight <= 2000) {
+            return $this->getPriceLessThan2();
+        } elseif ($weight <= 5000) {
+            return $this->getPrice2To5();
+        } elseif ($weight <= 10000) {
+            return $this->getPrice5To10();
+        } elseif ($weight <= 20000) {
+            return $this->getPrice10To20();
+        } elseif ($weight <= 30000) {
+            return $this->getPrice20To30();
+        }
+        throw new Exception('Weight cannot be superior than 30 kilograms');
     }
 
     /**
