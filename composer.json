@@ -1,13 +1,18 @@
 {
-	"name": "kouinkouin/bpost",
+	"name": "antidot/bpost-api-library",
 	"type": "library",
 	"description": "PHP bPost is a (wrapper)class to communicate with the bPost Webservices.",
-	"homepage": "https://github.com/tijsverkoyen/bpost",
+	"homepage": "https://github.com/antidot/bpost-api-library",
 	"license": "BSD",
 	"authors": [
 		{
 			"name": "Tijs Verkoyen",
 			"email": "bpost@verkoyen.eu",
+			"role": "Developer"
+		},
+		{
+			"name": "kouinkouin",
+			"email": "me@kouinkouin.com",
 			"role": "Developer"
 		}
 	],
