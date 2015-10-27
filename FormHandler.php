@@ -27,10 +27,11 @@ class FormHandler
      *
      * @param string $accountId
      * @param string $passPhrase
+     * @param string $apiUrl
      */
-    public function __construct($accountId, $passPhrase)
+    public function __construct($accountId, $passPhrase, $apiUrl = Bpost::API_URL)
     {
-        $this->bpost = new Bpost($accountId, $passPhrase);
+        $this->bpost = new Bpost($accountId, $passPhrase, $apiUrl);
     }
 
     /**
