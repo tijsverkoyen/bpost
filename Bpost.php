@@ -164,7 +164,7 @@ class Bpost
         $headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
 
         // set options
-        $options[CURLOPT_URL] = self::API_URL . '/' . $this->accountId . $url;
+        $options[CURLOPT_URL] = $this->apiUrl . '/' . $this->accountId . $url;
         if ($this->getPort() != 0) {
             $options[CURLOPT_PORT] = $this->getPort();
         }
