@@ -1,9 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
@@ -33,8 +30,10 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function testToXML()
     {
+        $accountId = 1234567;
+
         $data = array(
-            'accountId' => ACCOUNT_ID,
+            'accountId' => $accountId,
             'reference' => 'reference ' . time(),
             'costCenter' => 'costcenter ' . time(),
             'orderLine' => array(
@@ -244,7 +243,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $order->setBoxes(array($box));
 
         $actualDocument->appendChild(
-            $order->toXML($actualDocument, ACCOUNT_ID)
+            $order->toXML($actualDocument, $accountId)
         );
 
         $this->assertEquals($expectedDocument, $actualDocument);

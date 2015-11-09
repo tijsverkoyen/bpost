@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\CashOnDelivery;
 
 class CashOnDeliveryTest extends \PHPUnit_Framework_TestCase
@@ -82,6 +80,6 @@ class CashOnDeliveryTest extends \PHPUnit_Framework_TestCase
             $cashOnDelivery->toXML($actualDocument, 'foo')
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 }

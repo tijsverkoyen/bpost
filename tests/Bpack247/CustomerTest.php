@@ -1,9 +1,6 @@
 <?php
 namespace Bpost\Bpack;
 
-require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpack247\Customer;
 use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
 

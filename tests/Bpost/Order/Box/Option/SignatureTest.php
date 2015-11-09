@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Signature;
 
 class SignatureTest extends \PHPUnit_Framework_TestCase
@@ -50,6 +48,6 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             $signature->toXML($actualDocument, 'foo')
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 }

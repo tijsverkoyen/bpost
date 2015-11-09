@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\Customer;
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 
@@ -82,7 +80,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $customer->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**

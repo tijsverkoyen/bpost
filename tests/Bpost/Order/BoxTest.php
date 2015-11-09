@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
@@ -164,7 +162,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $box->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -307,7 +305,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $box->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**

@@ -2,9 +2,6 @@
 
 namespace TijsVerkoyen\Bpost\Geo6\test;
 
-require_once __DIR__ . '/../../../autoload.php';
-require_once 'config.php';
-
 use TijsVerkoyen\Bpost\Geo6;
 
 class Geo6Test extends \PHPUnit_Framework_TestCase
@@ -80,10 +77,17 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $this->assertEquals($response->getType(), $type);
 
         try {
+            $response = $this->geo6->getServicePointDetails('-1');
+        } catch (\Exception $e) {
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertEquals('No match for id : -1 and type : 3', $e->getMessage());
+        }
+
+        try {
             $response = $this->geo6->getServicePointDetails('0');
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('No match for id : 0 and type : 3', $e->getMessage());
+            $this->assertEquals('Id is mandatory', $e->getMessage());
         }
 
     }
@@ -98,7 +102,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $response = $this->geo6->getServicePointPage($id, 'nl', $type);
 
         $this->assertEquals(
-            'http://taxipost.geo6.be/Locator?Id=' . $id . '&Language=nl&Type=' . $type . '&Function=page&Partner=999999&AppId=A001&Format=xml',
+            'http://taxipost.geo6.be/Locator?Id=' . $id . '&Language=nl&Type=' . $type . '&Function=page&Partner=' . GEO6_PARTNER . '&AppId=' . GEO6_APP_ID . '&Format=xml',
             $response
         );
     }

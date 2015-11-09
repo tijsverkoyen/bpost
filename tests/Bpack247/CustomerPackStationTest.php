@@ -1,9 +1,6 @@
 <?php
 namespace Bpost\Bpack;
 
-require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
 
 class CustomerPackStationTest extends \PHPUnit_Framework_TestCase

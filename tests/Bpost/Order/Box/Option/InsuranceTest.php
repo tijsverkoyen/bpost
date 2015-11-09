@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 
 class InsuranceTest extends \PHPUnit_Framework_TestCase
@@ -97,7 +95,7 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
         $actualDocument->appendChild(
             $insurance->toXML($actualDocument, 'foo')
         );
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**

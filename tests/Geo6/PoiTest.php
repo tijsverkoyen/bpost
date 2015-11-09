@@ -2,8 +2,6 @@
 
 namespace Geo6;
 
-require_once __DIR__ . '/../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Geo6\Poi;
 
 class PoiTest extends \PHPUnit_Framework_TestCase

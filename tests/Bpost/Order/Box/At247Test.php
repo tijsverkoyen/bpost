@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 
@@ -91,7 +89,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
             $at247->toXML($actualDocument)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**

@@ -1,8 +1,6 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../autoload.php';
-
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 
 class ParcelsDepotAddressTest extends \PHPUnit_Framework_TestCase

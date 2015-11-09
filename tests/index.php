@@ -1,8 +1,8 @@
 <?php
 
 //require
-require_once '../../../autoload.php';
-require_once 'config.php';
+require_once __DIR__.'/../vendor/autoload.php';
+require_once __DIR__.'/config.php';
 
 use \TijsVerkoyen\Bpost\Bpost;
 
