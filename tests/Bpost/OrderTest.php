@@ -77,7 +77,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         // Normal
         $rootDom = $this->createDomDocument();
-        $document = $this->generateDomDocument($rootDom, $self->toXml($rootDom, '107423'));
+        $document = $this->generateDomDocument($rootDom, $self->toXML($rootDom, '107423'));
 
         $this->assertSame($this->getCreateOrderXml(), $document->saveXML());
     }
@@ -87,12 +87,12 @@ class OrderTest extends \PHPUnit_Framework_TestCase
      */
     public function testCreateFromXmlWithException()
     {
-        Order::createFromXml(new \SimpleXMLElement($this->getFetchOrderWithReferenceXml()));
+        Order::createFromXML(new \SimpleXMLElement($this->getFetchOrderWithReferenceXml()));
     }
 
     public function testCreateFromXml()
     {
-        $self = Order::createFromXml(new \SimpleXMLElement($this->getFetchOrderXml()));
+        $self = Order::createFromXML(new \SimpleXMLElement($this->getFetchOrderXml()));
 
         $this->assertSame('bpost_ref_56e02a5047119', $self->getReference());
         $this->assertNotNull($self->getLines());

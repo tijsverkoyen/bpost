@@ -76,14 +76,14 @@ class NationalTest extends \PHPUnit_Framework_TestCase
 
         // Normal
         $rootDom = $this->createDomDocument();
-        $document = $this->generateDomDocument($rootDom, $self->toXml($rootDom, 'tns'));
+        $document = $this->generateDomDocument($rootDom, $self->toXML($rootDom, 'tns'));
 
         $this->assertSame($this->getXml(), $document->saveXML());
     }
 
     public function testCreateFromXml()
     {
-        $self = NationalFake::createFromXml(new \SimpleXMLElement($this->getXml()));
+        $self = NationalFake::createFromXML(new \SimpleXMLElement($this->getXml()));
 
         $this->assertSame('bpack 24h Pro', $self->getProduct());
 
