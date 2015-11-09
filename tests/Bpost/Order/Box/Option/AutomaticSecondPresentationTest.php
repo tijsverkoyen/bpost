@@ -48,6 +48,6 @@ class AutomaticSecondPresentationTest extends \PHPUnit_Framework_TestCase
             $automaticSecondPresentation->toXML($actualDocument, 'foo')
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 }

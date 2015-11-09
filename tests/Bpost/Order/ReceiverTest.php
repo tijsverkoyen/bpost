@@ -80,7 +80,7 @@ class ReceiverTest extends \PHPUnit_Framework_TestCase
             $receiver->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -94,14 +94,14 @@ class ReceiverTest extends \PHPUnit_Framework_TestCase
             $receiver->setEmailAddress(str_repeat('a', 51));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 50.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
         }
 
         try {
             $receiver->setPhoneNumber(str_repeat('a', 21));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 20.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 20.', $e->getMessage());
         }
     }
 }

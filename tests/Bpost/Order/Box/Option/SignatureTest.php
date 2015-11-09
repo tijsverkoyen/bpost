@@ -48,6 +48,6 @@ class SignatureTest extends \PHPUnit_Framework_TestCase
             $signature->toXML($actualDocument, 'foo')
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 }

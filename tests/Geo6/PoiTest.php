@@ -12,8 +12,8 @@ class PoiTest extends \PHPUnit_Framework_TestCase
     public function testCreateFromXml()
     {
         $data = array(
-            'Id' => 405700,
-            'Type' => 1,
+            'Id' => '405700',
+            'Type' => '1',
             'Name' => 'ST-AMANDSBERG HOGEWEG',
             'Street' => 'Hogeweg',
             'Number' => '108',
@@ -35,16 +35,16 @@ class PoiTest extends \PHPUnit_Framework_TestCase
 
         $poi = Poi::createFromXML($xml);
 
-        $this->assertEquals($data['Id'], $poi->getId());
-        $this->assertEquals($data['Type'], $poi->getType());
-        $this->assertEquals($data['Name'], $poi->getOffice());
-        $this->assertEquals($data['Street'], $poi->getStreet());
-        $this->assertEquals($data['Number'], $poi->getNr());
-        $this->assertEquals($data['Zip'], $poi->getZip());
-        $this->assertEquals($data['City'], $poi->getCity());
-        $this->assertEquals($data['X'], $poi->getX());
-        $this->assertEquals($data['Y'], $poi->getY());
-        $this->assertEquals($data['Longitude'], $poi->getLongitude());
-        $this->assertEquals($data['Latitude'], $poi->getLatitude());
+        $this->assertSame($data['Id'], $poi->getId());
+        $this->assertSame($data['Type'], $poi->getType());
+        $this->assertSame($data['Name'], $poi->getOffice());
+        $this->assertSame($data['Street'], $poi->getStreet());
+        $this->assertSame($data['Number'], $poi->getNr());
+        $this->assertSame($data['Zip'], $poi->getZip());
+        $this->assertSame($data['City'], $poi->getCity());
+        $this->assertSame($data['X'], $poi->getX());
+        $this->assertSame($data['Y'], $poi->getY());
+        $this->assertSame($data['Longitude'], $poi->getLongitude());
+        $this->assertSame($data['Latitude'], $poi->getLatitude());
     }
 }

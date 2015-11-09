@@ -95,7 +95,7 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
         $actualDocument->appendChild(
             $insurance->toXML($actualDocument, 'foo')
         );
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -109,7 +109,7 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', Insurance::getPossibleTypeValues())
@@ -125,7 +125,7 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', Insurance::getPossibleValueValues())

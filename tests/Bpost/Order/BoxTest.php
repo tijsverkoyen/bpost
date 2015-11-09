@@ -162,7 +162,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $box->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -305,7 +305,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $box->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -319,7 +319,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
             $box->setStatus(str_repeat('a', 10));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 'Invalid value, possible values are: ' . implode(', ', Box::getPossibleStatusValues()) . '.',
                 $e->getMessage()
             );

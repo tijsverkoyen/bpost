@@ -46,7 +46,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
     public function testGetTimeOut()
     {
         $this->bpost->setTimeOut(5);
-        $this->assertEquals(5, $this->bpost->getTimeOut());
+        $this->assertSame(5, $this->bpost->getTimeOut());
     }
 
     /**
@@ -55,7 +55,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
     public function testGetUserAgent()
     {
         $this->bpost->setUserAgent('testing/1.0.0');
-        $this->assertEquals('PHP Bpost/' . Bpost::VERSION . ' testing/1.0.0', $this->bpost->getUserAgent());
+        $this->assertSame('PHP Bpost/' . Bpost::VERSION . ' testing/1.0.0', $this->bpost->getUserAgent());
     }
 
     /**
@@ -158,7 +158,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $this->bpost->createOrReplaceOrder($order);
         $response = $this->bpost->fetchOrder($order->getReference());
         $this->assertInstanceOf('\\TijsVerkoyen\Bpost\\Bpost\\Order', $response);
-        $this->assertEquals($order->getReference(), $response->getReference());
+        $this->assertSame($order->getReference(), $response->getReference());
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
     }

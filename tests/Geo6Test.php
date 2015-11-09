@@ -35,7 +35,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
     public function testGetTimeOut()
     {
         $this->geo6->setTimeOut(5);
-        $this->assertEquals(5, $this->geo6->getTimeOut());
+        $this->assertSame(5, $this->geo6->getTimeOut());
     }
 
     /**
@@ -44,7 +44,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
     public function testGetUserAgent()
     {
         $this->geo6->setUserAgent('testing/1.0.0');
-        $this->assertEquals('PHP Bpost Geo6/' . Geo6::VERSION . ' testing/1.0.0', $this->geo6->getUserAgent());
+        $this->assertSame('PHP Bpost Geo6/' . Geo6::VERSION . ' testing/1.0.0', $this->geo6->getUserAgent());
     }
 
     /**
@@ -73,21 +73,21 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $response = $this->geo6->getServicePointDetails($id, 'nl', $type);
 
         $this->assertInstanceOf('TijsVerkoyen\Bpost\Geo6\Poi', $response);
-        $this->assertEquals($response->getId(), $id);
-        $this->assertEquals($response->getType(), $type);
+        $this->assertSame($response->getId(), $id);
+        $this->assertSame($response->getType(), $type);
 
         try {
             $response = $this->geo6->getServicePointDetails('-1');
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('No match for id : -1 and type : 3', $e->getMessage());
+            $this->assertSame('No match for id : -1 and type : 3', $e->getMessage());
         }
 
         try {
             $response = $this->geo6->getServicePointDetails('0');
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Id is mandatory', $e->getMessage());
+            $this->assertSame('Id is mandatory', $e->getMessage());
         }
 
     }
@@ -101,7 +101,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $type = '1';
         $response = $this->geo6->getServicePointPage($id, 'nl', $type);
 
-        $this->assertEquals(
+        $this->assertSame(
             'http://taxipost.geo6.be/Locator?Id=' . $id . '&Language=nl&Type=' . $type . '&Function=page&Partner=' . GEO6_PARTNER . '&AppId=' . GEO6_APP_ID . '&Format=xml',
             $response
         );

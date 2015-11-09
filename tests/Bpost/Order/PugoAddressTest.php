@@ -69,42 +69,42 @@ class PugoAddressTest extends \PHPUnit_Framework_TestCase
             $address->setBox(str_repeat('a', 9));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 8.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 8.', $e->getMessage());
         }
 
         try {
             $address->setCountryCode(str_repeat('a', 3));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 2.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 2.', $e->getMessage());
         }
 
         try {
             $address->setLocality(str_repeat('a', 41));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 40.', $e->getMessage());
         }
 
         try {
             $address->setNumber(str_repeat('a', 9));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 8.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 8.', $e->getMessage());
         }
 
         try {
             $address->setPostalCode(str_repeat('a', 41));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 40.', $e->getMessage());
         }
 
         try {
             $address->setStreetName(str_repeat('a', 41));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 40.', $e->getMessage());
         }
     }
 }

@@ -72,7 +72,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -87,7 +87,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', Day::getPossibleDayValues())

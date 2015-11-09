@@ -89,7 +89,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
             $at247->toXML($actualDocument)
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -103,7 +103,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
             $at247->setProduct(str_repeat('a', 10));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', At247::getPossibleProductValues())

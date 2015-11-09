@@ -80,6 +80,6 @@ class CashOnDeliveryTest extends \PHPUnit_Framework_TestCase
             $cashOnDelivery->toXML($actualDocument, 'foo')
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 }

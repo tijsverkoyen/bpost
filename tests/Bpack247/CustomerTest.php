@@ -102,7 +102,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $customer->toXML($actualDocument)
         );
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -131,8 +131,8 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             'Town' => 'Tienen',
             'PackStations' => array(
                 array(
-                    'OrderNumber' => 1,
-                    'PackStationId' => 14472,
+                    'OrderNumber' => '1',
+                    'PackStationId' => '14472',
                 ),
             )
         );
@@ -166,26 +166,26 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['UserID'], $customer->getUserID());
-        $this->assertEquals($data['FirstName'], $customer->getFirstName());
-        $this->assertEquals($data['LastName'], $customer->getLastName());
-        $this->assertEquals($data['Street'], $customer->getStreet());
-        $this->assertEquals($data['Number'], $customer->getNumber());
-        $this->assertEquals($data['CompanyName'], $customer->getCompanyName());
+        $this->assertSame($data['UserID'], $customer->getUserID());
+        $this->assertSame($data['FirstName'], $customer->getFirstName());
+        $this->assertSame($data['LastName'], $customer->getLastName());
+        $this->assertSame($data['Street'], $customer->getStreet());
+        $this->assertSame($data['Number'], $customer->getNumber());
+        $this->assertSame($data['CompanyName'], $customer->getCompanyName());
         $this->assertEquals(new \DateTime($data['DateOfBirth']), $customer->getDateOfBirth());
-        $this->assertEquals($data['DeliveryCode'], $customer->getDeliveryCode());
-        $this->assertEquals($data['Email'], $customer->getEmail());
-        $this->assertEquals($data['MobilePrefix'], $customer->getMobilePrefix());
-        $this->assertEquals($data['MobileNumber'], $customer->getMobileNumber());
-        $this->assertEquals($data['Postalcode'], $customer->getPostalCode());
-        $this->assertEquals($data['PreferredLanguage'], $customer->getPreferredLanguage());
-        $this->assertEquals($data['ReceivePromotions'], $customer->getReceivePromotions());
-        $this->assertEquals($data['actived'], $customer->getActivated());
-        $this->assertEquals($data['Title'] . '.', $customer->getTitle());
-        $this->assertEquals($data['Town'], $customer->getTown());
+        $this->assertSame($data['DeliveryCode'], $customer->getDeliveryCode());
+        $this->assertSame($data['Email'], $customer->getEmail());
+        $this->assertSame($data['MobilePrefix'], $customer->getMobilePrefix());
+        $this->assertSame($data['MobileNumber'], $customer->getMobileNumber());
+        $this->assertSame($data['Postalcode'], $customer->getPostalCode());
+        $this->assertSame($data['PreferredLanguage'], $customer->getPreferredLanguage());
+        $this->assertSame($data['ReceivePromotions'], $customer->getReceivePromotions());
+        $this->assertSame($data['actived'], $customer->getActivated());
+        $this->assertSame($data['Title'] . '.', $customer->getTitle());
+        $this->assertSame($data['Town'], $customer->getTown());
         $packStations = $customer->getPackStations();
-        $this->assertEquals($data['PackStations'][0]['OrderNumber'], $packStations[0]->getOrderNumber());
-        $this->assertEquals($data['PackStations'][0]['PackStationId'], $packStations[0]->getPackStationId());
+        $this->assertSame($data['PackStations'][0]['OrderNumber'], $packStations[0]->getOrderNumber());
+        $this->assertSame($data['PackStations'][0]['PackStationId'], $packStations[0]->getPackStationId());
 
         try {
             $xml = simplexml_load_string(
@@ -195,7 +195,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $customer = Customer::createFromXML($xml);
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('No UserId found.', $e->getMessage());
+            $this->assertSame('No UserId found.', $e->getMessage());
         }
     }
 
@@ -210,7 +210,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $customer->setPreferredLanguage(str_repeat('a', 10));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 'Invalid value, possible values are: ' . implode(
                     ', ',
                     Customer::getPossiblePreferredLanguageValues()
@@ -222,7 +222,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             $customer->setTitle(str_repeat('a', 10));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 'Invalid value, possible values are: ' . implode(', ', Customer::getPossibleTitleValues()) . '.',
                 $e->getMessage()
             );
@@ -248,14 +248,14 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $customer = new Customer();
 
         $customer->setIsComfortZoneUser($data['IsComfortZoneUser']);
-        $this->assertEquals($data['IsComfortZoneUser'], $customer->getIsComfortZoneUser());
+        $this->assertSame($data['IsComfortZoneUser'], $customer->getIsComfortZoneUser());
         $customer->setOptIn($data['OptIn']);
-        $this->assertEquals($data['OptIn'], $customer->getOptIn());
+        $this->assertSame($data['OptIn'], $customer->getOptIn());
         $customer->setUseInformationForThirdParty($data['UseInformationForThirdParty']);
-        $this->assertEquals($data['UseInformationForThirdParty'], $customer->getUseInformationForThirdParty());
+        $this->assertSame($data['UseInformationForThirdParty'], $customer->getUseInformationForThirdParty());
         $customer->setUserName($data['UserName']);
-        $this->assertEquals($data['UserName'], $customer->getUserName());
+        $this->assertSame($data['UserName'], $customer->getUserName());
         $customer->setPackStations($data['PackStations']);
-        $this->assertEquals($data['PackStations'], $customer->getPackStations());
+        $this->assertSame($data['PackStations'], $customer->getPackStations());
     }
 }

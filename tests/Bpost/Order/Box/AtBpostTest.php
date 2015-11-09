@@ -87,7 +87,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
 
         $actualDocument->appendChild($atBpost->toXML($actualDocument));
 
-        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -101,7 +101,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
             $atBpost->setProduct(str_repeat('a', 10));
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', AtBpost::getPossibleProductValues())

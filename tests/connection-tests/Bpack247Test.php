@@ -35,7 +35,7 @@ class Bpack247Test extends \PHPUnit_Framework_TestCase
     public function testGetTimeOut()
     {
         $this->bpack247->setTimeOut(5);
-        $this->assertEquals(5, $this->bpack247->getTimeOut());
+        $this->assertSame(5, $this->bpack247->getTimeOut());
     }
 
     /**
@@ -44,7 +44,7 @@ class Bpack247Test extends \PHPUnit_Framework_TestCase
     public function testGetUserAgent()
     {
         $this->bpack247->setUserAgent('testing/1.0.0');
-        $this->assertEquals(
+        $this->assertSame(
             'PHP Bpost Bpack247/' . Bpack247::VERSION . ' testing/1.0.0',
             $this->bpack247->getUserAgent()
         );
@@ -62,6 +62,6 @@ class Bpack247Test extends \PHPUnit_Framework_TestCase
 
         // @todo    create a member
         $response = $this->bpack247->getMember($data['id']);
-        $this->assertEquals($data['UserId'], $response->getUserID());
+        $this->assertSame($data['UserId'], $response->getUserID());
     }
 }

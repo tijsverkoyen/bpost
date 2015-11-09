@@ -94,11 +94,11 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
     public function testCreateFromXML()
     {
         $data = array(
-            'parcelValue' => '700',
+            'parcelValue' => 700,
             'contentDescription' => 'BOOK',
             'shipmentType' => 'DOCUMENTS',
             'parcelReturnInstructions' => 'RTS',
-            'privateAddress' => false,
+            'privateAddress' => null,
         );
 
         $document = self::createDomDocument();
@@ -116,14 +116,14 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['parcelValue'], $customsInfo->getParcelValue());
-        $this->assertEquals($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
-        $this->assertEquals($data['contentDescription'], $customsInfo->getContentDescription());
-        $this->assertEquals($data['shipmentType'], $customsInfo->getShipmentType());
-        $this->assertEquals($data['privateAddress'], $customsInfo->getPrivateAddress());
+        $this->assertSame($data['parcelValue'], $customsInfo->getParcelValue());
+        $this->assertSame($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
+        $this->assertSame($data['contentDescription'], $customsInfo->getContentDescription());
+        $this->assertSame($data['shipmentType'], $customsInfo->getShipmentType());
+        $this->assertSame($data['privateAddress'], $customsInfo->getPrivateAddress());
 
         $data = array(
-            'parcelValue' => '700',
+            'parcelValue' => 700,
             'contentDescription' => 'BOOK',
             'shipmentType' => 'DOCUMENTS',
             'parcelReturnInstructions' => 'RTS',
@@ -145,11 +145,11 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['parcelValue'], $customsInfo->getParcelValue());
-        $this->assertEquals($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
-        $this->assertEquals($data['contentDescription'], $customsInfo->getContentDescription());
-        $this->assertEquals($data['shipmentType'], $customsInfo->getShipmentType());
-        $this->assertEquals(($data['privateAddress'] == 'true'), $customsInfo->getPrivateAddress());
+        $this->assertSame($data['parcelValue'], $customsInfo->getParcelValue());
+        $this->assertSame($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
+        $this->assertSame($data['contentDescription'], $customsInfo->getContentDescription());
+        $this->assertSame($data['shipmentType'], $customsInfo->getShipmentType());
+        $this->assertSame(($data['privateAddress'] == 'true'), $customsInfo->getPrivateAddress());
     }
 
     /**
@@ -165,7 +165,7 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 50.', $e->getMessage());
+            $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
         }
 
         try {
@@ -174,7 +174,7 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', CustomsInfo::getPossibleParcelReturnInstructionValues())
@@ -189,7 +189,7 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             );
         } catch (\Exception $e) {
             $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
+            $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', CustomsInfo::getPossibleShipmentTypeValues())
