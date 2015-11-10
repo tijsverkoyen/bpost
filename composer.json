@@ -23,10 +23,9 @@
     "require-dev": {
       "phpunit/phpunit": "5.*"
     },
-	"autoload": {
-        "psr:0": {
-          "TijsVerkoyen": "tests"
-        },
-		"classmap": [""]
-	}
+    "autoload": {
+		"psr-4": {
+			"TijsVerkoyen\\Bpost\\": ""
+		}
+    }
 }
