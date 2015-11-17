@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost;
 
 use Exception;
+use Psr\Log\LoggerInterface;
 use TijsVerkoyen\Bpost\Bpost\Label;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
@@ -67,6 +68,9 @@ class Bpost
 
     private $apiUrl;
 
+    /** @var  Logger */
+    private $logger;
+
     // class methods
     /**
      * Create Bpost instance
@@ -80,6 +84,7 @@ class Bpost
         $this->accountId = (string)$accountId;
         $this->passPhrase = (string)$passPhrase;
         $this->apiUrl = (string)$apiUrl;
+        $this->logger = new Logger();
     }
 
     /**
@@ -96,23 +101,11 @@ class Bpost
     /**
      * Decode the response
      *
-<<<<<<< HEAD
-     * @param  SimpleXMLElement $item   The item to decode.
-     * @param  array            $return Just a placeholder.
-     * @param  int              $i      A internal counter.
-     * @return array
-||||||| parent of fd0a370... style: Format Bpost.php for psr-2
-     * @param  SimpleXMLElement $item   The item to decode.
-     * @param  array            $return Just a placeholder.
-     * @param  int              $i      A internal counter.
-     * @return mixed
-=======
      * @param  \SimpleXMLElement $item The item to decode.
      * @param  array $return Just a placeholder.
      * @param  int $i A internal counter.
-     * @return mixed
+     * @return array
      * @throws Exception
->>>>>>> fd0a370... style: Format Bpost.php for psr-2
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
@@ -201,6 +194,8 @@ class Bpost
         // set options
         curl_setopt_array($this->curl, $options);
 
+        $this->logger->debug('curl request', $options);
+
         // execute
         $response = curl_exec($this->curl);
         $headers = curl_getinfo($this->curl);
@@ -208,6 +203,12 @@ class Bpost
         // fetch errors
         $errorNumber = curl_errno($this->curl);
         $errorMessage = curl_error($this->curl);
+
+        $this->logger->debug('curl response', array(
+            'status' => $errorNumber . ' (' . $errorMessage . ')',
+            'headers' => $headers,
+            'response' => $response
+        ));
 
         // error?
         if ($errorNumber != '') {
@@ -424,13 +425,7 @@ class Bpost
      * Modify the status for an order.
      *
      * @param  string $reference The reference for an order
-<<<<<<< HEAD
-     * @param  string $status    The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
-||||||| parent of fd0a370... style: Format Bpost.php for psr-2
-     * @param  string $status    The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED or ON-HOLD
-=======
      * @param  string $status The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
->>>>>>> fd0a370... style: Format Bpost.php for psr-2
      * @return bool
      * @throws Exception
      */
@@ -494,20 +489,10 @@ class Bpost
      *
      * @param  string $url
      * @param  string $format
-<<<<<<< HEAD
-     * @param  bool   $withReturnLabels
-     * @param  bool   $asPdf
-     * @return Label[]
-||||||| parent of fd0a370... style: Format Bpost.php for psr-2
-     * @param  bool   $withReturnLabels
-     * @param  bool   $asPdf
-     * @return array
-=======
      * @param  bool $withReturnLabels
      * @param  bool $asPdf
      * @return Bpost\Label[]
      * @throws Exception
->>>>>>> fd0a370... style: Format Bpost.php for psr-2
      */
     protected function getLabel($url, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
@@ -663,5 +648,15 @@ class Bpost
         }
 
         return $labels;
+    }
+
+    /**
+     * Set a logger to permit to the plugin to log events
+     *
+     * @param LoggerInterface $logger
+     */
+    public function setLogger(LoggerInterface $logger)
+    {
+        $this->logger->setLogger($logger);
     }
 }
