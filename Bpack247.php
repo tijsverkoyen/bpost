@@ -13,227 +13,235 @@ use TijsVerkoyen\Bpost\Bpack247\Customer;
  */
 class Bpack247
 {
-    // URL for the api
-    const API_URL = 'http://www.bpack247.be/BpostRegistrationWebserviceREST/servicecontroller.svc';
+	// URL for the api
+	const API_URL = 'http://www.bpack247.be/BpostRegistrationWebserviceREST/servicecontroller.svc';
 
-    // current version
-    const VERSION = '3.0.0';
+	// current version
+	const VERSION = '3.0.0';
 
-    /**
-     * The account id
-     *
-     * @var string
-     */
-    private $accountId;
+	/**
+	 * The account id
+	 *
+	 * @var string
+	 */
+	private $accountId;
 
-    /**
-     * A cURL instance
-     *
-     * @var resource
-     */
-    private $curl;
+	/**
+	 * A cURL instance
+	 *
+	 * @var resource
+	 */
+	private $curl;
 
-    /**
-     * The passPhrase
-     *
-     * @var string
-     */
-    private $passPhrase;
+	/**
+	 * The passPhrase
+	 *
+	 * @var string
+	 */
+	private $passPhrase;
 
-    /**
-     * The port to use.
-     *
-     * @var int
-     */
-    private $port;
+	/**
+	 * The port to use.
+	 *
+	 * @var int
+	 */
+	private $port;
 
-    /**
-     * The timeout
-     *
-     * @var int
-     */
-    private $timeOut = 30;
+	/**
+	 * The timeout
+	 *
+	 * @var int
+	 */
+	private $timeOut = 30;
 
-    /**
-     * The user agent
-     *
-     * @var string
-     */
-    private $userAgent;
+	/**
+	 * The user agent
+	 *
+	 * @var string
+	 */
+	private $userAgent;
 
-    /**
-     * Make the call
-     *
-     * @param  string $url    The URL to call.
-     * @param  string $body   The data to pass.
-     * @param  string $method The HTTP-method to use.
-     * @return mixed
-     */
-    private function doCall($url, $body = null, $method = 'GET')
-    {
-        // build Authorization header
-        $headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
+	/**
+	 * Make the call
+	 *
+	 * @param  string $url    The URL to call.
+	 * @param  string $body   The data to pass.
+	 * @param  string $method The HTTP-method to use.
+	 * @return mixed
+	 */
+	private function doCall($url, $body = null, $method = 'GET')
+	{
+		// build Authorization header
+		$headers[] = 'Authorization: Basic ' . $this->getAuthorizationHeader();
 
-        // set options
-        $options[CURLOPT_URL] = self::API_URL . $url;
-        $options[CURLOPT_USERAGENT] = $this->getUserAgent();
-        $options[CURLOPT_RETURNTRANSFER] = true;
-        $options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
-        $options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
-        $options[CURLOPT_HTTPHEADER] = $headers;
+		// set options
+		$options[CURLOPT_URL] = self::API_URL . $url;
+		$options[CURLOPT_USERAGENT] = $this->getUserAgent();
+		$options[CURLOPT_RETURNTRANSFER] = true;
+		$options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
+		$options[CURLOPT_HTTP_VERSION] = CURL_HTTP_VERSION_1_1;
+	   
+		if ($method == 'POST') {
+			$headers[] = 'Content-Type: application/xml';
+			
+			$options[CURLOPT_POST] = true;
+			$options[CURLOPT_POSTFIELDS] = $body;
+		}
 
-        if ($method == 'POST') {
-            $options[CURLOPT_POST] = true;
-            $options[CURLOPT_POSTFIELDS] = $body;
-        }
+		 $options[CURLOPT_HTTPHEADER] = $headers;
 
-        // init
-        $this->curl = curl_init();
 
-        // set options
-        curl_setopt_array($this->curl, $options);
+		// init
+		$this->curl = curl_init();
 
-        // execute
-        $response = curl_exec($this->curl);
-        $headers = curl_getinfo($this->curl);
+		// set options
+		curl_setopt_array($this->curl, $options);
 
-        // fetch errors
-        $errorNumber = curl_errno($this->curl);
-        $errorMessage = curl_error($this->curl);
+		// execute
+		$response = curl_exec($this->curl);
+		$headers = curl_getinfo($this->curl);
 
-        // error?
-        if ($errorNumber != '') {
-            throw new Exception($errorMessage, $errorNumber);
-        }
+		// fetch errors
+		$errorNumber = curl_errno($this->curl);
+		$errorMessage = curl_error($this->curl);
 
-        // valid HTTP-code
-        if (!in_array($headers['http_code'], array(0, 200))) {
-            $xml = @simplexml_load_string($response);
+		// error?
+		if ($errorNumber != '') {
+			throw new Exception($errorMessage, $errorNumber);
+		}
 
-            if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
-            ) {
-                $message = (string) $xml->message;
-                $code = isset($xml->code) ? (int) $xml->code : null;
-                throw new Exception($message, $code);
-            }
+		// valid HTTP-code
+		if (!in_array($headers['http_code'], array(0, 200))) {
+			$xml = @simplexml_load_string($response);
 
-            throw new Exception('Invalid response.', $headers['http_code']);
-        }
+			if ($xml !== false && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
+			) {
+				$message = (string)$xml->Message;
+				$code = isset($xml->Code) ? (int)$xml->Code : null;
+				throw new Exception($message, $code);
+			}
 
-        // convert into XML
-        $xml = simplexml_load_string($response);
+			throw new Exception('Invalid response.', $headers['http_code']);
+		}
 
-        // validate
-        if ($xml->getName() == 'businessException') {
-            $message = (string) $xml->message;
-            $code = (string) $xml->code;
-            throw new Exception($message, $code);
-        }
+		// convert into XML
+		$xml = simplexml_load_string($response);
 
-        // return the response
-        return $xml;
-    }
+		// validate
+		if ($xml->getName() == 'businessException') {
+			$message = (string) $xml->message;
+			$code = (string) $xml->code;
+			throw new Exception($message, $code);
+		}
 
-    /**
-     * Generate the secret string for the Authorization header
-     *
-     * @return string
-     */
-    private function getAuthorizationHeader()
-    {
-        return base64_encode($this->accountId . ':' . $this->passPhrase);
-    }
+		// return the response
+		return $xml;
+	}
 
-    /**
-     * Set the timeout
-     * After this time the request will stop. You should handle any errors triggered by this.
-     *
-     * @param int $seconds The timeout in seconds.
-     */
-    public function setTimeOut($seconds)
-    {
-        $this->timeOut = (int) $seconds;
-    }
+	/**
+	 * Generate the secret string for the Authorization header
+	 *
+	 * @return string
+	 */
+	private function getAuthorizationHeader()
+	{
+		return base64_encode($this->accountId . ':' . $this->passPhrase);
+	}
 
-    /**
-     * Get the timeout that will be used
-     *
-     * @return int
-     */
-    public function getTimeOut()
-    {
-        return (int) $this->timeOut;
-    }
+	/**
+	 * Set the timeout
+	 * After this time the request will stop. You should handle any errors triggered by this.
+	 *
+	 * @param int $seconds The timeout in seconds.
+	 */
+	public function setTimeOut($seconds)
+	{
+		$this->timeOut = (int) $seconds;
+	}
 
-    /**
-     * Get the useragent that will be used.
-     * Our version will be prepended to yours.
-     * It will look like: "PHP Bpost/<version> <your-user-agent>"
-     *
-     * @return string
-     */
-    public function getUserAgent()
-    {
-        return (string) 'PHP Bpost Bpack247/' . self::VERSION . ' ' . $this->userAgent;
-    }
+	/**
+	 * Get the timeout that will be used
+	 *
+	 * @return int
+	 */
+	public function getTimeOut()
+	{
+		return (int) $this->timeOut;
+	}
 
-    /**
-     * Set the user-agent for you application
-     * It will be appended to ours, the result will look like: "PHP Bpost/<version> <your-user-agent>"
-     *
-     * @param string $userAgent Your user-agent, it should look like <app-name>/<app-version>.
-     */
-    public function setUserAgent($userAgent)
-    {
-        $this->userAgent = (string) $userAgent;
-    }
+	/**
+	 * Get the useragent that will be used.
+	 * Our version will be prepended to yours.
+	 * It will look like: "PHP Bpost/<version> <your-user-agent>"
+	 *
+	 * @return string
+	 */
+	public function getUserAgent()
+	{
+		return (string) 'PHP Bpost Bpack247/' . self::VERSION . ' ' . $this->userAgent;
+	}
 
-    /**
-     * Create Bpost instance
-     *
-     * @param string $accountId
-     * @param string $passPhrase
-     */
-    public function __construct($accountId, $passPhrase)
-    {
-        $this->accountId = (string) $accountId;
-        $this->passPhrase = (string) $passPhrase;
-    }
+	/**
+	 * Set the user-agent for you application
+	 * It will be appended to ours, the result will look like: "PHP Bpost/<version> <your-user-agent>"
+	 *
+	 * @param string $userAgent Your user-agent, it should look like <app-name>/<app-version>.
+	 */
+	public function setUserAgent($userAgent)
+	{
+		$this->userAgent = (string) $userAgent;
+	}
 
-    // webservice methods
-    public function createMember(Customer $customer)
-    {
-        $url = '/customer';
+	/**
+	 * Create Bpost instance
+	 *
+	 * @param string $accountId
+	 * @param string $passPhrase
+	 */
+	public function __construct($accountId, $passPhrase)
+	{
+		$this->accountId = (string) $accountId;
+		$this->passPhrase = (string) $passPhrase;
+	}
 
-        $document = new \DOMDocument('1.0', 'utf-8');
-        $document->preserveWhiteSpace = false;
-        $document->formatOutput = true;
+	// webservice methods
+	public function createMember(Customer $customer)
+	{
+		$url = '/customer';
 
-        $document->appendChild(
-            $customer->toXML(
-                $document
-            )
-        );
+		$document = new \DOMDocument('1.0', 'utf-8');
+		$document->preserveWhiteSpace = false;
+		$document->formatOutput = true;
 
-        return $this->doCall(
-            $url,
-            $document->saveXML(),
-            'POST'
-        );
-    }
+		$document->appendChild(
+			$customer->toXML(
+				$document
+			)
+		);
 
-    /**
-     * Retrieve member information
-     *
-     * @param  string   $id
-     * @return Customer
-     */
-    public function getMember($id)
-    {
-        $xml = $this->doCall(
-            '/customer/' . $id
-        );
+		return $this->doCall(
+			$url,
+			$document->saveXML(),
+			'POST'
+		);
+	}
 
-        return Customer::createFromXML($xml);
-    }
+	/**
+	 * Retrieve member information
+	 *
+	 * @param  string   $id
+	 * @param  boolean  $as_xml [optional]
+	 * @return Customer / mixed
+	 */
+	public function getMember($id, $as_xml = false)
+	{
+		$xml = $this->doCall(
+			'/customer/'.$id
+		);
+
+		if ($as_xml)
+			return $xml;
+
+		return Customer::createFromXML($xml);
+	}
 }

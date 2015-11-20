@@ -607,7 +607,7 @@ class Customer
         if ($this->getPostalCode() !== null) {
             $customer->appendChild(
                 $document->createElement(
-                    'PostalCode',
+                    'Postalcode',
                     $this->getPostalCode()
                 )
             );
