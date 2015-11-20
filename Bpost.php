@@ -381,7 +381,7 @@ class Bpost
      * Modify the status for an order.
      *
      * @param  string $reference The reference for an order
-     * @param  string $status    The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED or ON-HOLD
+     * @param  string $status    The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
      * @return bool
      */
     public function modifyOrderStatus($reference, $status)
