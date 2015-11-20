@@ -93,7 +93,7 @@ class Bpost
      * @param  SimpleXMLElement $item   The item to decode.
      * @param  array            $return Just a placeholder.
      * @param  int              $i      A internal counter.
-     * @return mixed
+     * @return array
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
@@ -446,7 +446,7 @@ class Bpost
      * @param  string $format
      * @param  bool   $withReturnLabels
      * @param  bool   $asPdf
-     * @return array
+     * @return Label[]
      */
     protected function getLabel($url, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
@@ -502,7 +502,7 @@ class Bpost
      * @param  string $format           The desired format, allowed values are: A4, A6
      * @param  bool   $withReturnLabels Should return labels be returned?
      * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
-     * @return array
+     * @return Label[]
      */
     public function createLabelForOrder($reference, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
@@ -518,7 +518,7 @@ class Bpost
      * @param  string $format           The desired format, allowed values are: A4, A6
      * @param  bool   $withReturnLabels Should return labels be returned?
      * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
-     * @return array
+     * @return Label[]
      */
     public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
@@ -537,7 +537,7 @@ class Bpost
      * @param  string $format           The desired format, allowed values are: A4, A6
      * @param  bool   $withReturnLabels Should return labels be returned?
      * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
-     * @return array
+     * @return Label[]
      */
     public function createLabelInBulkForOrders(
         array $references,
