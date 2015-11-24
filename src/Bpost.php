@@ -24,6 +24,12 @@ class Bpost
     // current version
     const VERSION = '3.0.2';
 
+    /** Min weight, in grams, for a shipping */
+    const MIN_WEIGHT = 0;
+
+    /** Max weight, in grams, for a shipping */
+    const MAX_WEIGHT = 30000;
+
     /**
      * The account id
      *
@@ -658,5 +664,14 @@ class Bpost
     public function setLogger(LoggerInterface $logger)
     {
         $this->logger->setLogger($logger);
+    }
+
+    /**
+     * @param int $weight in grams
+     * @return bool
+     */
+    public function isValidWeight($weight)
+    {
+        return self::MIN_WEIGHT <= $weight && $weight <= self::MAX_WEIGHT;
     }
 }
