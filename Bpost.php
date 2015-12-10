@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
+use Exception;
 use TijsVerkoyen\Bpost\Bpost\Label;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
