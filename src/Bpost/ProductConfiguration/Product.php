@@ -126,4 +126,26 @@ class Product
         $this->options[] = $option;
     }
 
+    /**
+     * @return bool
+     */
+    public function isForNationalShipping()
+    {
+        switch ($this->getName()) {
+            case self::PRODUCT_NAME_BPACK_EASY_RETOUR:
+            case self::PRODUCT_NAME_BPACK_24H_PRO:
+            case self::PRODUCT_NAME_BPACK_24H_BUSINESS:
+            case self::PRODUCT_NAME_BPACK_AT_BPOST:
+            case self::PRODUCT_NAME_BPACK_CLICK_AND_COLLECT:
+            case self::PRODUCT_NAME_BPACK_24_7:
+                return true;
+
+            case self::PRODUCT_NAME_BPACK_WORLD_EASY_RETURN:
+            case self::PRODUCT_NAME_BPACK_WORLD_EXPRESS_PRO:
+            case self::PRODUCT_NAME_BPACK_WORLD_BUSINESS:
+            case self::PRODUCT_NAME_BPACK_EUROPE_BUSINESS:
+            default:
+                return false;
+        }
+    }
 }
