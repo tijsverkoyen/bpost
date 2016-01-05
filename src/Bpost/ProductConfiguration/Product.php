@@ -6,6 +6,17 @@ use SimpleXMLElement;
 
 class Product
 {
+    const PRODUCT_NAME_BPACK_EASY_RETOUR = 'bpack Easy Retour';
+    const PRODUCT_NAME_BPACK_24H_PRO = 'bpack 24h Pro';
+    const PRODUCT_NAME_BPACK_24H_BUSINESS = 'bpack 24h business';
+    const PRODUCT_NAME_BPACK_AT_BPOST = 'bpack@bpost';
+    const PRODUCT_NAME_BPACK_CLICK_AND_COLLECT = 'bpack Click & Collect';
+    const PRODUCT_NAME_BPACK_24_7 = 'bpack 24/7';
+    const PRODUCT_NAME_BPACK_WORLD_EASY_RETURN = 'bpack World Easy Return';
+    const PRODUCT_NAME_BPACK_WORLD_EXPRESS_PRO = 'bpack World Express Pro';
+    const PRODUCT_NAME_BPACK_WORLD_BUSINESS = 'bpack World Business';
+    const PRODUCT_NAME_BPACK_EUROPE_BUSINESS = 'bpack Europe Business';
+
     /** @var  bool */
     private $default;
     /** @var  string */

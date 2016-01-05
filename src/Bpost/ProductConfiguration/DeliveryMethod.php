@@ -6,6 +6,11 @@ use SimpleXMLElement;
 
 class DeliveryMethod
 {
+    const DELIVERY_METHOD_NAME_HOME_OR_OFFICE = 'home or office';
+    const DELIVERY_METHOD_NAME_PICKUP_POINT = 'pick-up point';
+    const DELIVERY_METHOD_NAME_PARCEL_LOCKER = 'parcel locker';
+    const DELIVERY_METHOD_NAME_CLICK_AND_COLLECT = 'Click & Collect';
+
     /** @var  string */
     private $name;
     /** @var  string */
