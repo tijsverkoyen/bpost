@@ -11,6 +11,10 @@ class DeliveryMethod
     const DELIVERY_METHOD_NAME_PARCEL_LOCKER = 'parcel locker';
     const DELIVERY_METHOD_NAME_CLICK_AND_COLLECT = 'Click & Collect';
 
+    const DELIVERY_METHOD_VISIBILITY_VISIBLE = 'VISIBLE';
+    const DELIVERY_METHOD_VISIBILITY_GREYED_OUT = 'GREYED_OUT';
+    const DELIVERY_METHOD_VISIBILITY_INVISIBLE = 'INVISIBLE';
+
     /** @var  string */
     private $name;
     /** @var  string */
@@ -57,7 +61,7 @@ class DeliveryMethod
      */
     public function setName($name)
     {
-        $this->name = (string) $name;
+        $this->name = (string)$name;
     }
 
     /**
@@ -70,13 +74,21 @@ class DeliveryMethod
     }
 
     /**
+     * @return bool
+     */
+    public function isVisibleAndActive()
+    {
+        return $this->getVisibility() === self::DELIVERY_METHOD_VISIBILITY_VISIBLE;
+    }
+
+    /**
      * @param string $visibility
      *
      * @see Constants self::VISIBLITY_*
      */
     public function setVisibility($visibility)
     {
-        $this->visibility = (string) $visibility;
+        $this->visibility = (string)$visibility;
     }
 
     /**
