@@ -37,7 +37,7 @@ class DeliveryMethod
 
         $deliveryMethod = new self();
         $deliveryMethod->setName($attributes['name']);
-        $deliveryMethod->setVisibility($attributes['visibility']);
+        $deliveryMethod->setVisibility($attributes['visiblity']);
 
         if (isset($children->product)) {
             foreach ($children->product as $productXml) {

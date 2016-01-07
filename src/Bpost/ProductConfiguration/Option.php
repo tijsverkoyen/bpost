@@ -7,6 +7,10 @@ use SimpleXMLElement;
 class Option
 {
 
+    const OPTION_VISIBILITY_NOT_VISIBLE_BY_CONSUMER_OPTIONAL = 'NOT_VISIBLE_BY_CONSUMER_OPTIONAL';
+    const OPTION_VISIBILITY_NOT_VISIBLE_BY_CONSUMER_DEFAULT = 'NOT_VISIBLE_BY_CONSUMER_DEFAULT';
+    const OPTION_VISIBILITY_VISIBLE_BY_CONSUMER_AND_MANDATORY = 'VISIBLE_BY_CONSUMER_AND_MANDATORY';
+
     /** @var  string */
     private $visibility;
     /** @var  int */
@@ -30,7 +34,7 @@ class Option
         $children = $xml->children();
 
         $option = new self();
-        $option->setVisibility($attributes['visibility']);
+        $option->setVisibility($attributes['visiblity']);
         $option->setPrice($attributes['price']);
         $option->setName($attributes['name']);
 
