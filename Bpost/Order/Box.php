@@ -135,8 +135,12 @@ class Box
             'PENDING',
             'PRINTED',
             'CANCELLED',
-            'COMPLETED',
-            'ON-HOLD'
+            'ON-HOLD',
+            'ANNOUNCED',
+            'IN_TRANSIT',
+            'AWAITING_PICKUP',
+            'DELIVERED',
+            'BACK_TO_SENDER',
         );
     }
 
