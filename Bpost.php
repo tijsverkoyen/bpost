@@ -341,7 +341,7 @@ class Bpost
         );
 
         $headers = array(
-            'Content-type: application/vnd.bpost.shm-order-v3+XML'
+            'Content-type: application/vnd.bpost.shm-order-v3.3+XML'
         );
 
         return (
@@ -366,7 +366,7 @@ class Bpost
         $url = '/orders/' . (string) $reference;
 
         $headers = array(
-            'Accept: application/vnd.bpost.shm-order-v3+XML',
+            'Accept: application/vnd.bpost.shm-order-v3.3+XML',
         );
         $xml = $this->doCall(
             $url,
