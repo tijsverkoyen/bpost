@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<phpunit
+        colors="true"
+	bootstrap="tests/phpunit-bootstrap.php"
+        strict="true"
+>
+
+    <testsuites>
+        <testsuite name="unit-tests">
+            <directory>tests</directory>
+	    <exclude>tests/connection-tests</exclude>
+        </testsuite>
+    </testsuites>
+
+    <filter processUncoveredFilesFromWhitelist="true">
+        <whitelist>
+            <directory suffix=".php">src</directory>
+            <exclude>
+                <!-- Classes with connection to API -->
+                <directory>src/Bpack247.php</directory>
+                <directory>src/Bpost.php</directory>
+                <directory>src/Geo6.php</directory>
+            </exclude>
+        </whitelist>
+    </filter>
+
+</phpunit>
