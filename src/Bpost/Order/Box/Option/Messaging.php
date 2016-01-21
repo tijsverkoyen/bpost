@@ -19,6 +19,11 @@ class Messaging extends Option
     const MESSAGING_LANGUAGE_FR = 'FR';
     const MESSAGING_LANGUAGE_DE = 'DE';
 
+    const MESSAGING_TYPE_INFO_DISTRIBUTED = 'infoDistributed';
+    const MESSAGING_TYPE_INFO_NEXT_DAY = 'infoNextDay';
+    const MESSAGING_TYPE_INFO_REMINDER = 'infoReminder';
+    const MESSAGING_TYPE_KEEP_ME_INFORMED = 'keepMeInformed';
+
     /**
      * @var string
      */
@@ -130,10 +135,10 @@ class Messaging extends Option
     public static function getPossibleTypeValues()
     {
         return array(
-            'infoDistributed',
-            'infoNextDay',
-            'infoReminder',
-            'keepMeInformed',
+            self::MESSAGING_TYPE_INFO_DISTRIBUTED,
+            self::MESSAGING_TYPE_INFO_NEXT_DAY,
+            self::MESSAGING_TYPE_INFO_REMINDER,
+            self::MESSAGING_TYPE_KEEP_ME_INFORMED,
         );
     }
 

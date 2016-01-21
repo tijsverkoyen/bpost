@@ -240,10 +240,10 @@ class AtBpost extends National
                 if (in_array(
                     $optionData->getName(),
                     array(
-                        'infoDistributed',
-                        'infoNextDay',
-                        'infoReminder',
-                        'keepMeInformed',
+                        Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED,
+                        Messaging::MESSAGING_TYPE_INFO_NEXT_DAY,
+                        Messaging::MESSAGING_TYPE_INFO_REMINDER,
+                        Messaging::MESSAGING_TYPE_KEEP_ME_INFORMED,
                     )
                 )
                 ) {

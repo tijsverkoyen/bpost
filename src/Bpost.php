@@ -119,7 +119,7 @@ class Bpost
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
-        $arrayKeys = array('barcode', 'orderLine', Insurance::INSURANCE_TYPE_ADDITIONAL_INSURANCE, 'infoDistributed', 'infoPugo');
+        $arrayKeys = array('barcode', 'orderLine', Insurance::INSURANCE_TYPE_ADDITIONAL_INSURANCE, Box\Option\Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED, 'infoPugo');
         $integerKeys = array('totalPrice');
 
         if ($item instanceof \SimpleXMLElement) {

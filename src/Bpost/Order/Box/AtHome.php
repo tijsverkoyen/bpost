@@ -196,7 +196,7 @@ class AtHome extends National
             foreach ($xml->atHome->options as $optionData) {
                 $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
 
-                if (in_array($optionData->getName(), array('infoDistributed'))) {
+                if (in_array($optionData->getName(), array(Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED))) {
                     $option = Messaging::createFromXML($optionData);
                 } else {
                     $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
