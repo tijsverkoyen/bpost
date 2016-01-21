@@ -13,6 +13,11 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class CustomsInfo
 {
+
+    const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTA = 'RTA';
+    const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTS = 'RTS';
+    const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_ABANDONED = 'ABANDONED';
+
     /**
      * @var int
      */
@@ -94,9 +99,9 @@ class CustomsInfo
     public static function getPossibleParcelReturnInstructionValues()
     {
         return array(
-            'RTA',
-            'RTS',
-            'ABANDONED',
+            self::CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTA,
+            self::CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTS,
+            self::CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_ABANDONED,
         );
     }
 
