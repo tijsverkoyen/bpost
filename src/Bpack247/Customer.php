@@ -10,6 +10,11 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Customer
 {
+
+    const CUSTOMER_PREFERRED_LANGUAGE_NL = 'nl-BE';
+    const CUSTOMER_PREFERRED_LANGUAGE_FR = 'fr-BE';
+    const CUSTOMER_PREFERRED_LANGUAGE_EN = 'en-US';
+
     /**
      * @var bool
      */
@@ -384,9 +389,9 @@ class Customer
     public static function getPossiblePreferredLanguageValues()
     {
         return array(
-            'nl-BE',
-            'fr-BE',
-            'en-US',
+            self::CUSTOMER_PREFERRED_LANGUAGE_NL,
+            self::CUSTOMER_PREFERRED_LANGUAGE_FR,
+            self::CUSTOMER_PREFERRED_LANGUAGE_EN,
         );
     }
 
