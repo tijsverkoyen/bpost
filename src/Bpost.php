@@ -18,6 +18,10 @@ use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
  */
 class Bpost
 {
+
+    const LABEL_FORMAT_A4 = 'A4';
+    const LABEL_FORMAT_A6 = 'A6';
+
     // URL for the api
     const API_URL = 'https://api.bpost.be/services/shm';
 
@@ -485,8 +489,8 @@ class Bpost
     public static function getPossibleLabelFormatValues()
     {
         return array(
-            'A4',
-            'A6',
+            self::LABEL_FORMAT_A4,
+            self::LABEL_FORMAT_A6,
         );
     }
 
@@ -500,7 +504,7 @@ class Bpost
      * @return Bpost\Label[]
      * @throws BpostException
      */
-    protected function getLabel($url, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    protected function getLabel($url, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
     {
         $format = strtoupper($format);
         if (!in_array($format, self::getPossibleLabelFormatValues())) {
@@ -556,7 +560,7 @@ class Bpost
      * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
      * @return Label[]
      */
-    public function createLabelForOrder($reference, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    public function createLabelForOrder($reference, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
     {
         $url = '/orders/' . (string)$reference;
 
@@ -572,7 +576,7 @@ class Bpost
      * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
      * @return Label[]
      */
-    public function createLabelForBox($barcode, $format = 'A6', $withReturnLabels = false, $asPdf = false)
+    public function createLabelForBox($barcode, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
     {
         $url = '/boxes/' . (string)$barcode;
 
@@ -594,7 +598,7 @@ class Bpost
      */
     public function createLabelInBulkForOrders(
         array $references,
-        $format = 'A6',
+        $format = self::LABEL_FORMAT_A6,
         $withReturnLabels = false,
         $asPdf = false
     ) {
