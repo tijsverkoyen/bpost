@@ -1,5 +1,7 @@
 # bPost class
 
+[![Build Status](https://travis-ci.org/Antidot-be/bpost-api-library.svg?branch=master)](https://travis-ci.org/Antidot-be/bpost-api-library.svg?branch=master)
+
 ## About
 
 PHP bPost is a (wrapper)class to communicate with the
