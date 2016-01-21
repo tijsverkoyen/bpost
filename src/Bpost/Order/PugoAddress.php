@@ -9,4 +9,13 @@ namespace TijsVerkoyen\Bpost\Bpost\Order;
 class PugoAddress extends Address
 {
     const TAG_NAME = 'pugoAddress';
+
+    /**
+     * @param \SimpleXMLElement $xml
+     * @return PugoAddress
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        return parent::createFromXML($xml);
+    }
 }

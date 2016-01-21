@@ -9,4 +9,13 @@ namespace TijsVerkoyen\Bpost\Bpost\Order;
 class ParcelsDepotAddress extends Address
 {
     const TAG_NAME = 'parcelsDepotAddress';
+
+    /**
+     * @param \SimpleXMLElement $xml
+     * @return ParcelsDepotAddress
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        return parent::createFromXML($xml);
+    }
 }
