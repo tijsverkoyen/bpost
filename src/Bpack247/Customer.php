@@ -15,6 +15,9 @@ class Customer
     const CUSTOMER_PREFERRED_LANGUAGE_FR = 'fr-BE';
     const CUSTOMER_PREFERRED_LANGUAGE_EN = 'en-US';
 
+    const CUSTOMER_TITLE_MR = 'Mr.';
+    const CUSTOMER_TITLE_MS = 'Ms.';
+
     /**
      * @var bool
      */
@@ -459,8 +462,8 @@ class Customer
     public static function getPossibleTitleValues()
     {
         return array(
-            'Mr.',
-            'Ms.',
+            self::CUSTOMER_TITLE_MR,
+            self::CUSTOMER_TITLE_MS,
         );
     }
 
