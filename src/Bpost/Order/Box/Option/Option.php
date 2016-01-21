@@ -9,7 +9,12 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
  * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
  * @license   BSD License
  */
-class Option
+abstract class Option
 {
-
+    /**
+     * @param \DOMDocument $document
+     * @param string       $prefix
+     * @return \DOMElement
+     */
+    abstract public function toXML(\DOMDocument $document, $prefix = null);
 }
