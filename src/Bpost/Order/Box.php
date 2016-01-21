@@ -10,6 +10,18 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Box
 {
+
+    const BOX_STATUS_OPEN = 'OPEN';
+    const BOX_STATUS_PENDING = 'PENDING';
+    const BOX_STATUS_PRINTED = 'PRINTED';
+    const BOX_STATUS_CANCELLED = 'CANCELLED';
+    const BOX_STATUS_ON_HOLD = 'ON-HOLD';
+    const BOX_STATUS_ANNOUNCED = 'ANNOUNCED';
+    const BOX_STATUS_IN_TRANSIT = 'IN_TRANSIT';
+    const BOX_STATUS_AWAITING_PICKUP = 'AWAITING_PICKUP';
+    const BOX_STATUS_DELIVERED = 'DELIVERED';
+    const BOX_STATUS_BACK_TO_SENDER = 'BACK_TO_SENDER';
+
     /**
      * @var \TijsVerkoyen\Bpost\Bpost\Order\Sender
      */
@@ -132,16 +144,16 @@ class Box
     public static function getPossibleStatusValues()
     {
         return array(
-            'OPEN',
-            'PENDING',
-            'PRINTED',
-            'CANCELLED',
-            'ON-HOLD',
-            'ANNOUNCED',
-            'IN_TRANSIT',
-            'AWAITING_PICKUP',
-            'DELIVERED',
-            'BACK_TO_SENDER',
+            self::BOX_STATUS_OPEN,
+            self::BOX_STATUS_PENDING,
+            self::BOX_STATUS_PRINTED,
+            self::BOX_STATUS_CANCELLED,
+            self::BOX_STATUS_ON_HOLD,
+            self::BOX_STATUS_ANNOUNCED,
+            self::BOX_STATUS_IN_TRANSIT,
+            self::BOX_STATUS_AWAITING_PICKUP,
+            self::BOX_STATUS_DELIVERED,
+            self::BOX_STATUS_BACK_TO_SENDER,
         );
     }
 
