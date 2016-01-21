@@ -13,6 +13,10 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Insurance extends Option
 {
+
+    const INSURANCE_TYPE_BASIC_INSURANCE = 'basicInsurance';
+    const INSURANCE_TYPE_ADDITIONAL_INSURANCE = 'additionalInsurance';
+
     /**
      * @var string
      */
@@ -29,8 +33,8 @@ class Insurance extends Option
     public static function getPossibleTypeValues()
     {
         return array(
-            'basicInsurance',
-            'additionalInsurance',
+            self::INSURANCE_TYPE_BASIC_INSURANCE,
+            self::INSURANCE_TYPE_ADDITIONAL_INSURANCE,
         );
     }
 

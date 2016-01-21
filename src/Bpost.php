@@ -5,6 +5,7 @@ use Psr\Log\LoggerInterface;
 use TijsVerkoyen\Bpost\Bpost\Label;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 /**
@@ -114,7 +115,7 @@ class Bpost
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
-        $arrayKeys = array('barcode', 'orderLine', 'additionalInsurance', 'infoDistributed', 'infoPugo');
+        $arrayKeys = array('barcode', 'orderLine', Insurance::INSURANCE_TYPE_ADDITIONAL_INSURANCE, 'infoDistributed', 'infoPugo');
         $integerKeys = array('totalPrice');
 
         if ($item instanceof \SimpleXMLElement) {
