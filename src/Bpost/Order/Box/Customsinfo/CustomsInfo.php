@@ -18,6 +18,11 @@ class CustomsInfo
     const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTS = 'RTS';
     const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_ABANDONED = 'ABANDONED';
 
+    const CUSTOM_INFO_SHIPMENT_TYPE_SAMPLE = 'SAMPLE';
+    const CUSTOM_INFO_SHIPMENT_TYPE_GIFT = 'GIFT';
+    const CUSTOM_INFO_SHIPMENT_TYPE_DOCUMENTS = 'DOCUMENTS';
+    const CUSTOM_INFO_SHIPMENT_TYPE_OTHER = 'OTHER';
+
     /**
      * @var int
      */
@@ -171,10 +176,10 @@ class CustomsInfo
     public static function getPossibleShipmentTypeValues()
     {
         return array(
-            'SAMPLE',
-            'GIFT',
-            'DOCUMENTS',
-            'OTHER',
+            self::CUSTOM_INFO_SHIPMENT_TYPE_SAMPLE,
+            self::CUSTOM_INFO_SHIPMENT_TYPE_GIFT,
+            self::CUSTOM_INFO_SHIPMENT_TYPE_DOCUMENTS,
+            self::CUSTOM_INFO_SHIPMENT_TYPE_OTHER,
         );
     }
 
