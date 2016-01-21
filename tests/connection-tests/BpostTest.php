@@ -158,7 +158,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $this->bpost->createOrReplaceOrder($order);
         $response = $this->bpost->fetchOrder($order->getReference());
         $this->assertInstanceOf('\\TijsVerkoyen\Bpost\\Bpost\\Order', $response);
-        $this->assertSame($order->getReference(), $response->getReference());
+        $this->assertEquals($order->getReference(), $response->getReference());
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
     }
