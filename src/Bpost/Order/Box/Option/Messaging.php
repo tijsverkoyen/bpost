@@ -13,6 +13,12 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Messaging extends Option
 {
+
+    const MESSAGING_LANGUAGE_EN = 'EN';
+    const MESSAGING_LANGUAGE_NL = 'NL';
+    const MESSAGING_LANGUAGE_FR = 'FR';
+    const MESSAGING_LANGUAGE_DE = 'DE';
+
     /**
      * @var string
      */
@@ -89,10 +95,10 @@ class Messaging extends Option
     public static function getPossibleLanguageValues()
     {
         return array(
-            'EN',
-            'NL',
-            'FR',
-            'DE',
+            self::MESSAGING_LANGUAGE_EN,
+            self::MESSAGING_LANGUAGE_NL,
+            self::MESSAGING_LANGUAGE_FR,
+            self::MESSAGING_LANGUAGE_DE,
         );
     }
 
