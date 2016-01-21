@@ -210,6 +210,7 @@ class Box
             );
         }
         if (isset($xml->nationalBox)) {
+            /** @var \SimpleXMLElement $nationalBoxData */
             $nationalBoxData = $xml->nationalBox->children('http://schema.post.be/shm/deepintegration/v3/national');
 
             // build classname based on the tag name
@@ -230,6 +231,7 @@ class Box
             $box->setNationalBox($nationalBox);
         }
         if (isset($xml->internationalBox)) {
+            /** @var \SimpleXMLElement $internationalBoxData */
             $internationalBoxData = $xml->internationalBox->children('http://schema.post.be/shm/deepintegration/v3/international');
 
             // build classname based on the tag name

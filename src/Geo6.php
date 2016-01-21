@@ -78,7 +78,7 @@ class Geo6
      *
      * @param  string           $method
      * @param  array|null       $parameters
-     * @return SimpleXMLElement
+     * @return \SimpleXMLElement
      * @throws \TijsVerkoyen\Bpost\BpostException
      */
     private function doCall($method, $parameters = null)

@@ -191,6 +191,7 @@ class AtHome extends National
             );
         }
         if (isset($xml->atHome->options) && !empty($xml->atHome->options)) {
+            /** @var \SimpleXMLElement $optionData */
             foreach ($xml->atHome->options as $optionData) {
                 $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
 

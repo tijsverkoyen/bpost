@@ -1,6 +1,8 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
+
 /**
  * bPost National class
  *
@@ -27,7 +29,7 @@ abstract class National implements IBox
     protected $weight;
 
     /**
-     * @param array $options
+     * @param Option[] $options
      */
     public function setOptions($options)
     {
@@ -35,7 +37,7 @@ abstract class National implements IBox
     }
 
     /**
-     * @return array
+     * @return Option[]
      */
     public function getOptions()
     {

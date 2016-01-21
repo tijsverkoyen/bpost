@@ -59,7 +59,7 @@ class International implements IBox
     }
 
     /**
-     * @param array $options
+     * @param Option[] $options
      */
     public function setOptions($options)
     {
@@ -67,7 +67,7 @@ class International implements IBox
     }
 
     /**
-     * @return array
+     * @return Option[]
      */
     public function getOptions()
     {
@@ -229,6 +229,7 @@ class International implements IBox
             );
         }
         if (isset($xml->international->options)) {
+            /** @var \SimpleXMLElement $optionData */
             foreach ($xml->international->options as $optionData) {
                 $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
 

@@ -261,6 +261,7 @@ class At247 extends National
             );
         }
         if (isset($xml->{'at24-7'}->options)) {
+            /** @var \SimpleXMLElement $optionData */
             foreach ($xml->{'at24-7'}->options as $optionData) {
                 $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
 
@@ -311,6 +312,7 @@ class At247 extends National
             );
         }
         if (isset($xml->{'at24-7'}->parcelsDepotAddress)) {
+            /** @var \SimpleXMLElement $parcelsDepotAddressData */
             $parcelsDepotAddressData = $xml->{'at24-7'}->parcelsDepotAddress->children(
                 'http://schema.post.be/shm/deepintegration/v3/common'
             );

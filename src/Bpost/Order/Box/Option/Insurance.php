@@ -112,7 +112,7 @@ class Insurance extends Option
 
     /**
      * @param string      $type
-     * @param string\null $value
+     * @param string|null $value
      */
     public function __construct($type, $value = null)
     {
