@@ -59,7 +59,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
             $day = new Day();
             $day->getDayIndex();
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid day.', $e->getMessage());
         }
 

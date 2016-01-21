@@ -61,7 +61,7 @@ class LabelTest extends \PHPUnit_Framework_TestCase
         try {
             $label->setMimeType(str_repeat('a', 9));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 'Invalid value, possible values are: ' . implode(', ', Label::getPossibleMimeTypeValues()) . '.',
                 $e->getMessage()

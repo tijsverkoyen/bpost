@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 class CustomsInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -164,7 +164,7 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
                 str_repeat('a', 51)
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
         }
 
@@ -173,7 +173,7 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
                 str_repeat('a', 10)
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
@@ -188,7 +188,7 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
                 str_repeat('a', 10)
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',

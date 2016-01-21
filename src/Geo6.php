@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Geo6\Poi;
 
 /**
@@ -102,7 +102,7 @@ class Geo6
 
         // error?
         if ($errorNumber != '') {
-            throw new Exception($errorMessage, $errorNumber);
+            throw new BpostException($errorMessage, $errorNumber);
         }
 
         // we expect XML so decode it
@@ -110,12 +110,12 @@ class Geo6
 
         // validate xml
         if ($xml === false || (isset($xml->head) && isset($xml->body))) {
-            throw new Exception('Invalid XML-response.');
+            throw new BpostException('Invalid XML-response.');
         }
 
         // catch generic errors
         if (isset($xml['type']) && (string) $xml['type'] == 'TaxipostLocatorError') {
-            throw new Exception((string) $xml->txt);
+            throw new BpostException((string) $xml->txt);
         }
 
         // return
@@ -228,7 +228,7 @@ class Geo6
         $xml = $this->doCall('search', $parameters);
 
         if (!isset($xml->PoiList->Poi)) {
-            throw new Exception('Invalid XML-response');
+            throw new BpostException('Invalid XML-response');
         }
 
         $pois = array();
@@ -264,7 +264,7 @@ class Geo6
         $xml = $this->doCall('info', $parameters);
 
         if (!isset($xml->Poi->Record)) {
-            throw new Exception('Invalid XML-response.');
+            throw new BpostException('Invalid XML-response.');
         }
 
         return Poi::createFromXML($xml->Poi->Record);

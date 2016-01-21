@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 
@@ -102,7 +102,7 @@ class International implements IBox
     public function setProduct($product)
     {
         if (!in_array($product, self::getPossibleProductValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleProductValues())
@@ -233,7 +233,7 @@ class International implements IBox
                 } else {
                     $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
-                        throw new Exception('Not Implemented');
+                        throw new BpostException('Not Implemented');
                     }
                     $option = call_user_func(
                         array($className, 'createFromXML'),

@@ -255,7 +255,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
             );
             $order = Order::createFromXML($xml);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('No reference found.', $e->getMessage());
         }
     }

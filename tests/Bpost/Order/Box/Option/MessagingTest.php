@@ -99,7 +99,7 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
                 'NL'
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
@@ -115,7 +115,7 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
                 str_repeat('a', 10)
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
@@ -132,7 +132,7 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
                 str_repeat('a', 51)
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
         }
 
@@ -144,7 +144,7 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
                 str_repeat('a', 21)
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid length, maximum is 20.', $e->getMessage());
         }
     }

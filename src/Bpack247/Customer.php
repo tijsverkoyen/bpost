@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpack247;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
 
 /**
@@ -359,7 +359,7 @@ class Customer
     public function setPreferredLanguage($preferredLanguage)
     {
         if (!in_array($preferredLanguage, self::getPossiblePreferredLanguageValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossiblePreferredLanguageValues())
@@ -428,7 +428,7 @@ class Customer
     public function setTitle($title)
     {
         if (!in_array($title, self::getPossibleTitleValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleTitleValues())
@@ -640,7 +640,7 @@ class Customer
     {
         // @todo work with classmaps ...
         if (!isset($xml->UserID)) {
-            throw new Exception('No UserId found.');
+            throw new BpostException('No UserId found.');
         }
 
         $customer = new Customer();

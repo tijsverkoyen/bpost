@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 /**
  * bPost CustomsInfo class
@@ -45,7 +45,7 @@ class CustomsInfo
     {
         $length = 50;
         if (mb_strlen($contentDescription) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
 
         $this->contentDescription = $contentDescription;
@@ -67,7 +67,7 @@ class CustomsInfo
         $parcelReturnInstructions = strtoupper($parcelReturnInstructions);
 
         if (!in_array($parcelReturnInstructions, self::getPossibleParcelReturnInstructionValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleParcelReturnInstructionValues())
@@ -138,7 +138,7 @@ class CustomsInfo
         $shipmentType = strtoupper($shipmentType);
 
         if (!in_array($shipmentType, self::getPossibleShipmentTypeValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleShipmentTypeValues())

@@ -4,8 +4,11 @@ namespace TijsVerkoyen\Bpost;
 /**
  * bPost Exception class
  *
- * @author Tijs Verkoyen <php-bpost@verkoyen.eu>
+ * Class used for the retro-compatibility (Before, we had TijsVerkoyen\Bpost\Exception which extended \Exception)
+ *
+ * @deprecated Use BpostException
+ * @see        BpostException
  */
-class Exception extends \Exception
+class Exception extends BpostException
 {
 }

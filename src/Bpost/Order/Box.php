@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 /**
  * bPost Box class
@@ -106,7 +106,7 @@ class Box
     {
         $status = strtoupper($status);
         if (!in_array($status, self::getPossibleStatusValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleStatusValues())
@@ -217,7 +217,7 @@ class Box
             }
 
             if (!method_exists($className, 'createFromXML')) {
-                throw new Exception('Not Implemented');
+                throw new BpostException('Not Implemented');
             }
 
             $nationalBox = call_user_func(
@@ -235,7 +235,7 @@ class Box
 
             if (!method_exists($className, 'createFromXML')) {
                 var_dump($className);
-                throw new Exception('Not Implemented');
+                throw new BpostException('Not Implemented');
             }
 
             $internationalBox = call_user_func(

@@ -3,7 +3,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 class Price
 {
@@ -48,7 +48,7 @@ class Price
      * @param int $weight
      *
      * @return int
-     * @throws Exception
+     * @throws BpostException
      */
     public function getPriceByWeight($weight) {
         if ($weight <= 2000) {
@@ -62,7 +62,7 @@ class Price
         } elseif ($weight <= 30000) {
             return $this->getPrice20To30();
         }
-        throw new Exception('Weight cannot be superior than 30 kilograms');
+        throw new BpostException('Weight cannot be superior than 30 kilograms');
     }
 
     /**

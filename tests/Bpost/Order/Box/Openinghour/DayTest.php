@@ -86,7 +86,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
                 '10:00-17:00'
             );
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',

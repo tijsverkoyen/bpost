@@ -4,7 +4,7 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 /**
  * bPost AtHome class
@@ -82,7 +82,7 @@ class AtHome extends National
     public function setProduct($product)
     {
         if (!in_array($product, self::getPossibleProductValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleProductValues())
@@ -197,7 +197,7 @@ class AtHome extends National
                 } else {
                     $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
-                        throw new Exception('Not Implemented');
+                        throw new BpostException('Not Implemented');
                     }
                     $option = call_user_func(
                         array($className, 'createFromXML'),
@@ -214,7 +214,7 @@ class AtHome extends National
             );
         }
         if (isset($xml->atHome->openingHours) && $xml->atHome->openingHours != '') {
-            throw new Exception('Not Implemented');
+            throw new BpostException('Not Implemented');
             $atHome->setProduct(
                 (string) $xml->atHome->openingHours
             );

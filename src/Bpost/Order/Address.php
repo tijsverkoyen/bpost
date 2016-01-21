@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 /**
  * bPost Address class
@@ -49,7 +49,7 @@ class Address
     {
         $length = 8;
         if (mb_strlen($box) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
         $this->box = $box;
     }
@@ -69,7 +69,7 @@ class Address
     {
         $length = 2;
         if (mb_strlen($countryCode) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
         $this->countryCode = strtoupper($countryCode);
     }
@@ -89,7 +89,7 @@ class Address
     {
         $length = 40;
         if (mb_strlen($locality) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
         $this->locality = $locality;
     }
@@ -109,7 +109,7 @@ class Address
     {
         $length = 8;
         if (mb_strlen($number) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
         $this->number = $number;
     }
@@ -129,7 +129,7 @@ class Address
     {
         $length = 40;
         if (mb_strlen($postalCode) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
         $this->postalCode = $postalCode;
     }
@@ -149,7 +149,7 @@ class Address
     {
         $length = 40;
         if (mb_strlen($streetName) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
         $this->streetName = $streetName;
     }

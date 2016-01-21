@@ -2,7 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 
 /**
@@ -51,7 +51,7 @@ class AtBpost extends National
     public function setProduct($product)
     {
         if (!in_array($product, self::getPossibleProductValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleProductValues())
@@ -246,7 +246,7 @@ class AtBpost extends National
                 } else {
                     $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
-                        throw new Exception('Not Implemented');
+                        throw new BpostException('Not Implemented');
                     }
                     $option = call_user_func(
                         array($className, 'createFromXML'),

@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 
 /**
  * bPost Messaging class
@@ -40,7 +40,7 @@ class Messaging extends Option
     {
         $length = 50;
         if (mb_strlen($emailAddress) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
 
         $this->emailAddress = $emailAddress;
@@ -62,7 +62,7 @@ class Messaging extends Option
         $language = strtoupper($language);
 
         if (!in_array($language, self::getPossibleLanguageValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleLanguageValues())
@@ -101,7 +101,7 @@ class Messaging extends Option
     {
         $length = 20;
         if (mb_strlen($mobilePhone) > $length) {
-            throw new Exception(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
         }
 
         $this->mobilePhone = $mobilePhone;
@@ -135,7 +135,7 @@ class Messaging extends Option
     {
 
         if (!in_array($type, self::getPossibleTypeValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleTypeValues())

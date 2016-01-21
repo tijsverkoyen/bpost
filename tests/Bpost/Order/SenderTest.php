@@ -93,14 +93,14 @@ class SenderTest extends \PHPUnit_Framework_TestCase
         try {
             $sender->setEmailAddress(str_repeat('a', 51));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
         }
 
         try {
             $sender->setPhoneNumber(str_repeat('a', 21));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid length, maximum is 20.', $e->getMessage());
         }
     }

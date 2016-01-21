@@ -103,7 +103,7 @@ class Bpack247
 
         // error?
         if ($errorNumber != '') {
-            throw new Exception($errorMessage, $errorNumber);
+            throw new BpostException($errorMessage, $errorNumber);
         }
 
         // valid HTTP-code
@@ -114,10 +114,10 @@ class Bpack247
             ) {
                 $message = (string) $xml->message;
                 $code = isset($xml->code) ? (int) $xml->code : null;
-                throw new Exception($message, $code);
+                throw new BpostException($message, $code);
             }
 
-            throw new Exception('Invalid response.', $headers['http_code']);
+            throw new BpostException('Invalid response.', $headers['http_code']);
         }
 
         // convert into XML
@@ -127,7 +127,7 @@ class Bpack247
         if ($xml->getName() == 'businessException') {
             $message = (string) $xml->message;
             $code = (string) $xml->code;
-            throw new Exception($message, $code);
+            throw new BpostException($message, $code);
         }
 
         // return the response

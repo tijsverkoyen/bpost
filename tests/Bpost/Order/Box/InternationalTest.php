@@ -185,7 +185,7 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
         try {
             $international->setProduct(str_repeat('a', 10));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',

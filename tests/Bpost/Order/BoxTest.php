@@ -318,7 +318,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         try {
             $box->setStatus(str_repeat('a', 10));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 'Invalid value, possible values are: ' . implode(', ', Box::getPossibleStatusValues()) . '.',
                 $e->getMessage()

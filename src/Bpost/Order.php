@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Bpost;
 
-use TijsVerkoyen\Bpost\Exception;
+use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Line;
 
@@ -235,7 +235,7 @@ class Order
     {
         // @todo work with classmaps ...
         if (!isset($xml->reference)) {
-            throw new Exception('No reference found.');
+            throw new BpostException('No reference found.');
         }
 
         $order = new Order((string) $xml->reference);

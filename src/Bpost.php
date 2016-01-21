@@ -1,7 +1,6 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
-use Exception;
 use Psr\Log\LoggerInterface;
 use TijsVerkoyen\Bpost\Bpost\Label;
 use TijsVerkoyen\Bpost\Bpost\Order;
@@ -111,7 +110,7 @@ class Bpost
      * @param  array $return Just a placeholder.
      * @param  int $i A internal counter.
      * @return array
-     * @throws Exception
+     * @throws BpostException
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
@@ -156,7 +155,7 @@ class Bpost
                 }
             }
         } else {
-            throw new Exception('Invalid item.');
+            throw new BpostException('Invalid item.');
         }
 
         return $return;
@@ -171,7 +170,7 @@ class Bpost
      * @param  string $method The HTTP-method to use.
      * @param  bool $expectXML Do we expect XML?
      * @return mixed
-     * @throws Exception
+     * @throws BpostException
      */
     private function doCall($url, $body = null, $headers = array(), $method = 'GET', $expectXML = true)
     {
@@ -218,7 +217,7 @@ class Bpost
 
         // error?
         if ($errorNumber != '') {
-            throw new Exception($errorMessage, $errorNumber);
+            throw new BpostException($errorMessage, $errorNumber);
         }
 
         // valid HTTP-code
@@ -234,7 +233,7 @@ class Bpost
                 $code = isset($xml->code) ? (int)$xml->code : null;
 
                 // throw exception
-                throw new Exception($message, $code);
+                throw new BpostException($message, $code);
             }
 
             if (
@@ -246,7 +245,7 @@ class Bpost
                 $message = 'Invalid response.';
             }
 
-            throw new Exception($message, $headers['http_code']);
+            throw new BpostException($message, $headers['http_code']);
         }
 
         // if we don't expect XML we can return the content here
@@ -433,13 +432,13 @@ class Bpost
      * @param  string $reference The reference for an order
      * @param  string $status The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
      * @return bool
-     * @throws Exception
+     * @throws BpostException
      */
     public function modifyOrderStatus($reference, $status)
     {
         $status = strtoupper($status);
         if (!in_array($status, Box::getPossibleStatusValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', Box::getPossibleStatusValues())
@@ -498,13 +497,13 @@ class Bpost
      * @param  bool $withReturnLabels
      * @param  bool $asPdf
      * @return Bpost\Label[]
-     * @throws Exception
+     * @throws BpostException
      */
     protected function getLabel($url, $format = 'A6', $withReturnLabels = false, $asPdf = false)
     {
         $format = strtoupper($format);
         if (!in_array($format, self::getPossibleLabelFormatValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleLabelFormatValues())
@@ -590,7 +589,7 @@ class Bpost
      * @param  bool $withReturnLabels Should return labels be returned?
      * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
      * @return Bpost\Label[]
-     * @throws Exception
+     * @throws BpostException
      */
     public function createLabelInBulkForOrders(
         array $references,
@@ -600,7 +599,7 @@ class Bpost
     ) {
         $format = strtoupper($format);
         if (!in_array($format, self::getPossibleLabelFormatValues())) {
-            throw new Exception(
+            throw new BpostException(
                 sprintf(
                     'Invalid value, possible values are: %1$s.',
                     implode(', ', self::getPossibleLabelFormatValues())

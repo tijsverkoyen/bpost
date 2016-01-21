@@ -194,7 +194,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
             );
             $customer = Customer::createFromXML($xml);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('No UserId found.', $e->getMessage());
         }
     }
@@ -209,7 +209,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         try {
             $customer->setPreferredLanguage(str_repeat('a', 10));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 'Invalid value, possible values are: ' . implode(
                     ', ',
@@ -221,7 +221,7 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         try {
             $customer->setTitle(str_repeat('a', 10));
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
+            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame(
                 'Invalid value, possible values are: ' . implode(', ', Customer::getPossibleTitleValues()) . '.',
                 $e->getMessage()

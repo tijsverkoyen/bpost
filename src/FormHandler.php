@@ -109,7 +109,7 @@ class FormHandler
                 $allowedValues['lang'] = array('NL', 'FR', 'EN', 'DE', 'Default');
 
                 if (!in_array($value, $allowedValues[$key])) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid value (' . $value . ') for ' . $key . ', allowed values are: ' .
                         implode(', ', $allowedValues[$key]) . '.'
                     );
@@ -120,7 +120,7 @@ class FormHandler
             // maximum 2 chars
             case 'customerCountry':
                 if (mb_strlen($value) > 2) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid length for ' . $key . ', maximum is 2.'
                     );
                 }
@@ -131,7 +131,7 @@ class FormHandler
             case 'customerStreetNumber':
             case 'customerBox':
                 if (mb_strlen($value) > 8) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid length for ' . $key . ', maximum is 8.'
                     );
                 }
@@ -141,7 +141,7 @@ class FormHandler
             // maximum 20 chars
             case 'customerPhoneNumber':
                 if (mb_strlen($value) > 20) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid length for ' . $key . ', maximum is 20.'
                     );
                 }
@@ -151,7 +151,7 @@ class FormHandler
             // maximum 32 chars
             case 'customerPostalCode':
                 if (mb_strlen($value) > 32) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid length for ' . $key . ', maximum is 32.'
                     );
                 }
@@ -165,7 +165,7 @@ class FormHandler
             case 'customerStreet':
             case 'customerCity':
                 if (mb_strlen($value) > 40) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid length for ' . $key . ', maximum is 40.'
                     );
                 }
@@ -177,7 +177,7 @@ class FormHandler
             case 'costCenter':
             case 'customerEmail':
                 if (mb_strlen($value) > 50) {
-                    throw new Exception(
+                    throw new BpostException(
                         'Invalid length for ' . $key . ', maximum is 50.'
                     );
                 }
