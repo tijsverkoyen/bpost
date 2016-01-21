@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 use TijsVerkoyen\Bpost\BpostException;
 

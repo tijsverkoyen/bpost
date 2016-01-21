@@ -2,7 +2,6 @@
 namespace TijsVerkoyen\Bpost\Bpack247;
 
 use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
 
 /**
  * bPost Customer class

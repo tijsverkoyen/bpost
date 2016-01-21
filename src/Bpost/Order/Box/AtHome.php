@@ -56,9 +56,9 @@ class AtHome extends National
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day $day
+     * @param Day $day
      */
-    public function addOpeningHour(\TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day $day)
+    public function addOpeningHour(Day $day)
     {
         $this->openingHours[] = $day;
     }

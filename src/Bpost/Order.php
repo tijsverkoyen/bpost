@@ -76,9 +76,9 @@ class Order
     /**
      * Add a box
      *
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box $box
+     * @param Box $box
      */
-    public function addBox(\TijsVerkoyen\Bpost\Bpost\Order\Box $box)
+    public function addBox(Box $box)
     {
         $this->boxes[] = $box;
     }
@@ -118,9 +118,9 @@ class Order
     /**
      * Add an order line
      *
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Line $line
+     * @param Line $line
      */
-    public function addLine(\TijsVerkoyen\Bpost\Bpost\Order\Line $line)
+    public function addLine(Line $line)
     {
         $this->lines[] = $line;
     }

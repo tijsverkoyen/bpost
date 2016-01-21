@@ -1,6 +1,8 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
 use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
@@ -73,9 +75,9 @@ class International implements IBox
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option $option
+     * @param Option $option
      */
-    public function addOption(Option\Option $option)
+    public function addOption(Option $option)
     {
         $this->options[] = $option;
     }

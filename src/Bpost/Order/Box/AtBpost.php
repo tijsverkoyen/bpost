@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;

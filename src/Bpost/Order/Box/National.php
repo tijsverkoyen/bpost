@@ -43,9 +43,9 @@ abstract class National implements IBox
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option $option
+     * @param Option $option
      */
-    public function addOption(Option\Option $option)
+    public function addOption(Option $option)
     {
         $this->options[] = $option;
     }
