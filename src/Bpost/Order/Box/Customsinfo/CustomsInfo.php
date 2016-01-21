@@ -40,6 +40,7 @@ class CustomsInfo
 
     /**
      * @param string $contentDescription
+     * @throws BpostException
      */
     public function setContentDescription($contentDescription)
     {
@@ -61,6 +62,7 @@ class CustomsInfo
 
     /**
      * @param string $parcelReturnInstructions
+     * @throws BpostException
      */
     public function setParcelReturnInstructions($parcelReturnInstructions)
     {
@@ -132,6 +134,7 @@ class CustomsInfo
 
     /**
      * @param string $shipmentType
+     * @throws BpostException
      */
     public function setShipmentType($shipmentType)
     {

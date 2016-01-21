@@ -68,6 +68,7 @@ class Bpack247
      * @param  string $body   The data to pass.
      * @param  string $method The HTTP-method to use.
      * @return mixed
+     * @throws BpostException
      */
     private function doCall($url, $body = null, $method = 'GET')
     {

@@ -60,6 +60,7 @@ class Label
 
     /**
      * @param string $mimeType
+     * @throws BpostException
      */
     public function setMimeType($mimeType)
     {

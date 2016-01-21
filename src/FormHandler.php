@@ -98,6 +98,7 @@ class FormHandler
      *
      * @param string $key
      * @param mixed  $value
+     * @throws BpostException
      */
     public function setParameter($key, $value)
     {

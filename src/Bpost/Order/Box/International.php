@@ -98,6 +98,7 @@ class International implements IBox
 
     /**
      * @param string $product
+     * @throws BpostException
      */
     public function setProduct($product)
     {
@@ -214,6 +215,7 @@ class International implements IBox
     /**
      * @param  \SimpleXMLElement $xml
      * @return International
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

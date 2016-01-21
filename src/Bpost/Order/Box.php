@@ -101,6 +101,7 @@ class Box
 
     /**
      * @param string $status
+     * @throws BpostException
      */
     public function setStatus($status)
     {
@@ -194,6 +195,7 @@ class Box
     /**
      * @param  \SimpleXMLElement $xml
      * @return Box
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

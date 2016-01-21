@@ -44,6 +44,7 @@ class Address
 
     /**
      * @param string $box
+     * @throws BpostException
      */
     public function setBox($box)
     {
@@ -64,6 +65,7 @@ class Address
 
     /**
      * @param string $countryCode
+     * @throws BpostException
      */
     public function setCountryCode($countryCode)
     {
@@ -84,6 +86,7 @@ class Address
 
     /**
      * @param string $locality
+     * @throws BpostException
      */
     public function setLocality($locality)
     {
@@ -104,6 +107,7 @@ class Address
 
     /**
      * @param string $number
+     * @throws BpostException
      */
     public function setNumber($number)
     {
@@ -124,6 +128,7 @@ class Address
 
     /**
      * @param string $postalCode
+     * @throws BpostException
      */
     public function setPostalCode($postalCode)
     {
@@ -144,6 +149,7 @@ class Address
 
     /**
      * @param string $streetName
+     * @throws BpostException
      */
     public function setStreetName($streetName)
     {

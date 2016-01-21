@@ -26,6 +26,7 @@ class Day
 
     /**
      * @param string $day
+     * @throws BpostException
      */
     public function setDay($day)
     {

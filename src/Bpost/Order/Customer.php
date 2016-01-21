@@ -71,6 +71,7 @@ class Customer
 
     /**
      * @param string $emailAddress
+     * @throws BpostException
      */
     public function setEmailAddress($emailAddress)
     {
@@ -107,6 +108,7 @@ class Customer
 
     /**
      * @param string $phoneNumber
+     * @throws BpostException
      */
     public function setPhoneNumber($phoneNumber)
     {

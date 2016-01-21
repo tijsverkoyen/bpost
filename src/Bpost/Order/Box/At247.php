@@ -115,6 +115,7 @@ class At247 extends National
 
     /**
      * @param string $product Possible values are: bpack 24h Pro
+     * @throws BpostException
      */
     public function setProduct($product)
     {
@@ -247,6 +248,7 @@ class At247 extends National
     /**
      * @param  \SimpleXMLElement $xml
      * @return At247
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

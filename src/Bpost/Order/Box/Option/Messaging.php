@@ -35,6 +35,7 @@ class Messaging extends Option
 
     /**
      * @param string $emailAddress
+     * @throws BpostException
      */
     public function setEmailAddress($emailAddress)
     {
@@ -56,6 +57,7 @@ class Messaging extends Option
 
     /**
      * @param string $language
+     * @throws BpostException
      */
     public function setLanguage($language)
     {
@@ -96,6 +98,7 @@ class Messaging extends Option
 
     /**
      * @param string $mobilePhone
+     * @throws BpostException
      */
     public function setMobilePhone($mobilePhone)
     {
@@ -130,6 +133,7 @@ class Messaging extends Option
 
     /**
      * @param string $type
+     * @throws BpostException
      */
     public function setType($type)
     {

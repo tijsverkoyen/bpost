@@ -78,6 +78,7 @@ class AtHome extends National
      *                          * bpack Bus
      *                          * bpack Pallet
      *                          * bpack Easy Retour
+     * @throws BpostException
      */
     public function setProduct($product)
     {
@@ -178,6 +179,7 @@ class AtHome extends National
     /**
      * @param  \SimpleXMLElement $xml
      * @return AtHome
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

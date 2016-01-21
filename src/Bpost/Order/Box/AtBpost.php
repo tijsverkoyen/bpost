@@ -47,6 +47,7 @@ class AtBpost extends National
 
     /**
      * @param string $product Possible values are: bpack@bpost
+     * @throws BpostException
      */
     public function setProduct($product)
     {
@@ -218,6 +219,7 @@ class AtBpost extends National
     /**
      * @param  \SimpleXMLElement $xml
      * @return AtBpost
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

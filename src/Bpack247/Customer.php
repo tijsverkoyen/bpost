@@ -355,6 +355,7 @@ class Customer
 
     /**
      * @param string $preferredLanguage
+     * @throws BpostException
      */
     public function setPreferredLanguage($preferredLanguage)
     {
@@ -424,6 +425,7 @@ class Customer
 
     /**
      * @param string $title
+     * @throws BpostException
      */
     public function setTitle($title)
     {
@@ -635,6 +637,7 @@ class Customer
     /**
      * @param  \SimpleXMLElement $xml
      * @return Customer
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

@@ -79,6 +79,7 @@ class Geo6
      * @param  string           $method
      * @param  array|null       $parameters
      * @return SimpleXMLElement
+     * @throws \TijsVerkoyen\Bpost\BpostException
      */
     private function doCall($method, $parameters = null)
     {
@@ -214,6 +215,7 @@ class Geo6
      *                              7: (1+2+4, Post Office + Post Point + bpack 24/7)
      * @param  int   $limit
      * @return array
+     * @throws \TijsVerkoyen\Bpost\BpostException
      */
     public function getNearestServicePoint($street, $number, $zone, $language = 'nl', $type = 3, $limit = 10)
     {
@@ -253,6 +255,7 @@ class Geo6
      *                              2: Post Point
      *                              4: bpack 24/7
      * @return Poi
+     * @throws \TijsVerkoyen\Bpost\BpostException
      */
     public function getServicePointDetails($id, $language = 'nl', $type = 3)
     {

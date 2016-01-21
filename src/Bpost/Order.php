@@ -230,6 +230,7 @@ class Order
     /**
      * @param  \SimpleXMLElement $xml
      * @return Order
+     * @throws BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
