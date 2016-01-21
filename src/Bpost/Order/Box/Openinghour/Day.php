@@ -14,6 +14,15 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Day
 {
+
+    const DAY_MONDAY = 'Monday';
+    const DAY_TUESDAY = 'Tuesday';
+    const DAY_WEDNESDAY = 'Wednesday';
+    const DAY_THURSDAY = 'Thursday';
+    const DAY_FRIDAY = 'Friday';
+    const DAY_SATURDAY = 'Saterday';
+    const DAY_SUNDAY = 'Sunday';
+
     /**
      * @var string
      */
@@ -56,13 +65,13 @@ class Day
     public static function getPossibleDayValues()
     {
         return array(
-            'Monday',
-            'Tuesday',
-            'Wednesday',
-            'Thursday',
-            'Friday',
-            'Saterday',
-            'Sunday'
+            self::DAY_MONDAY,
+            self::DAY_TUESDAY,
+            self::DAY_WEDNESDAY,
+            self::DAY_THURSDAY,
+            self::DAY_FRIDAY,
+            self::DAY_SATURDAY,
+            self::DAY_SUNDAY,
         );
     }
 
