@@ -3,6 +3,7 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
+use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\BpostException;
 
 /**
@@ -33,7 +34,7 @@ class At247 extends National
     /**
      * @var string
      */
-    protected $product = 'bpack 24h Pro';
+    protected $product = Product::PRODUCT_NAME_BPACK_24H_PRO;
 
     /**
      * @var string
@@ -138,7 +139,7 @@ class At247 extends National
     public static function getPossibleProductValues()
     {
         return array(
-            'bpack 24h Pro',
+            Product::PRODUCT_NAME_BPACK_24H_PRO,
         );
     }
 

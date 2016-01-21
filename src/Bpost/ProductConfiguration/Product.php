@@ -12,6 +12,8 @@ class Product
     const PRODUCT_NAME_BPACK_AT_BPOST = 'bpack@bpost';
     const PRODUCT_NAME_BPACK_CLICK_AND_COLLECT = 'bpack Click & Collect';
     const PRODUCT_NAME_BPACK_24_7 = 'bpack 24/7';
+    const PRODUCT_NAME_BPACK_BUSINESS = 'bpack Bus';
+    const PRODUCT_NAME_BPACK_PALLET = 'bpack Pallet';
     const PRODUCT_NAME_BPACK_WORLD_EASY_RETURN = 'bpack World Easy Return';
     const PRODUCT_NAME_BPACK_WORLD_EXPRESS_PRO = 'bpack World Express Pro';
     const PRODUCT_NAME_BPACK_WORLD_BUSINESS = 'bpack World Business';

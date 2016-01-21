@@ -3,6 +3,7 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
+use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 
@@ -19,7 +20,7 @@ class AtBpost extends National
     /**
      * @var string
      */
-    protected $product = 'bpack@bpost';
+    protected $product = Product::PRODUCT_NAME_BPACK_AT_BPOST;
 
     /**
      * @var string
@@ -70,7 +71,7 @@ class AtBpost extends National
     public static function getPossibleProductValues()
     {
         return array(
-            'bpack@bpost',
+            Product::PRODUCT_NAME_BPACK_AT_BPOST,
         );
     }
 

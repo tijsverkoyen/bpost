@@ -4,6 +4,7 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
+use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\BpostException;
 
 /**
@@ -100,11 +101,11 @@ class AtHome extends National
     public static function getPossibleProductValues()
     {
         return array(
-            'bpack 24h Pro',
-            'bpack 24h business',
-            'bpack Bus',
-            'bpack Pallet',
-            'bpack Easy Retour',
+            Product::PRODUCT_NAME_BPACK_24H_PRO,
+            Product::PRODUCT_NAME_BPACK_24H_BUSINESS,
+            Product::PRODUCT_NAME_BPACK_BUSINESS,
+            Product::PRODUCT_NAME_BPACK_PALLET,
+            Product::PRODUCT_NAME_BPACK_EASY_RETOUR,
         );
     }
 
