@@ -11,6 +11,11 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Label
 {
+
+    const LABEL_MIME_TYPE_IMAGE_PNG = 'image/png';
+    const LABEL_MIME_TYPE_IMAGE_PDF = 'image/pdf';
+    const LABEL_MIME_TYPE_APPLICATION_PDF = 'application/pdf';
+
     /**
      * @var string
      */
@@ -90,9 +95,9 @@ class Label
     public static function getPossibleMimeTypeValues()
     {
         return array(
-            'image/png',
-            'image/pdf',
-            'application/pdf',
+            self::LABEL_MIME_TYPE_IMAGE_PNG,
+            self::LABEL_MIME_TYPE_IMAGE_PDF,
+            self::LABEL_MIME_TYPE_APPLICATION_PDF,
         );
     }
 
