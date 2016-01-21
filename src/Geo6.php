@@ -76,8 +76,8 @@ class Geo6
     /**
      * Make the real call
      *
-     * @param  string           $method
-     * @param  array|null       $parameters
+     * @param  string     $method
+     * @param  array|null $parameters
      * @return \SimpleXMLElement
      * @throws \TijsVerkoyen\Bpost\BpostException
      */
@@ -208,11 +208,11 @@ class Geo6
      * @param string $zone     Postal code and/or city
      * @param string $language Language, possible values are: nl, fr
      * @param int    $type     Requested point type, possible values are:
-     *                              1: Post Office
-     *                              2: Post Point
-     *                              3: (1+2, Post Office + Post Point)
-     *                              4: bpack 24/7
-     *                              7: (1+2+4, Post Office + Post Point + bpack 24/7)
+     *                         - 1: Post Office
+     *                         - 2: Post Point
+     *                         - 3: (1+2, Post Office + Post Point)
+     *                         - 4: bpack 24/7
+     *                         - 7: (1+2+4, Post Office + Post Point + bpack 24/7)
      * @param  int   $limit
      * @return array
      * @throws \TijsVerkoyen\Bpost\BpostException
@@ -251,9 +251,9 @@ class Geo6
      * @param string $id       Requested point identifier
      * @param string $language Language, possible values: nl, fr
      * @param int    $type     Requested point type, possible values are:
-     *                              1: Post Office
-     *                              2: Post Point
-     *                              4: bpack 24/7
+     *                         - 1: Post Office
+     *                         - 2: Post Point
+     *                         - 4: bpack 24/7
      * @return Poi
      * @throws \TijsVerkoyen\Bpost\BpostException
      */
