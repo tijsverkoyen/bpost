@@ -14,6 +14,23 @@ use TijsVerkoyen\Bpost\BpostException;
  */
 class Day
 {
+
+    const DAY_INDEX_MONDAY = 1;
+    const DAY_INDEX_TUESDAY = 2;
+    const DAY_INDEX_WEDNESDAY = 3;
+    const DAY_INDEX_THURSDAY = 4;
+    const DAY_INDEX_FRIDAY = 5;
+    const DAY_INDEX_SATURDAY = 6;
+    const DAY_INDEX_SUNDAY = 7;
+
+    const DAY_NAME_MONDAY = 'Monday';
+    const DAY_NAME_TUESDAY = 'Tuesday';
+    const DAY_NAME_WEDNESDAY = 'Wednesday';
+    const DAY_NAME_THURSDAY = 'Thursday';
+    const DAY_NAME_FRIDAY = 'Friday';
+    const DAY_NAME_SATURDAY = 'Saturday';
+    const DAY_NAME_SUNDAY = 'Sunday';
+
     /**
      * @var string
      */
@@ -94,21 +111,21 @@ class Day
      */
     public function getDayIndex()
     {
-        switch (strtolower($this->getDay())) {
-            case 'monday':
-                return 1;
-            case 'tuesday':
-                return 2;
-            case 'wednesday':
-                return 3;
-            case 'thursday':
-                return 4;
-            case 'friday':
-                return 5;
-            case 'saturday':
-                return 6;
-            case 'sunday':
-                return 7;
+        switch (ucfirst(strtolower($this->getDay()))) {
+            case self::DAY_NAME_MONDAY:
+                return self::DAY_INDEX_MONDAY;
+            case self::DAY_NAME_TUESDAY:
+                return self::DAY_INDEX_TUESDAY;
+            case self::DAY_NAME_WEDNESDAY:
+                return self::DAY_INDEX_WEDNESDAY;
+            case self::DAY_NAME_THURSDAY:
+                return self::DAY_INDEX_THURSDAY;
+            case self::DAY_NAME_FRIDAY:
+                return self::DAY_INDEX_FRIDAY;
+            case self::DAY_NAME_SATURDAY:
+                return self::DAY_INDEX_SATURDAY;
+            case self::DAY_NAME_SUNDAY:
+                return self::DAY_INDEX_SUNDAY;
         }
 
         throw new BpostException('Invalid day.');

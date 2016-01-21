@@ -433,25 +433,25 @@ class Poi
         }
 
         if (isset($xml->Hours->Monday)) {
-            $poi->addHour(1, Day::createFromXML($xml->Hours->Monday));
+            $poi->addHour(Day::DAY_INDEX_MONDAY, Day::createFromXML($xml->Hours->Monday));
         }
         if (isset($xml->Hours->Tuesday)) {
-            $poi->addHour(2, Day::createFromXML($xml->Hours->Tuesday));
+            $poi->addHour(Day::DAY_INDEX_TUESDAY, Day::createFromXML($xml->Hours->Tuesday));
         }
         if (isset($xml->Hours->Wednesday)) {
-            $poi->addHour(3, Day::createFromXML($xml->Hours->Wednesday));
+            $poi->addHour(Day::DAY_INDEX_WEDNESDAY, Day::createFromXML($xml->Hours->Wednesday));
         }
         if (isset($xml->Hours->Thursday)) {
-            $poi->addHour(4, Day::createFromXML($xml->Hours->Thursday));
+            $poi->addHour(Day::DAY_INDEX_THURSDAY, Day::createFromXML($xml->Hours->Thursday));
         }
         if (isset($xml->Hours->Friday)) {
-            $poi->addHour(5, Day::createFromXML($xml->Hours->Friday));
+            $poi->addHour(Day::DAY_INDEX_FRIDAY, Day::createFromXML($xml->Hours->Friday));
         }
         if (isset($xml->Hours->Saturday)) {
-            $poi->addHour(6, Day::createFromXML($xml->Hours->Saturday));
+            $poi->addHour(Day::DAY_INDEX_SATURDAY, Day::createFromXML($xml->Hours->Saturday));
         }
         if (isset($xml->Hours->Sunday)) {
-            $poi->addHour(7, Day::createFromXML($xml->Hours->Sunday));
+            $poi->addHour(Day::DAY_INDEX_SUNDAY, Day::createFromXML($xml->Hours->Sunday));
         }
         if (isset($xml->ClosedFrom) && $xml->ClosedFrom != '') {
             $poi->setClosedFrom((string) $xml->ClosedFrom);
