@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidXmlResponseException;
 use TijsVerkoyen\Bpost\Geo6\Poi;
 
 /**
@@ -79,6 +80,7 @@ class Geo6
      * @param  string     $method
      * @param  array|null $parameters
      * @return \SimpleXMLElement
+     * @throws BpostInvalidXmlResponseException
      * @throws \TijsVerkoyen\Bpost\BpostException
      */
     private function doCall($method, $parameters = null)
@@ -111,7 +113,7 @@ class Geo6
 
         // validate xml
         if ($xml === false || (isset($xml->head) && isset($xml->body))) {
-            throw new BpostException('Invalid XML-response.');
+            throw new BpostInvalidXmlResponseException();
         }
 
         // catch generic errors
@@ -215,7 +217,7 @@ class Geo6
      *                         - 7: (1+2+4, Post Office + Post Point + bpack 24/7)
      * @param  int   $limit
      * @return array
-     * @throws \TijsVerkoyen\Bpost\BpostException
+     * @throws BpostInvalidXmlResponseException
      */
     public function getNearestServicePoint($street, $number, $zone, $language = 'nl', $type = 3, $limit = 10)
     {
@@ -230,7 +232,7 @@ class Geo6
         $xml = $this->doCall('search', $parameters);
 
         if (!isset($xml->PoiList->Poi)) {
-            throw new BpostException('Invalid XML-response');
+            throw new BpostInvalidXmlResponseException();
         }
 
         $pois = array();
@@ -255,7 +257,7 @@ class Geo6
      *                         - 2: Post Point
      *                         - 4: bpack 24/7
      * @return Poi
-     * @throws \TijsVerkoyen\Bpost\BpostException
+     * @throws BpostInvalidXmlResponseException
      */
     public function getServicePointDetails($id, $language = 'nl', $type = 3)
     {
@@ -267,7 +269,7 @@ class Geo6
         $xml = $this->doCall('info', $parameters);
 
         if (!isset($xml->Poi->Record)) {
-            throw new BpostException('Invalid XML-response.');
+            throw new BpostInvalidXmlResponseException();
         }
 
         return Poi::createFromXML($xml->Poi->Record);
