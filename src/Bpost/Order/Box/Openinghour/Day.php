@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost Day class
@@ -35,17 +35,12 @@ class Day
 
     /**
      * @param string $day
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setDay($day)
     {
         if (!in_array($day, self::getPossibleDayValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleDayValues())
-                )
-            );
+            throw new BpostInvalidValueException('day', $day, self::getPossibleDayValues());
         }
 
         $this->day = $day;

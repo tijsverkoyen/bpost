@@ -2,7 +2,7 @@
 namespace Bpost\Bpack;
 
 use TijsVerkoyen\Bpost\Bpack247\Customer;
-use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
@@ -208,25 +208,24 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
 
         try {
             $customer->setPreferredLanguage(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                'Invalid value, possible values are: ' . implode(
-                    ', ',
-                    Customer::getPossiblePreferredLanguageValues()
-                ) . '.',
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
         try {
             $customer->setTitle(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                'Invalid value, possible values are: ' . implode(', ', Customer::getPossibleTitleValues()) . '.',
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 
     /**

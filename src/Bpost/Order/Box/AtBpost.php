@@ -6,6 +6,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost AtBpost class
@@ -49,17 +50,12 @@ class AtBpost extends National
 
     /**
      * @param string $product Possible values are: bpack@bpost
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setProduct($product)
     {
         if (!in_array($product, self::getPossibleProductValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleProductValues())
-                )
-            );
+            throw new BpostInvalidValueException('product', $product, self::getPossibleProductValues());
         }
 
         parent::setProduct($product);

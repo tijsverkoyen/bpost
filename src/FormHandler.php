@@ -1,6 +1,8 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+
 /**
  * bPost Form handler class
  *
@@ -99,6 +101,7 @@ class FormHandler
      * @param string $key
      * @param mixed  $value
      * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setParameter($key, $value)
     {
@@ -110,10 +113,7 @@ class FormHandler
                 $allowedValues['lang'] = array('NL', 'FR', 'EN', 'DE', 'Default');
 
                 if (!in_array($value, $allowedValues[$key])) {
-                    throw new BpostException(
-                        'Invalid value (' . $value . ') for ' . $key . ', allowed values are: ' .
-                        implode(', ', $allowedValues[$key]) . '.'
-                    );
+                    throw new BpostInvalidValueException($key, $value, $allowedValues[$key]);
                 }
                 $this->parameters[$key] = $value;
                 break;

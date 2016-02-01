@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Bpost;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost Label class
@@ -65,17 +65,12 @@ class Label
 
     /**
      * @param string $mimeType
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setMimeType($mimeType)
     {
         if (!in_array($mimeType, self::getPossibleMimeTypeValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleMimeTypeValues())
-                )
-            );
+            throw new BpostInvalidValueException('mimeType', $mimeType, self::getPossibleMimeTypeValues());
         }
 
         $this->mimeType = $mimeType;

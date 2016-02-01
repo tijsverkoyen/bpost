@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpack247;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost Customer class
@@ -362,16 +363,15 @@ class Customer
 
     /**
      * @param string $preferredLanguage
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setPreferredLanguage($preferredLanguage)
     {
         if (!in_array($preferredLanguage, self::getPossiblePreferredLanguageValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossiblePreferredLanguageValues())
-                )
+            throw new BpostInvalidValueException(
+                'preferred language',
+                $preferredLanguage,
+                self::getPossiblePreferredLanguageValues()
             );
         }
 
@@ -432,17 +432,12 @@ class Customer
 
     /**
      * @param string $title
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setTitle($title)
     {
         if (!in_array($title, self::getPossibleTitleValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleTitleValues())
-                )
-            );
+            throw new BpostInvalidValueException('title', $title, self::getPossibleTitleValues());
         }
 
         $this->title = $title;

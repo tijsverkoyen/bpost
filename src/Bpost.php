@@ -7,6 +7,7 @@ use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * Bpost class
@@ -437,18 +438,13 @@ class Bpost
      * @param  string $reference The reference for an order
      * @param  string $status The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
      * @return bool
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function modifyOrderStatus($reference, $status)
     {
         $status = strtoupper($status);
         if (!in_array($status, Box::getPossibleStatusValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Box::getPossibleStatusValues())
-                )
-            );
+            throw new BpostInvalidValueException('status', $status, Box::getPossibleStatusValues());
         }
 
         $url = '/orders/' . $reference;
@@ -502,18 +498,13 @@ class Bpost
      * @param  bool $withReturnLabels
      * @param  bool $asPdf
      * @return Bpost\Label[]
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     protected function getLabel($url, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
     {
         $format = strtoupper($format);
         if (!in_array($format, self::getPossibleLabelFormatValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleLabelFormatValues())
-                )
-            );
+            throw new BpostInvalidValueException('format', $format, self::getPossibleLabelFormatValues());
         }
 
         $url .= '/labels/' . $format;
@@ -594,7 +585,7 @@ class Bpost
      * @param  bool $withReturnLabels Should return labels be returned?
      * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
      * @return Bpost\Label[]
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function createLabelInBulkForOrders(
         array $references,
@@ -604,12 +595,7 @@ class Bpost
     ) {
         $format = strtoupper($format);
         if (!in_array($format, self::getPossibleLabelFormatValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleLabelFormatValues())
-                )
-            );
+            throw new BpostInvalidValueException('format', $format, self::getPossibleLabelFormatValues());
         }
 
         $url = '/labels/' . $format;

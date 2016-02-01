@@ -5,6 +5,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost At247 class
@@ -117,17 +118,12 @@ class At247 extends National
 
     /**
      * @param string $product Possible values are: bpack 24h Pro
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setProduct($product)
     {
         if (!in_array($product, self::getPossibleProductValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleProductValues())
-                )
-            );
+            throw new BpostInvalidValueException('product', $product, self::getPossibleProductValues());
         }
 
         parent::setProduct($product);

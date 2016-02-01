@@ -3,6 +3,7 @@ namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class CustomsInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -184,18 +185,15 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
         }
 
         try {
-            $customsInfo->setShipmentType(
-                str_repeat('a', 10)
-            );
+            $customsInfo->setShipmentType(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', CustomsInfo::getPossibleShipmentTypeValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

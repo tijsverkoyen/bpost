@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost Messaging class
@@ -68,19 +69,14 @@ class Messaging extends Option
 
     /**
      * @param string $language
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setLanguage($language)
     {
         $language = strtoupper($language);
 
         if (!in_array($language, self::getPossibleLanguageValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleLanguageValues())
-                )
-            );
+            throw new BpostInvalidValueException('language', $language, self::getPossibleLanguageValues());
         }
 
         $this->language = $language;
@@ -144,18 +140,13 @@ class Messaging extends Option
 
     /**
      * @param string $type
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setType($type)
     {
 
         if (!in_array($type, self::getPossibleTypeValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleTypeValues())
-                )
-            );
+            throw new BpostInvalidValueException('type', $type, self::getPossibleTypeValues());
         }
 
         $this->type = $type;

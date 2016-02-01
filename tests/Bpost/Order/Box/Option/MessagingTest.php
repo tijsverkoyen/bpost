@@ -2,6 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class MessagingTest extends \PHPUnit_Framework_TestCase
 {
@@ -94,35 +95,21 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
     public function testFaultyProperties()
     {
         try {
-            new Messaging(
-                str_repeat('a', 10),
-                'NL'
-            );
+            new Messaging(str_repeat('a', 10), 'NL');
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Messaging::getPossibleTypeValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
 
         try {
-            new Messaging(
-                'infoDistributed',
-                str_repeat('a', 10)
-            );
+            new Messaging('infoDistributed', str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Messaging::getPossibleLanguageValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
 
         try {
@@ -147,5 +134,8 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
             $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
             $this->assertSame('Invalid length, maximum is 20.', $e->getMessage());
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

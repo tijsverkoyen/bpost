@@ -7,6 +7,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\International;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class BoxTest extends \PHPUnit_Framework_TestCase
 {
@@ -317,12 +318,14 @@ class BoxTest extends \PHPUnit_Framework_TestCase
 
         try {
             $box->setStatus(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                'Invalid value, possible values are: ' . implode(', ', Box::getPossibleStatusValues()) . '.',
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

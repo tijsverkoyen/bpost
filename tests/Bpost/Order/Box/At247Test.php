@@ -3,6 +3,7 @@ namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class At247Test extends \PHPUnit_Framework_TestCase
 {
@@ -101,15 +102,14 @@ class At247Test extends \PHPUnit_Framework_TestCase
 
         try {
             $at247->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', At247::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

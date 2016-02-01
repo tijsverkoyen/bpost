@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost Insurance class
@@ -51,18 +51,13 @@ class Insurance extends Option
 
     /**
      * @param string $type
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setType($type)
     {
 
         if (!in_array($type, self::getPossibleTypeValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleTypeValues())
-                )
-            );
+            throw new BpostInvalidValueException('type', $type, self::getPossibleTypeValues());
         }
 
         $this->type = $type;
@@ -78,17 +73,12 @@ class Insurance extends Option
 
     /**
      * @param string $value
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setValue($value)
     {
         if (!in_array($value, self::getPossibleValueValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleValueValues())
-                )
-            );
+            throw new BpostInvalidValueException('value', $value, self::getPossibleValueValues());
         }
 
         $this->value = $value;

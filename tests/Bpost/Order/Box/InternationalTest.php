@@ -6,6 +6,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\International;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class InternationalTest extends \PHPUnit_Framework_TestCase
 {
@@ -184,15 +185,14 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
 
         try {
             $international->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', International::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

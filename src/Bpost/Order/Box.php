@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost Box class
@@ -113,18 +114,13 @@ class Box
 
     /**
      * @param string $status
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setStatus($status)
     {
         $status = strtoupper($status);
         if (!in_array($status, self::getPossibleStatusValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleStatusValues())
-                )
-            );
+            throw new BpostInvalidValueException('status', $status, self::getPossibleStatusValues());
         }
 
         $this->status = $status;

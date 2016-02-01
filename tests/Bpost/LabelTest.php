@@ -2,6 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Label;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class LabelTest extends \PHPUnit_Framework_TestCase
 {
@@ -60,12 +61,14 @@ class LabelTest extends \PHPUnit_Framework_TestCase
 
         try {
             $label->setMimeType(str_repeat('a', 9));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                'Invalid value, possible values are: ' . implode(', ', Label::getPossibleMimeTypeValues()) . '.',
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

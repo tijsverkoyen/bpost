@@ -2,6 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class InsuranceTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,34 +105,24 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
     public function testFaultyProperties()
     {
         try {
-            new Insurance(
-                str_repeat('a', 10)
-            );
+            new Insurance(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Insurance::getPossibleTypeValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
 
         try {
-            new Insurance(
-                'additionalInsurance',
-                str_repeat('1', 10)
-            );
+            new Insurance('additionalInsurance', str_repeat('1', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Insurance::getPossibleValueValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

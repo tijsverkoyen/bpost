@@ -7,6 +7,7 @@ use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost International class
@@ -101,17 +102,12 @@ class International implements IBox
 
     /**
      * @param string $product
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setProduct($product)
     {
         if (!in_array($product, self::getPossibleProductValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleProductValues())
-                )
-            );
+            throw new BpostInvalidValueException('product', $product, self::getPossibleProductValues());
         }
 
         $this->product = $product;

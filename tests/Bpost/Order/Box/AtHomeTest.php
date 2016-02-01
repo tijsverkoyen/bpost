@@ -6,6 +6,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day as OpeninghourDay;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class AtHomeTest extends \PHPUnit_Framework_TestCase
 {
@@ -177,15 +178,14 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $atHome->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', AtHome::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
  * bPost CustomsInfo class
@@ -72,18 +73,17 @@ class CustomsInfo
 
     /**
      * @param string $parcelReturnInstructions
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setParcelReturnInstructions($parcelReturnInstructions)
     {
         $parcelReturnInstructions = strtoupper($parcelReturnInstructions);
 
         if (!in_array($parcelReturnInstructions, self::getPossibleParcelReturnInstructionValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleParcelReturnInstructionValues())
-                )
+            throw new BpostInvalidValueException(
+                'parcelReturnInstructions',
+                $parcelReturnInstructions,
+                self::getPossibleParcelReturnInstructionValues()
             );
         }
 
@@ -144,19 +144,14 @@ class CustomsInfo
 
     /**
      * @param string $shipmentType
-     * @throws BpostException
+     * @throws BpostInvalidValueException
      */
     public function setShipmentType($shipmentType)
     {
         $shipmentType = strtoupper($shipmentType);
 
         if (!in_array($shipmentType, self::getPossibleShipmentTypeValues())) {
-            throw new BpostException(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', self::getPossibleShipmentTypeValues())
-                )
-            );
+            throw new BpostInvalidValueException('shipmentType', $shipmentType, self::getPossibleShipmentTypeValues());
         }
 
         $this->shipmentType = $shipmentType;
