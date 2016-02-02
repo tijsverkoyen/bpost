@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
@@ -47,13 +47,13 @@ class Messaging extends Option
 
     /**
      * @param string $emailAddress
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setEmailAddress($emailAddress)
     {
         $length = 50;
         if (mb_strlen($emailAddress) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('emailAddress', mb_strlen($emailAddress), $length);
         }
 
         $this->emailAddress = $emailAddress;
@@ -105,13 +105,13 @@ class Messaging extends Option
 
     /**
      * @param string $mobilePhone
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setMobilePhone($mobilePhone)
     {
         $length = 20;
         if (mb_strlen($mobilePhone) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('mobilePhone', mb_strlen($mobilePhone), $length);
         }
 
         $this->mobilePhone = $mobilePhone;

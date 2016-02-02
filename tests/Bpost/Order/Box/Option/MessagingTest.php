@@ -2,6 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class MessagingTest extends \PHPUnit_Framework_TestCase
@@ -113,26 +114,21 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
         }
 
         try {
-            new Messaging(
-                'infoDistributed',
-                'NL',
-                str_repeat('a', 51)
-            );
+            new Messaging('infoDistributed', 'NL', str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
-            new Messaging(
-                'infoDistributed',
-                'NL',
-                null,
-                str_repeat('a', 21)
-            );
+            new Messaging('infoDistributed', 'NL', null, str_repeat('a', 21));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 20.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         // Exceptions were caught,

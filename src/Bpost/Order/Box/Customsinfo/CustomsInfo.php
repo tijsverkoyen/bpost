@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
@@ -51,13 +51,13 @@ class CustomsInfo
 
     /**
      * @param string $contentDescription
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setContentDescription($contentDescription)
     {
         $length = 50;
         if (mb_strlen($contentDescription) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('contentDescription', mb_strlen($contentDescription), $length);
         }
 
         $this->contentDescription = $contentDescription;

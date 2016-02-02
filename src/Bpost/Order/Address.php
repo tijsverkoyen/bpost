@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 
 /**
  * bPost Address class
@@ -44,13 +44,13 @@ class Address
 
     /**
      * @param string $box
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setBox($box)
     {
         $length = 8;
         if (mb_strlen($box) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('box', mb_strlen($box), $length);
         }
         $this->box = $box;
     }
@@ -65,13 +65,13 @@ class Address
 
     /**
      * @param string $countryCode
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setCountryCode($countryCode)
     {
         $length = 2;
         if (mb_strlen($countryCode) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('countryCode', mb_strlen($countryCode), $length);
         }
         $this->countryCode = strtoupper($countryCode);
     }
@@ -86,13 +86,13 @@ class Address
 
     /**
      * @param string $locality
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setLocality($locality)
     {
         $length = 40;
         if (mb_strlen($locality) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('locality', mb_strlen($locality), $length);
         }
         $this->locality = $locality;
     }
@@ -107,13 +107,13 @@ class Address
 
     /**
      * @param string $number
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setNumber($number)
     {
         $length = 8;
         if (mb_strlen($number) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('number', mb_strlen($number), $length);
         }
         $this->number = $number;
     }
@@ -128,13 +128,13 @@ class Address
 
     /**
      * @param string $postalCode
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setPostalCode($postalCode)
     {
         $length = 40;
         if (mb_strlen($postalCode) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('postalCode', mb_strlen($postalCode), $length);
         }
         $this->postalCode = $postalCode;
     }
@@ -149,13 +149,13 @@ class Address
 
     /**
      * @param string $streetName
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setStreetName($streetName)
     {
         $length = 40;
         if (mb_strlen($streetName) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('streetName', mb_strlen($streetName), $length);
         }
         $this->streetName = $streetName;
     }

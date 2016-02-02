@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 
 /**
  * bPost Customer class
@@ -71,13 +71,13 @@ class Customer
 
     /**
      * @param string $emailAddress
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setEmailAddress($emailAddress)
     {
         $length = 50;
         if (mb_strlen($emailAddress) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('emailAddress', mb_strlen($emailAddress), $length);
         }
         $this->emailAddress = $emailAddress;
     }
@@ -108,13 +108,13 @@ class Customer
 
     /**
      * @param string $phoneNumber
-     * @throws BpostException
+     * @throws BpostInvalidLengthException
      */
     public function setPhoneNumber($phoneNumber)
     {
         $length = 20;
         if (mb_strlen($phoneNumber) > $length) {
-            throw new BpostException(sprintf('Invalid length, maximum is %1$s.', $length));
+            throw new BpostInvalidLengthException('phoneNumber', mb_strlen($phoneNumber), $length);
         }
         $this->phoneNumber = $phoneNumber;
     }

@@ -2,6 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -67,45 +68,60 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         try {
             $address->setBox(str_repeat('a', 9));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 8.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setCountryCode(str_repeat('a', 3));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 2.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setLocality(str_repeat('a', 41));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 40.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setNumber(str_repeat('a', 9));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 8.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setPostalCode(str_repeat('a', 41));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 40.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setStreetName(str_repeat('a', 41));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 40.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 
     /**

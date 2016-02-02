@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 class CustomsInfoTest extends \PHPUnit_Framework_TestCase
@@ -161,27 +161,21 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
         $customsInfo = new CustomsInfo();
 
         try {
-            $customsInfo->setContentDescription(
-                str_repeat('a', 51)
-            );
+            $customsInfo->setContentDescription(str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
-            $customsInfo->setParcelReturnInstructions(
-                str_repeat('a', 10)
-            );
+            $customsInfo->setContentDescription(str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', CustomsInfo::getPossibleParcelReturnInstructionValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {

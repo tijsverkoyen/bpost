@@ -3,6 +3,7 @@ namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
 
 class SenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -92,16 +93,23 @@ class SenderTest extends \PHPUnit_Framework_TestCase
 
         try {
             $sender->setEmailAddress(str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 50.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $sender->setPhoneNumber(str_repeat('a', 21));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid length, maximum is 20.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }
