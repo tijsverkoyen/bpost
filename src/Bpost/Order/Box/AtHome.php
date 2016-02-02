@@ -5,8 +5,8 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
-use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
 
 /**
  * bPost AtHome class
@@ -176,7 +176,7 @@ class AtHome extends National
     /**
      * @param  \SimpleXMLElement $xml
      * @return AtHome
-     * @throws BpostException
+     * @throws BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
@@ -197,7 +197,7 @@ class AtHome extends National
                 } else {
                     $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
-                        throw new BpostException('Not Implemented');
+                        throw new BpostNotImplementedException();
                     }
                     $option = call_user_func(
                         array($className, 'createFromXML'),
@@ -214,7 +214,7 @@ class AtHome extends National
             );
         }
         if (isset($xml->atHome->openingHours) && $xml->atHome->openingHours != '') {
-            throw new BpostException('Not Implemented');
+            throw new BpostNotImplementedException();
             $atHome->setProduct(
                 (string) $xml->atHome->openingHours
             );

@@ -4,9 +4,9 @@ namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
-use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
 
 /**
  * bPost AtBpost class
@@ -217,7 +217,7 @@ class AtBpost extends National
     /**
      * @param  \SimpleXMLElement $xml
      * @return AtBpost
-     * @throws BpostException
+     * @throws BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
@@ -247,7 +247,7 @@ class AtBpost extends National
                 } else {
                     $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
-                        throw new BpostException('Not Implemented');
+                        throw new BpostNotImplementedException();
                     }
                     $option = call_user_func(
                         array($className, 'createFromXML'),
