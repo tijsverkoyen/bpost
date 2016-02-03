@@ -8,6 +8,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
@@ -177,8 +178,8 @@ class Bpost
      * @param  string $method The HTTP-method to use.
      * @param  bool $expectXML Do we expect XML?
      * @return mixed
-     * @throws BpostException
      * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
      */
     private function doCall($url, $body = null, $headers = array(), $method = 'GET', $expectXML = true)
     {
@@ -244,16 +245,15 @@ class Bpost
                 throw new BpostException($message, $code);
             }
 
+            $message = '';
             if (
                 (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) ||
                 (in_array($headers['http_code'], array(400, 404)))
             ) {
                 $message = $response;
-            } else {
-                $message = 'Invalid response.';
             }
 
-            throw new BpostException($message, $headers['http_code']);
+            throw new BpostInvalidResponseException($message, $headers['http_code']);
         }
 
         // if we don't expect XML we can return the content here

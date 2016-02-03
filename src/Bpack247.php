@@ -3,6 +3,7 @@ namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Bpack247\Customer;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
 
 /**
  * bPost Bpack24/7 class
@@ -71,6 +72,7 @@ class Bpack247
      * @return \SimpleXMLElement
      * @throws BpostException
      * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
      */
     private function doCall($url, $body = null, $method = 'GET')
     {
@@ -120,7 +122,7 @@ class Bpack247
                 throw new BpostException($message, $code);
             }
 
-            throw new BpostException('Invalid response.', $headers['http_code']);
+            throw new BpostInvalidResponseException('', $headers['http_code']);
         }
 
         // convert into XML
