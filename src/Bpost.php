@@ -9,6 +9,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidSelectionException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
@@ -180,6 +181,7 @@ class Bpost
      * @return mixed
      * @throws BpostCurlException
      * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
      */
     private function doCall($url, $body = null, $headers = array(), $method = 'GET', $expectXML = true)
     {
@@ -242,7 +244,7 @@ class Bpost
                 $code = isset($xml->code) ? (int)$xml->code : null;
 
                 // throw exception
-                throw new BpostException($message, $code);
+                throw new BpostInvalidSelectionException($message, $code);
             }
 
             $message = '';
