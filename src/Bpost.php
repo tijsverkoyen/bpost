@@ -7,6 +7,7 @@ use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 
 /**
@@ -177,6 +178,7 @@ class Bpost
      * @param  bool $expectXML Do we expect XML?
      * @return mixed
      * @throws BpostException
+     * @throws BpostCurlException
      */
     private function doCall($url, $body = null, $headers = array(), $method = 'GET', $expectXML = true)
     {
@@ -223,7 +225,7 @@ class Bpost
 
         // error?
         if ($errorNumber != '') {
-            throw new BpostException($errorMessage, $errorNumber);
+            throw new BpostCurlException($errorMessage, $errorNumber);
         }
 
         // valid HTTP-code

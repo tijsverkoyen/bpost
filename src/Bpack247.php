@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Bpack247\Customer;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 
 /**
  * bPost Bpack24/7 class
@@ -67,8 +68,9 @@ class Bpack247
      * @param  string $url    The URL to call.
      * @param  string $body   The data to pass.
      * @param  string $method The HTTP-method to use.
-     * @return mixed
+     * @return \SimpleXMLElement
      * @throws BpostException
+     * @throws BpostCurlException
      */
     private function doCall($url, $body = null, $method = 'GET')
     {
@@ -104,7 +106,7 @@ class Bpack247
 
         // error?
         if ($errorNumber != '') {
-            throw new BpostException($errorMessage, $errorNumber);
+            throw new BpostCurlException($errorMessage, $errorNumber);
         }
 
         // valid HTTP-code

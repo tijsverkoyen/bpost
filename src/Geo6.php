@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidXmlResponseException;
 use TijsVerkoyen\Bpost\Geo6\Poi;
 
@@ -80,6 +81,7 @@ class Geo6
      * @param  string     $method
      * @param  array|null $parameters
      * @return \SimpleXMLElement
+     * @throws BpostCurlException
      * @throws BpostInvalidXmlResponseException
      * @throws \TijsVerkoyen\Bpost\BpostException
      */
@@ -105,7 +107,7 @@ class Geo6
 
         // error?
         if ($errorNumber != '') {
-            throw new BpostException($errorMessage, $errorNumber);
+            throw new BpostCurlException($errorMessage, $errorNumber);
         }
 
         // we expect XML so decode it
