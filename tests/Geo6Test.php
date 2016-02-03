@@ -2,6 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Geo6\test;
 
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostTaxipostLocatorException;
 use TijsVerkoyen\Bpost\Geo6;
 
 class Geo6Test extends \PHPUnit_Framework_TestCase
@@ -77,17 +78,21 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $this->assertSame($response->getType(), $type);
 
         try {
-            $response = $this->geo6->getServicePointDetails('-1');
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
+            $this->geo6->getServicePointDetails('-1');
+            $this->fail('BpostTaxipostLocatorException not launched');
+        } catch (BpostTaxipostLocatorException $e) {
             $this->assertSame('No match for id : -1 and type : 3', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->fail('BpostTaxipostLocatorException not caught');
         }
 
         try {
-            $response = $this->geo6->getServicePointDetails('0');
-        } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
+            $this->geo6->getServicePointDetails('0');
+            $this->fail('BpostTaxipostLocatorException not launched');
+        } catch (BpostTaxipostLocatorException $e) {
             $this->assertSame('Id is mandatory', $e->getMessage());
+        } catch (\Exception $e) {
+            $this->fail('BpostTaxipostLocatorException not caught');
         }
 
     }

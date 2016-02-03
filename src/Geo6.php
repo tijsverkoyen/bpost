@@ -1,9 +1,9 @@
 <?php
 namespace TijsVerkoyen\Bpost;
 
-use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidXmlResponseException;
+use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostTaxipostLocatorException;
 use TijsVerkoyen\Bpost\Geo6\Poi;
 
 /**
@@ -83,7 +83,7 @@ class Geo6
      * @return \SimpleXMLElement
      * @throws BpostCurlException
      * @throws BpostInvalidXmlResponseException
-     * @throws \TijsVerkoyen\Bpost\BpostException
+     * @throws BpostTaxipostLocatorException
      */
     private function doCall($method, $parameters = null)
     {
@@ -120,7 +120,7 @@ class Geo6
 
         // catch generic errors
         if (isset($xml['type']) && (string) $xml['type'] == 'TaxipostLocatorError') {
-            throw new BpostException((string) $xml->txt);
+            throw new BpostTaxipostLocatorException((string) $xml->txt, (int)$xml->status);
         }
 
         // return
