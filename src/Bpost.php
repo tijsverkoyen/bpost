@@ -123,48 +123,54 @@ class Bpost
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
-        $arrayKeys = array('barcode', 'orderLine', Insurance::INSURANCE_TYPE_ADDITIONAL_INSURANCE, Box\Option\Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED, 'infoPugo');
+        if (!$item instanceof \SimpleXMLElement) {
+            throw new BpostException('Invalid item.');
+        }
+
+        $arrayKeys = array(
+            'barcode',
+            'orderLine',
+            Insurance::INSURANCE_TYPE_ADDITIONAL_INSURANCE,
+            Box\Option\Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED,
+            'infoPugo'
+        );
         $integerKeys = array('totalPrice');
 
-        if ($item instanceof \SimpleXMLElement) {
-            /** @var \SimpleXMLElement $value */
-            foreach ($item as $key => $value) {
-                $attributes = (array)$value->attributes();
+        /** @var \SimpleXMLElement $value */
+        foreach ($item as $key => $value) {
+            $attributes = (array) $value->attributes();
 
-                if (!empty($attributes) && isset($attributes['@attributes'])) {
-                    $return[$key]['@attributes'] = $attributes['@attributes'];
-                }
+            if (!empty($attributes) && isset($attributes['@attributes'])) {
+                $return[$key]['@attributes'] = $attributes['@attributes'];
+            }
 
-                // empty
-                if (isset($value['nil']) && (string)$value['nil'] === 'true') {
-                    $return[$key] = null;
-                } // empty
-                elseif (isset($value[0]) && (string)$value == '') {
-                    if (in_array($key, $arrayKeys)) {
-                        $return[$key][] = self::decodeResponse($value);
-                    } else {
-                        $return[$key] = self::decodeResponse($value, null, 1);
-                    }
+            // empty
+            if (isset($value['nil']) && (string) $value['nil'] === 'true') {
+                $return[$key] = null;
+            } // empty
+            elseif (isset($value[0]) && (string) $value == '') {
+                if (in_array($key, $arrayKeys)) {
+                    $return[$key][] = self::decodeResponse($value);
                 } else {
-                    // arrays
-                    if (in_array($key, $arrayKeys)) {
-                        $return[$key][] = (string)$value;
-                    } // booleans
-                    elseif ((string)$value == 'true') {
-                        $return[$key] = true;
-                    } elseif ((string)$value == 'false') {
-                        $return[$key] = false;
-                    } // integers
-                    elseif (in_array($key, $integerKeys)) {
-                        $return[$key] = (int)$value;
-                    } // fallback to string
-                    else {
-                        $return[$key] = (string)$value;
-                    }
+                    $return[$key] = self::decodeResponse($value, null, 1);
+                }
+            } else {
+                // arrays
+                if (in_array($key, $arrayKeys)) {
+                    $return[$key][] = (string) $value;
+                } // booleans
+                elseif ((string) $value == 'true') {
+                    $return[$key] = true;
+                } elseif ((string) $value == 'false') {
+                    $return[$key] = false;
+                } // integers
+                elseif (in_array($key, $integerKeys)) {
+                    $return[$key] = (int) $value;
+                } // fallback to string
+                else {
+                    $return[$key] = (string) $value;
                 }
             }
-        } else {
-            throw new BpostException('Invalid item.');
         }
 
         return $return;
