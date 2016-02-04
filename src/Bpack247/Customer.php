@@ -1,7 +1,6 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpack247;
 
-use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
 use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
 

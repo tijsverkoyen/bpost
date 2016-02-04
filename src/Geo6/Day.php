@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Geo6;
 
-use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidDayException;
 
 /**
  * Geo6 class
@@ -116,9 +116,8 @@ class Day
 
     /**
      * Get the index for a day
-     *
      * @return int
-     * @throws BpostException
+     * @throws BpostInvalidDayException
      */
     public function getDayIndex()
     {
@@ -128,7 +127,7 @@ class Day
             return self::$dayMap[$day];
         }
 
-        throw new BpostException('Invalid day.');
+        throw new BpostInvalidDayException($day, array_keys(self::$dayMap));
     }
 
     /**

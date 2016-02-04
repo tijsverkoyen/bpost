@@ -2,7 +2,6 @@
 
 namespace TijsVerkoyen\Bpost\Bpost;
 
-use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Line;
 use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoReferenceFoundException;

@@ -2,6 +2,7 @@
 
 namespace Geo6;
 
+use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidDayException;
 use TijsVerkoyen\Bpost\Geo6\Day;
 
 class DayTest extends \PHPUnit_Framework_TestCase
@@ -55,12 +56,15 @@ class DayTest extends \PHPUnit_Framework_TestCase
         $day->setDay('Sunday');
         $this->assertSame(7, $day->getDayIndex());
 
+        $day = new Day();
+
         try {
-            $day = new Day();
             $day->getDayIndex();
+            $this->fail('BpostInvalidDayException not launched');
+        } catch (BpostInvalidDayException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('Invalid day.', $e->getMessage());
+            $this->fail('BpostInvalidDayException not caught');
         }
 
     }
