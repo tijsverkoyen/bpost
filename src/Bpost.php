@@ -11,6 +11,7 @@ use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidSelectionException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * Bpost class
@@ -119,12 +120,12 @@ class Bpost
      * @param  array $return Just a placeholder.
      * @param  int $i A internal counter.
      * @return array
-     * @throws BpostException
+     * @throws BpostXmlInvalidItemException
      */
     private static function decodeResponse($item, $return = null, $i = 0)
     {
         if (!$item instanceof \SimpleXMLElement) {
-            throw new BpostException('Invalid item.');
+            throw new BpostXmlInvalidItemException();
         }
 
         $arrayKeys = array(
