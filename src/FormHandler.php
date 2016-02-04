@@ -101,7 +101,6 @@ class FormHandler
      *
      * @param string $key
      * @param mixed  $value
-     * @throws BpostException
      * @throws BpostInvalidValueException
      * @throws BpostInvalidLengthException
      */

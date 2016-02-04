@@ -8,6 +8,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
 use TijsVerkoyen\Bpost\Bpost\Order\Line;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoReferenceFoundException;
 
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
@@ -249,14 +250,14 @@ class OrderTest extends \PHPUnit_Framework_TestCase
         $this->assertEquals($expectedDocument, $actualDocument);
 
         try {
-            $xml = simplexml_load_string(
-                '<order>
-                </order>'
-            );
-            $order = Order::createFromXML($xml);
+            $xml = simplexml_load_string('<order></order>');
+            Order::createFromXML($xml);
+            $this->fail('BpostXmlNoReferenceFoundException not launched');
+        } catch (BpostXmlNoReferenceFoundException $e) {
+            // Nothing, the exception is good
+            $this->assertTrue(true);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('No reference found.', $e->getMessage());
+            $this->fail('BpostXmlNoReferenceFoundException not caught');
         }
     }
 }
