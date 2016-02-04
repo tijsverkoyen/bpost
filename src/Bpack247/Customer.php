@@ -3,6 +3,7 @@ namespace TijsVerkoyen\Bpost\Bpack247;
 
 use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
 
 /**
  * bPost Customer class
@@ -639,13 +640,13 @@ class Customer
     /**
      * @param  \SimpleXMLElement $xml
      * @return Customer
-     * @throws BpostException
+     * @throws BpostXmlNoUserIdFoundException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
         // @todo work with classmaps ...
         if (!isset($xml->UserID)) {
-            throw new BpostException('No UserId found.');
+            throw new BpostXmlNoUserIdFoundException();
         }
 
         $customer = new Customer();

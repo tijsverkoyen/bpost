@@ -3,6 +3,7 @@ namespace Bpost\Bpack;
 
 use TijsVerkoyen\Bpost\Bpack247\Customer;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {
@@ -187,15 +188,16 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data['PackStations'][0]['OrderNumber'], $packStations[0]->getOrderNumber());
         $this->assertSame($data['PackStations'][0]['PackStationId'], $packStations[0]->getPackStationId());
 
+
         try {
-            $xml = simplexml_load_string(
-                '<Customer>
-                </Customer>'
-            );
-            $customer = Customer::createFromXML($xml);
+            $xml = simplexml_load_string('<Customer></Customer>');
+            Customer::createFromXML($xml);
+            $this->fail('BpostXmlNoUserIdFoundException not launched');
+        } catch (BpostXmlNoUserIdFoundException $e) {
+            // Nothing, the exception is good
+            $this->assertTrue(true);
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\BpostException', $e);
-            $this->assertSame('No UserId found.', $e->getMessage());
+            $this->fail('BpostXmlNoUserIdFoundException not caught');
         }
     }
 
