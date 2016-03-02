@@ -116,9 +116,9 @@ class Bpost
     /**
      * Decode the response
      *
-     * @param  \SimpleXMLElement $item The item to decode.
-     * @param  array $return Just a placeholder.
-     * @param  int $i A internal counter.
+     * @param  \SimpleXMLElement $item   The item to decode.
+     * @param  array             $return Just a placeholder.
+     * @param  int               $i      A internal counter.
      * @return array
      * @throws BpostXmlInvalidItemException
      */
@@ -139,17 +139,17 @@ class Bpost
 
         /** @var \SimpleXMLElement $value */
         foreach ($item as $key => $value) {
-            $attributes = (array) $value->attributes();
+            $attributes = (array)$value->attributes();
 
             if (!empty($attributes) && isset($attributes['@attributes'])) {
                 $return[$key]['@attributes'] = $attributes['@attributes'];
             }
 
             // empty
-            if (isset($value['nil']) && (string) $value['nil'] === 'true') {
+            if (isset($value['nil']) && (string)$value['nil'] === 'true') {
                 $return[$key] = null;
             } // empty
-            elseif (isset($value[0]) && (string) $value == '') {
+            elseif (isset($value[0]) && (string)$value == '') {
                 if (in_array($key, $arrayKeys)) {
                     $return[$key][] = self::decodeResponse($value);
                 } else {
@@ -158,18 +158,18 @@ class Bpost
             } else {
                 // arrays
                 if (in_array($key, $arrayKeys)) {
-                    $return[$key][] = (string) $value;
+                    $return[$key][] = (string)$value;
                 } // booleans
-                elseif ((string) $value == 'true') {
+                elseif ((string)$value == 'true') {
                     $return[$key] = true;
-                } elseif ((string) $value == 'false') {
+                } elseif ((string)$value == 'false') {
                     $return[$key] = false;
                 } // integers
                 elseif (in_array($key, $integerKeys)) {
-                    $return[$key] = (int) $value;
+                    $return[$key] = (int)$value;
                 } // fallback to string
                 else {
-                    $return[$key] = (string) $value;
+                    $return[$key] = (string)$value;
                 }
             }
         }
@@ -180,11 +180,11 @@ class Bpost
     /**
      * Make the call
      *
-     * @param  string $url The URL to call.
-     * @param  string $body The data to pass.
-     * @param  array $headers The headers to pass.
-     * @param  string $method The HTTP-method to use.
-     * @param  bool $expectXML Do we expect XML?
+     * @param  string $url       The URL to call.
+     * @param  string $body      The data to pass.
+     * @param  array  $headers   The headers to pass.
+     * @param  string $method    The HTTP-method to use.
+     * @param  bool   $expectXML Do we expect XML?
      * @return mixed
      * @throws BpostCurlException
      * @throws BpostInvalidResponseException
@@ -447,7 +447,8 @@ class Bpost
      * Modify the status for an order.
      *
      * @param  string $reference The reference for an order
-     * @param  string $status The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
+     * @param  string $status    The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
+     *
      * @return bool
      * @throws BpostInvalidValueException
      */
@@ -506,8 +507,9 @@ class Bpost
      *
      * @param  string $url
      * @param  string $format
-     * @param  bool $withReturnLabels
-     * @param  bool $asPdf
+     * @param  bool   $withReturnLabels
+     * @param  bool   $asPdf
+     *
      * @return Bpost\Label[]
      * @throws BpostInvalidValueException
      */
@@ -556,14 +558,20 @@ class Bpost
      * Boxes that were unprinted will get the status PRINTED, the boxes that
      * had already been printed will remain the same.
      *
-     * @param  string $reference The reference for an order
-     * @param  string $format The desired format, allowed values are: A4, A6
-     * @param  bool $withReturnLabels Should return labels be returned?
-     * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
-     * @return Label[]
+     * @param  string $reference        The reference for an order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     *
+     * @return Bpost\Label[]
+     * @throws BpostInvalidValueException
      */
-    public function createLabelForOrder($reference, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
-    {
+    public function createLabelForOrder(
+        $reference,
+        $format = self::LABEL_FORMAT_A6,
+        $withReturnLabels = false,
+        $asPdf = false
+    ) {
         $url = '/orders/' . (string)$reference;
 
         return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
@@ -572,14 +580,20 @@ class Bpost
     /**
      * Create a label for a known barcode.
      *
-     * @param  string $barcode The barcode of the parcel
-     * @param  string $format The desired format, allowed values are: A4, A6
-     * @param  bool $withReturnLabels Should return labels be returned?
-     * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
-     * @return Label[]
+     * @param  string $barcode          The barcode of the parcel
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     *
+     * @return Bpost\Label[]
+     * @throws BpostInvalidValueException
      */
-    public function createLabelForBox($barcode, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
-    {
+    public function createLabelForBox(
+        $barcode,
+        $format = self::LABEL_FORMAT_A6,
+        $withReturnLabels = false,
+        $asPdf = false
+    ) {
         $url = '/boxes/' . (string)$barcode;
 
         return $this->getLabel($url, $format, $withReturnLabels, $asPdf);
@@ -591,10 +605,11 @@ class Bpost
      * request, the service will return a label of every box of that order. If
      * a certain box was not yet printed, it will have the status PRINTED
      *
-     * @param  array $references The references for the order
-     * @param  string $format The desired format, allowed values are: A4, A6
-     * @param  bool $withReturnLabels Should return labels be returned?
-     * @param  bool $asPdf Should we retrieve the PDF-version instead of PNG
+     * @param  array  $references       The references for the order
+     * @param  string $format           The desired format, allowed values are: A4, A6
+     * @param  bool   $withReturnLabels Should return labels be returned?
+     * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     *
      * @return Bpost\Label[]
      * @throws BpostInvalidValueException
      */

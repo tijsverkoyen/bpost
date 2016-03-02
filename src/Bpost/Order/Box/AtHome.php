@@ -18,19 +18,13 @@ use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
  */
 class AtHome extends National
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     private $openingHours;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $desiredDeliveryPlace;
 
-    /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\Receiver
-     */
+    /** @var \TijsVerkoyen\Bpost\Bpost\Order\Receiver */
     private $receiver;
 
     /**
@@ -74,12 +68,8 @@ class AtHome extends National
     }
 
     /**
-     * @param string $product Possible values are:
-     *                          * bpack 24h Pro,
-     *                          * bpack 24h business
-     *                          * bpack Bus
-     *                          * bpack Pallet
-     *                          * bpack Easy Retour
+     * @param string $product
+     * @see getPossibleProductValues
      * @throws BpostInvalidValueException
      */
     public function setProduct($product)
@@ -184,7 +174,7 @@ class AtHome extends National
 
         if (isset($xml->atHome->product) && $xml->atHome->product != '') {
             $atHome->setProduct(
-                (string) $xml->atHome->product
+                (string)$xml->atHome->product
             );
         }
         if (isset($xml->atHome->options) && !empty($xml->atHome->options)) {
@@ -210,18 +200,18 @@ class AtHome extends National
         }
         if (isset($xml->atHome->weight) && $xml->atHome->weight != '') {
             $atHome->setWeight(
-                (int) $xml->atHome->weight
+                (int)$xml->atHome->weight
             );
         }
         if (isset($xml->atHome->openingHours) && $xml->atHome->openingHours != '') {
             throw new BpostNotImplementedException();
             $atHome->setProduct(
-                (string) $xml->atHome->openingHours
+                (string)$xml->atHome->openingHours
             );
         }
         if (isset($xml->atHome->desiredDeliveryPlace) && $xml->atHome->desiredDeliveryPlace != '') {
             $atHome->setDesiredDeliveryPlace(
-                (string) $xml->atHome->desiredDeliveryPlace
+                (string)$xml->atHome->desiredDeliveryPlace
             );
         }
         if (isset($xml->atHome->receiver)) {
