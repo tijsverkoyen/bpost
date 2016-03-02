@@ -48,6 +48,9 @@ class Box
      */
     private $status;
 
+    /** @var string */
+    private $barcode;
+
     /**
      * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\International $internationalBox
      */
@@ -127,6 +130,22 @@ class Box
     }
 
     /**
+     * @param string $barcode
+     */
+    public function setBarcode($barcode)
+    {
+        $this->barcode = strtoupper((string) $barcode);
+    }
+
+    /**
+     * @return string
+     */
+    public function getBarcode()
+    {
+        return $this->barcode;
+    }
+
+    /**
      * @return string
      */
     public function getStatus()
@@ -196,6 +215,18 @@ class Box
                 )
             );
         }
+        if ($this->getBarcode() !== null) {
+            $tagName = 'barcode';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $box->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getBarcode()
+                )
+            );
+        }
 
         return $box;
     }
@@ -261,6 +292,9 @@ class Box
         }
         if (isset($xml->remark) && $xml->remark != '') {
             $box->setRemark((string) $xml->remark);
+        }
+        if (!empty($xml->barcode)) {
+            $box->setBarcode((string) $xml->barcode);
         }
         if (isset($xml->status) && $xml->status != '') {
             $box->setStatus((string) $xml->status);

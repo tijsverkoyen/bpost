@@ -65,6 +65,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
             'remark' => 'remark',
+            'barcode' => 'BARCODE',
         );
 
         $expectedDocument = self::createDomDocument();
@@ -115,6 +116,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->appendChild($sender);
         $box->appendChild($nationalBox);
         $box->appendChild($expectedDocument->createElement('remark', $data['remark']));
+        $box->appendChild($expectedDocument->createElement('barcode', $data['barcode']));
 
         $actualDocument = self::createDomDocument();
         $address = new Address(
@@ -158,6 +160,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->setSender($sender);
         $box->setNationalBox($atHome);
         $box->setRemark($data['remark']);
+        $box->setBarcode($data['barcode']);
 
         $actualDocument->appendChild(
             $box->toXML($actualDocument, null)
@@ -206,6 +209,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
             'remark' => 'remark',
+            'barcode' => 'BARCODE',
         );
         $expectedDocument = self::createDomDocument();
         $box = $expectedDocument->createElement('box');
@@ -259,6 +263,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->appendChild($sender);
         $box->appendChild($nationalBox);
         $box->appendChild($expectedDocument->createElement('remark', $data['remark']));
+        $box->appendChild($expectedDocument->createElement('barcode', $data['barcode']));
 
         $actualDocument = self::createDomDocument();
         $address = new Address(
@@ -301,6 +306,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->setSender($sender);
         $box->setInternationalBox($international);
         $box->setRemark($data['remark']);
+        $box->setBarcode($data['barcode']);
 
         $actualDocument->appendChild(
             $box->toXML($actualDocument, null)
