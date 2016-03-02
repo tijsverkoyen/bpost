@@ -124,15 +124,8 @@ abstract class National implements IBox
         }
 
         if ($this->getWeight() !== null) {
-            $tagName = 'weight';
-            if ($prefix !== null) {
-                $tagName = $prefix . ':' . $tagName;
-            }
             $typeElement->appendChild(
-                $document->createElement(
-                    $tagName,
-                    $this->getWeight()
-                )
+                $document->createElement($this->getPrefixedTagName($prefix, 'weight'), $this->getWeight())
             );
         }
 
@@ -147,4 +140,19 @@ abstract class National implements IBox
     {
         return;
     }
+
+    /**
+     * Prefix $tagName with the $prefix, if needed
+     * @param string $prefix
+     * @param string $tagName
+     * @return string
+     */
+    protected function getPrefixedTagName($prefix, $tagName)
+    {
+        if ($prefix !== null) {
+            return $prefix . ':' . $tagName;
+        }
+        return $tagName;
+    }
+
 }

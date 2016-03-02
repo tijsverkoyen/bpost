@@ -176,19 +176,14 @@ class At247 extends National
         $nationalElement->appendChild($boxElement);
 
         if ($this->getParcelsDepotId() !== null) {
-            $tagName = 'parcelsDepotId';
             $boxElement->appendChild(
-                $document->createElement(
-                    $tagName,
-                    $this->getParcelsDepotId()
-                )
+                $document->createElement('parcelsDepotId', $this->getParcelsDepotId())
             );
         }
         if ($this->getParcelsDepotName() !== null) {
-            $tagName = 'parcelsDepotName';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    'parcelsDepotName',
                     $this->getParcelsDepotName()
                 )
             );
@@ -199,28 +194,25 @@ class At247 extends National
             );
         }
         if ($this->getMemberId() !== null) {
-            $tagName = 'memberId';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    'memberId',
                     $this->getMemberId()
                 )
             );
         }
         if ($this->getReceiverName() !== null) {
-            $tagName = 'receiverName';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    'receiverName',
                     $this->getReceiverName()
                 )
             );
         }
         if ($this->getReceiverCompany() !== null) {
-            $tagName = 'receiverCompany';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    'receiverCompany',
                     $this->getReceiverCompany()
                 )
             );

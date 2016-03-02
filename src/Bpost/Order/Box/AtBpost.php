@@ -148,28 +148,22 @@ class AtBpost extends National
      */
     public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $tagName = 'nationalBox';
-        if ($prefix !== null) {
-            $tagName = $prefix . ':' . $tagName;
-        }
-        $nationalElement = $document->createElement($tagName);
+        $nationalElement = $document->createElement($this->getPrefixedTagName($prefix, 'nationalBox'));
         $boxElement = parent::toXML($document, null, 'atBpost');
         $nationalElement->appendChild($boxElement);
 
         if ($this->getPugoId() !== null) {
-            $tagName = 'pugoId';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    $this->getPrefixedTagName($prefix, 'pugoId'),
                     $this->getPugoId()
                 )
             );
         }
         if ($this->getPugoName() !== null) {
-            $tagName = 'pugoName';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    $this->getPrefixedTagName($prefix, 'pugoName'),
                     $this->getPugoName()
                 )
             );
@@ -180,19 +174,17 @@ class AtBpost extends National
             );
         }
         if ($this->getReceiverName() !== null) {
-            $tagName = 'receiverName';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    $this->getPrefixedTagName($prefix, 'receiverName'),
                     $this->getReceiverName()
                 )
             );
         }
         if ($this->getReceiverCompany() !== null) {
-            $tagName = 'receiverCompany';
             $boxElement->appendChild(
                 $document->createElement(
-                    $tagName,
+                    $this->getPrefixedTagName($prefix, 'receiverCompany'),
                     $this->getReceiverCompany()
                 )
             );
