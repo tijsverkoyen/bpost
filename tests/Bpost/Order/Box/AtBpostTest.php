@@ -41,6 +41,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
                 ),
                 'receiverName' => 'Tijs Verkoyen',
                 'receiverCompany' => 'Sumo Coders',
+                'requestedDeliveryDate' => '2016-03-16',
             ),
         );
 
@@ -85,6 +86,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
         $atBpost->setPugoAddress($pugoAddress);
         $atBpost->setReceiverName($data['atBpost']['receiverName']);
         $atBpost->setReceiverCompany($data['atBpost']['receiverCompany']);
+        $atBpost->setRequestedDeliveryDate($data['atBpost']['requestedDeliveryDate']);
 
         $actualDocument->appendChild($atBpost->toXML($actualDocument));
 

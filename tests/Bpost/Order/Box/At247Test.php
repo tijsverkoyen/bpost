@@ -43,6 +43,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
                 'memberId' => '188565346',
                 'receiverName' => 'Tijs Verkoyen',
                 'receiverCompany' => 'Sumo Coders',
+                'requestedDeliveryDate' => '2016-03-16',
             ),
         );
 
@@ -80,6 +81,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
         $at247 = new At247();
         $at247->setProduct($data['at24-7']['product']);
         $at247->setWeight($data['at24-7']['weight']);
+        $at247->setRequestedDeliveryDate($data['at24-7']['requestedDeliveryDate']);
         $at247->setParcelsDepotId($data['at24-7']['parcelsDepotId']);
         $at247->setParcelsDepotName($data['at24-7']['parcelsDepotName']);
         $at247->setParcelsDepotAddress($parcelsDepotAddress);

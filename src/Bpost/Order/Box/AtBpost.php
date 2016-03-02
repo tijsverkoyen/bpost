@@ -139,6 +139,22 @@ class AtBpost extends National
     }
 
     /**
+     * @return string
+     */
+    public function getRequestedDeliveryDate()
+    {
+        return $this->requestedDeliveryDate;
+    }
+
+    /**
+     * @param string $requestedDeliveryDate
+     */
+    public function setRequestedDeliveryDate($requestedDeliveryDate)
+    {
+        $this->requestedDeliveryDate = $requestedDeliveryDate;
+    }
+
+    /**
      * Return the object as an array for usage in the XML
      *
      * @param  \DomDocument $document
@@ -189,8 +205,26 @@ class AtBpost extends National
                 )
             );
         }
+        $this->addToXmlRequestedDeliveryDate($document, $boxElement, $prefix);
 
         return $nationalElement;
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param \DOMElement  $typeElement
+     * @param string       $prefix
+     */
+    protected function addToXmlRequestedDeliveryDate(\DOMDocument $document, \DOMElement $typeElement, $prefix)
+    {
+        if ($this->getRequestedDeliveryDate() !== null) {
+            $typeElement->appendChild(
+                $document->createElement(
+                    $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
+                    $this->getRequestedDeliveryDate()
+                )
+            );
+        }
     }
 
     /**
@@ -271,6 +305,11 @@ class AtBpost extends National
             );
             $atBpost->setPugoAddress(
                 PugoAddress::createFromXML($pugoAddressData)
+            );
+        }
+        if (isset($xml->atBpost->requestedDeliveryDate) && $xml->atBpost->requestedDeliveryDate != '') {
+            $atBpost->setRequestedDeliveryDate(
+                (string)$xml->atBpost->requestedDeliveryDate
             );
         }
 

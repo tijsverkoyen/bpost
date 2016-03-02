@@ -38,6 +38,9 @@ class At247 extends National
     /** @var string */
     private $receiverCompany;
 
+    /** @var string */
+    protected $requestedDeliveryDate;
+
     /**
      * @param string $memberId
      */
@@ -158,6 +161,22 @@ class At247 extends National
     }
 
     /**
+     * @return string
+     */
+    public function getRequestedDeliveryDate()
+    {
+        return $this->requestedDeliveryDate;
+    }
+
+    /**
+     * @param string $requestedDeliveryDate
+     */
+    public function setRequestedDeliveryDate($requestedDeliveryDate)
+    {
+        $this->requestedDeliveryDate = (string)$requestedDeliveryDate;
+    }
+
+    /**
      * Return the object as an array for usage in the XML
      *
      * @param  \DomDocument $document
@@ -217,8 +236,26 @@ class At247 extends National
                 )
             );
         }
+        $this->addToXmlRequestedDeliveryDate($document, $boxElement, $prefix);
 
         return $nationalElement;
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param \DOMElement  $typeElement
+     * @param string       $prefix
+     */
+    protected function addToXmlRequestedDeliveryDate(\DOMDocument $document, \DOMElement $typeElement, $prefix)
+    {
+        if ($this->getRequestedDeliveryDate() !== null) {
+            $typeElement->appendChild(
+                $document->createElement(
+                    $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
+                    $this->getRequestedDeliveryDate()
+                )
+            );
+        }
     }
 
     /**
@@ -295,6 +332,11 @@ class At247 extends National
             );
             $at247->setParcelsDepotAddress(
                 ParcelsDepotAddress::createFromXML($parcelsDepotAddressData)
+            );
+        }
+        if (isset($xml->{'at24-7'}->requestedDeliveryDate) && $xml->{'at24-7'}->requestedDeliveryDate != '') {
+            $at247->setRequestedDeliveryDate(
+                (string)$xml->{'at24-7'}->requestedDeliveryDate
             );
         }
 

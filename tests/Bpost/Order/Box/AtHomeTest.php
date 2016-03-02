@@ -61,6 +61,7 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
                     'emailAddress' => 'bpost@verkoyen.eu',
                     'phoneNumber' => '+32 9 395 02 51',
                 ),
+                'requestedDeliveryDate' => '2016-03-16',
             ),
         );
 
@@ -120,6 +121,9 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
                 );
             }
         }
+        $atHome->appendChild(
+            $expectedDocument->createElement('requestedDeliveryDate', $data['atHome']['requestedDeliveryDate'])
+        );
 
         $actualDocument = self::createDomDocument();
         $address = new Address(
@@ -149,6 +153,7 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
         $atHome = new AtHome();
         $atHome->setProduct($data['atHome']['product']);
         $atHome->setWeight($data['atHome']['weight']);
+        $atHome->setRequestedDeliveryDate($data['atHome']['requestedDeliveryDate']);
         $atHome->setReceiver($receiver);
         $atHome->setDesiredDeliveryPlace($data['atHome']['desiredDeliveryPlace']);
 
