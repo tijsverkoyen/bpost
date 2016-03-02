@@ -133,15 +133,6 @@ abstract class National implements IBox
     }
 
     /**
-     * @param  \SimpleXMLElement $xml
-     * @return National
-     */
-    public static function createFromXML(\SimpleXMLElement $xml)
-    {
-        return;
-    }
-
-    /**
      * Prefix $tagName with the $prefix, if needed
      * @param string $prefix
      * @param string $tagName
