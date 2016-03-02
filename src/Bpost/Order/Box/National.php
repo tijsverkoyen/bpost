@@ -13,19 +13,13 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
  */
 abstract class National implements IBox
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $product;
 
-    /**
-     * @var array
-     */
+    /** @var Option[] */
     protected $options;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     protected $weight;
 
     /**

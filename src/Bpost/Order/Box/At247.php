@@ -17,39 +17,25 @@ use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
  */
 class At247 extends National
 {
-    /**
-     * @var string
-     */
+    /**@var string */
     private $parcelsDepotId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $parcelsDepotName;
 
-    /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress
-     */
+    /** @var \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress */
     private $parcelsDepotAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $product = Product::PRODUCT_NAME_BPACK_24H_PRO;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $memberId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $receiverName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $receiverCompany;
 
     /**
@@ -256,7 +242,7 @@ class At247 extends National
 
         if (isset($xml->{'at24-7'}->product) && $xml->{'at24-7'}->product != '') {
             $at247->setProduct(
-                (string) $xml->{'at24-7'}->product
+                (string)$xml->{'at24-7'}->product
             );
         }
         if (isset($xml->{'at24-7'}->options)) {
@@ -282,32 +268,32 @@ class At247 extends National
         }
         if (isset($xml->{'at24-7'}->weight) && $xml->{'at24-7'}->weight != '') {
             $at247->setWeight(
-                (int) $xml->{'at24-7'}->weight
+                (int)$xml->{'at24-7'}->weight
             );
         }
         if (isset($xml->{'at24-7'}->memberId) && $xml->{'at24-7'}->memberId != '') {
             $at247->setMemberId(
-                (string) $xml->{'at24-7'}->memberId
+                (string)$xml->{'at24-7'}->memberId
             );
         }
         if (isset($xml->{'at24-7'}->receiverName) && $xml->{'at24-7'}->receiverName != '') {
             $at247->setReceiverName(
-                (string) $xml->{'at24-7'}->receiverName
+                (string)$xml->{'at24-7'}->receiverName
             );
         }
         if (isset($xml->{'at24-7'}->receiverCompany) && $xml->{'at24-7'}->receiverCompany != '') {
             $at247->setReceiverCompany(
-                (string) $xml->{'at24-7'}->receiverCompany
+                (string)$xml->{'at24-7'}->receiverCompany
             );
         }
         if (isset($xml->{'at24-7'}->parcelsDepotId) && $xml->{'at24-7'}->parcelsDepotId != '') {
             $at247->setParcelsDepotId(
-                (string) $xml->{'at24-7'}->parcelsDepotId
+                (string)$xml->{'at24-7'}->parcelsDepotId
             );
         }
         if (isset($xml->{'at24-7'}->parcelsDepotName) && $xml->{'at24-7'}->parcelsDepotName != '') {
             $at247->setParcelsDepotName(
-                (string) $xml->{'at24-7'}->parcelsDepotName
+                (string)$xml->{'at24-7'}->parcelsDepotName
             );
         }
         if (isset($xml->{'at24-7'}->parcelsDepotAddress)) {
