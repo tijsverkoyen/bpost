@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Exception\ApiResponseException;
 
 use TijsVerkoyen\Bpost\Exception\ApiResponseException;
 
+/**
+ * Class BpostInvalidResponseException
+ * @package TijsVerkoyen\Bpost\Exception\ApiResponseException
+ */
 class BpostInvalidResponseException extends ApiResponseException
 {
     /**

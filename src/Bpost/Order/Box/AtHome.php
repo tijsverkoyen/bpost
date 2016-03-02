@@ -165,7 +165,9 @@ class AtHome extends National
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return AtHome
+     * @throws BpostInvalidValueException
      * @throws BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)

@@ -202,7 +202,9 @@ class Box
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return Box
+     * @throws BpostInvalidValueException
      * @throws BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)

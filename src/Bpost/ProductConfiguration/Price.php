@@ -5,6 +5,10 @@ namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 use SimpleXMLElement;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidWeightException;
 
+/**
+ * Class Price
+ * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ */
 class Price
 {
     /** @var  string */

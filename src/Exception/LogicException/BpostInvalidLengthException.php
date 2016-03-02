@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Exception\LogicException;
 
 use TijsVerkoyen\Bpost\Exception\LogicException;
 
+/**
+ * Class BpostInvalidLengthException
+ * @package TijsVerkoyen\Bpost\Exception\LogicException
+ */
 class BpostInvalidLengthException extends LogicException
 {
     /**

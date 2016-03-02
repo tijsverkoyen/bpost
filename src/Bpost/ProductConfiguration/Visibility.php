@@ -2,6 +2,10 @@
 
 namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
+/**
+ * Class Visibility
+ * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ */
 class Visibility
 {
     const VISIBILITY_VISIBLE = 'VISIBLE';

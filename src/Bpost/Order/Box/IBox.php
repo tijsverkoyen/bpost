@@ -2,6 +2,10 @@
 
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+/**
+ * Interface IBox
+ * @package TijsVerkoyen\Bpost\Bpost\Order\Box
+ */
 interface IBox
 {
 

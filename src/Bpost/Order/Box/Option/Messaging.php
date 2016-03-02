@@ -161,10 +161,13 @@ class Messaging extends Option
     }
 
     /**
-     * @param string      $type
-     * @param string      $language
+     * @param string $type
+     * @param string $language
      * @param string|null $emailAddress
      * @param string|null $mobilePhone
+     *
+     * @throws BpostInvalidLengthException
+     * @throws BpostInvalidValueException
      */
     public function __construct($type, $language, $emailAddress = null, $mobilePhone = null)
     {
@@ -226,7 +229,9 @@ class Messaging extends Option
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return Messaging
+     * @throws BpostInvalidLengthException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

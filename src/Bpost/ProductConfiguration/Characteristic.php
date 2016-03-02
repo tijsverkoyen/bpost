@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
 
+/**
+ * Class Characteristic
+ * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ */
 class Characteristic
 {
     /** @var  string */

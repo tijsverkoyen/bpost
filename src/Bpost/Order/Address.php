@@ -175,6 +175,8 @@ class Address
      * @param string $postalCode
      * @param string $locality
      * @param string $countryCode
+     *
+     * @throws BpostInvalidLengthException
      */
     public function __construct(
         $streetName = null,

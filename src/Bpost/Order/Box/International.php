@@ -213,7 +213,9 @@ class International implements IBox
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return International
+     * @throws BpostInvalidValueException
      * @throws BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)

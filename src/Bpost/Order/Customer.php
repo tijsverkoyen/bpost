@@ -130,7 +130,7 @@ class Customer
     /**
      * Return the object as an array for usage in the XML
      *
-     * @param \DomDocument
+     * @param \DomDocument $document
      * @param  string      $prefix
      * @return \DomElement
      */
@@ -187,7 +187,9 @@ class Customer
     /**
      * @param  \SimpleXMLElement $xml
      * @param  Customer          $instance
+     *
      * @return Customer
+     * @throws BpostInvalidLengthException
      */
     public static function createFromXMLHelper(\SimpleXMLElement $xml, Customer $instance)
     {

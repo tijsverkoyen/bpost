@@ -638,7 +638,9 @@ class Customer
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return Customer
+     * @throws BpostInvalidValueException
      * @throws BpostXmlNoUserIdFoundException
      */
     public static function createFromXML(\SimpleXMLElement $xml)

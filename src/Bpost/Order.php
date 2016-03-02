@@ -229,8 +229,10 @@ class Order
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return Order
      * @throws BpostXmlNoReferenceFoundException
+     * @throws \TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

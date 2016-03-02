@@ -114,6 +114,8 @@ class Insurance extends Option
     /**
      * @param string      $type
      * @param string|null $value
+     *
+     * @throws BpostInvalidValueException
      */
     public function __construct($type, $value = null)
     {

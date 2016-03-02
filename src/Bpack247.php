@@ -216,6 +216,15 @@ class Bpack247
     }
 
     // webservice methods
+    /**
+     * @param Customer $customer
+     *
+     * @return \SimpleXMLElement
+     * @throws BpostApiBusinessException
+     * @throws BpostApiValidationException
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     */
     public function createMember(Customer $customer)
     {
         $url = '/customer';
@@ -240,8 +249,14 @@ class Bpack247
     /**
      * Retrieve member information
      *
-     * @param  string   $id
+     * @param  string $id
+     *
      * @return Customer
+     * @throws BpostApiBusinessException
+     * @throws BpostApiValidationException
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws Exception\XmlException\BpostXmlNoUserIdFoundException
      */
     public function getMember($id)
     {

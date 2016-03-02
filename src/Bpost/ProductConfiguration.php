@@ -5,6 +5,10 @@ namespace TijsVerkoyen\Bpost\Bpost;
 use SimpleXMLElement;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\DeliveryMethod;
 
+/**
+ * Class ProductConfiguration
+ * @package TijsVerkoyen\Bpost\Bpost
+ */
 class ProductConfiguration
 {
 

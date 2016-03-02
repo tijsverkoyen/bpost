@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Exception\LogicException;
 
 use TijsVerkoyen\Bpost\BpostException;
 
+/**
+ * Class BpostNotImplementedException
+ * @package TijsVerkoyen\Bpost\Exception\LogicException
+ */
 class BpostNotImplementedException extends BpostException
 {
     /**

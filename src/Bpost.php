@@ -367,7 +367,11 @@ class Bpost
      * Creates a new order. If an order with the same orderReference already exists
      *
      * @param  Order $order
+     *
      * @return bool
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
      */
     public function createOrReplaceOrder(Order $order)
     {
@@ -403,7 +407,12 @@ class Bpost
      * Fetch an order
      *
      * @param $reference
+     *
      * @return Order
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
+     * @throws Exception\XmlException\BpostXmlNoReferenceFoundException
      */
     public function fetchOrder($reference)
     {
@@ -425,6 +434,9 @@ class Bpost
      * Get the products configuration
      *
      * @return ProductConfiguration
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
      */
     public function fetchProductConfig()
     {
@@ -450,6 +462,9 @@ class Bpost
      * @param  string $status    The new status, allowed values are: OPEN, PENDING, CANCELLED, COMPLETED, ON-HOLD or PRINTED
      *
      * @return bool
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
      * @throws BpostInvalidValueException
      */
     public function modifyOrderStatus($reference, $status)
@@ -511,6 +526,9 @@ class Bpost
      * @param  bool   $asPdf
      *
      * @return Bpost\Label[]
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
      * @throws BpostInvalidValueException
      */
     protected function getLabel($url, $format = self::LABEL_FORMAT_A6, $withReturnLabels = false, $asPdf = false)
@@ -611,6 +629,9 @@ class Bpost
      * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
      *
      * @return Bpost\Label[]
+     * @throws BpostCurlException
+     * @throws BpostInvalidResponseException
+     * @throws BpostInvalidSelectionException
      * @throws BpostInvalidValueException
      */
     public function createLabelInBulkForOrders(

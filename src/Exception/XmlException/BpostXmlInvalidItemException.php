@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Exception\XmlException;
 
 use TijsVerkoyen\Bpost\Exception\BpostXmlException;
 
+/**
+ * Class BpostXmlInvalidItemException
+ * @package TijsVerkoyen\Bpost\Exception\XmlException
+ */
 class BpostXmlInvalidItemException extends BpostXmlException
 {
     /**

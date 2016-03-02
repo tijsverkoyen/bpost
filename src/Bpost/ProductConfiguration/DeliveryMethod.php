@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
 
+/**
+ * Class DeliveryMethod
+ * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ */
 class DeliveryMethod
 {
     const DELIVERY_METHOD_NAME_HOME_OR_OFFICE = 'home or office';

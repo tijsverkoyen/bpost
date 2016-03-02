@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
 
+/**
+ * Class Product
+ * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ */
 class Product
 {
     const PRODUCT_NAME_BPACK_EASY_RETOUR = 'bpack Easy Retour';

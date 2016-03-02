@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Exception\XmlException;
 
 use TijsVerkoyen\Bpost\Exception\BpostXmlException;
 
+/**
+ * Class BpostXmlNoReferenceFoundException
+ * @package TijsVerkoyen\Bpost\Exception\XmlException
+ */
 class BpostXmlNoReferenceFoundException extends BpostXmlException
 {
     /**

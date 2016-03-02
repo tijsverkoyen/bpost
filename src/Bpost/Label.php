@@ -108,7 +108,9 @@ class Label
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return Label
+     * @throws BpostInvalidValueException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

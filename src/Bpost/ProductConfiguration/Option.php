@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
 
+/**
+ * Class Option
+ * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ */
 class Option
 {
 

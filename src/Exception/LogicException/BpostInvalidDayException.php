@@ -4,6 +4,10 @@ namespace TijsVerkoyen\Bpost\Exception\LogicException;
 
 use TijsVerkoyen\Bpost\Exception\LogicException;
 
+/**
+ * Class BpostInvalidDayException
+ * @package TijsVerkoyen\Bpost\Exception\LogicException
+ */
 class BpostInvalidDayException extends BpostInvalidValueException
 {
     /**

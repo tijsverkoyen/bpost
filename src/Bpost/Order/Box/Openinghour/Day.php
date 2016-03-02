@@ -89,6 +89,8 @@ class Day
     /**
      * @param string $day
      * @param string $value
+     *
+     * @throws BpostInvalidValueException
      */
     public function __construct($day, $value)
     {

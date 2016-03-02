@@ -265,7 +265,10 @@ class CustomsInfo
 
     /**
      * @param  \SimpleXMLElement $xml
+     *
      * @return CustomsInfo
+     * @throws BpostInvalidLengthException
+     * @throws BpostInvalidValueException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
