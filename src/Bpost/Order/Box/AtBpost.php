@@ -1,7 +1,6 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
@@ -18,34 +17,22 @@ use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
  */
 class AtBpost extends National
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $product = Product::PRODUCT_NAME_BPACK_AT_BPOST;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $pugoId;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $pugoName;
 
-    /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-     */
+    /** @var \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress */
     private $pugoAddress;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $receiverName;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $receiverCompany;
 
     /**
@@ -225,7 +212,7 @@ class AtBpost extends National
 
         if (isset($xml->atBpost->product) && $xml->atBpost->product != '') {
             $atBpost->setProduct(
-                (string) $xml->atBpost->product
+                (string)$xml->atBpost->product
             );
         }
         if (isset($xml->atBpost->options)) {
@@ -260,27 +247,27 @@ class AtBpost extends National
         }
         if (isset($xml->atBpost->weight) && $xml->atBpost->weight != '') {
             $atBpost->setWeight(
-                (int) $xml->atBpost->weight
+                (int)$xml->atBpost->weight
             );
         }
         if (isset($xml->atBpost->receiverName) && $xml->atBpost->receiverName != '') {
             $atBpost->setReceiverName(
-                (string) $xml->atBpost->receiverName
+                (string)$xml->atBpost->receiverName
             );
         }
         if (isset($xml->atBpost->receiverCompany) && $xml->atBpost->receiverCompany != '') {
             $atBpost->setReceiverCompany(
-                (string) $xml->atBpost->receiverCompany
+                (string)$xml->atBpost->receiverCompany
             );
         }
         if (isset($xml->atBpost->pugoId) && $xml->atBpost->pugoId != '') {
             $atBpost->setPugoId(
-                (string) $xml->atBpost->pugoId
+                (string)$xml->atBpost->pugoId
             );
         }
         if (isset($xml->atBpost->pugoName) && $xml->atBpost->pugoName != '') {
             $atBpost->setPugoName(
-                (string) $xml->atBpost->pugoName
+                (string)$xml->atBpost->pugoName
             );
         }
         if (isset($xml->atBpost->pugoAddress)) {
