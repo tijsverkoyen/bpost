@@ -3,7 +3,7 @@ namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class AtBpostTest extends \PHPUnit_Framework_TestCase
 {

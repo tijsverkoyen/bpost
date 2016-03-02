@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Label;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class LabelTest extends \PHPUnit_Framework_TestCase
 {

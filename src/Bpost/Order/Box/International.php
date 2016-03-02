@@ -6,8 +6,8 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostNotImplementedException;
 
 /**
  * bPost International class

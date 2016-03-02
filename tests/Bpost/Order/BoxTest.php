@@ -7,7 +7,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\International;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\Order\Sender;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class BoxTest extends \PHPUnit_Framework_TestCase
 {

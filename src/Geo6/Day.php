@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Geo6;
 
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidDayException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidDayException;
 
 /**
  * Geo6 class

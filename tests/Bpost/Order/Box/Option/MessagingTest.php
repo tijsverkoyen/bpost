@@ -2,8 +2,8 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class MessagingTest extends \PHPUnit_Framework_TestCase
 {

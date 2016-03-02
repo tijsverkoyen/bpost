@@ -3,7 +3,7 @@ namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class At247Test extends \PHPUnit_Framework_TestCase
 {

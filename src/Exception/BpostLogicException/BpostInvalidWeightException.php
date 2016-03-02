@@ -1,14 +1,14 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\LogicException;
+namespace TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
 /**
  * Class BpostInvalidWeightException
  * @package TijsVerkoyen\Bpost\Exception\LogicException
  */
-class BpostInvalidWeightException extends LogicException
+class BpostInvalidWeightException extends BpostLogicException
 {
     /**
      * @param string     $invalidWeight

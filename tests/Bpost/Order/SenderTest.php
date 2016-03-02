@@ -3,7 +3,7 @@ namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Address;
 use TijsVerkoyen\Bpost\Bpost\Order\Sender;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class SenderTest extends \PHPUnit_Framework_TestCase
 {

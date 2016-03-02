@@ -3,7 +3,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidWeightException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidWeightException;
 
 /**
  * Class Price

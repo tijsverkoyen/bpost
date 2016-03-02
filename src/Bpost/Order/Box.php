@@ -1,8 +1,8 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostNotImplementedException;
 
 /**
  * bPost Box class

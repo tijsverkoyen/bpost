@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class ParcelsDepotAddressTest extends \PHPUnit_Framework_TestCase
 {

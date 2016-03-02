@@ -1,14 +1,14 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\LogicException;
+namespace TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
 /**
  * Class BpostInvalidLengthException
  * @package TijsVerkoyen\Bpost\Exception\LogicException
  */
-class BpostInvalidLengthException extends LogicException
+class BpostInvalidLengthException extends BpostLogicException
 {
     /**
      * BpostInvalidLengthException constructor.

@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\test\Exception\LogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidDayException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidDayException;
 
 class BpostInvalidDayExceptionTest extends \PHPUnit_Framework_TestCase
 

@@ -5,9 +5,9 @@ namespace TijsVerkoyen\Bpost\Exception;
 use TijsVerkoyen\Bpost\BpostException;
 
 /**
- * Class LogicException
+ * Class BpostLogicException
  * @package TijsVerkoyen\Bpost\Exception
  */
-class LogicException extends BpostException
+class BpostLogicException extends BpostException
 {
 }

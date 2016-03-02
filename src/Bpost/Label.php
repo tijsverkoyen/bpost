@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\Bpost;
 
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * bPost Label class

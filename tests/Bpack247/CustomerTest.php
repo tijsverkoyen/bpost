@@ -2,7 +2,7 @@
 namespace Bpost\Bpack;
 
 use TijsVerkoyen\Bpost\Bpack247\Customer;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase

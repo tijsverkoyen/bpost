@@ -10,7 +10,7 @@ use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidSelectionException;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidValueException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**

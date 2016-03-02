@@ -232,7 +232,7 @@ class Order
      *
      * @return Order
      * @throws BpostXmlNoReferenceFoundException
-     * @throws \TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException
+     * @throws \TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

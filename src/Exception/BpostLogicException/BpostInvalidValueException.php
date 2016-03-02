@@ -1,14 +1,14 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\LogicException;
+namespace TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
 /**
  * Class BpostInvalidValueException
  * @package TijsVerkoyen\Bpost\Exception\LogicException
  */
-class BpostInvalidValueException extends LogicException
+class BpostInvalidValueException extends BpostLogicException
 {
     /**
      * @param string     $key

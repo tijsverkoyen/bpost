@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\test\Exception\LogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidWeightException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidWeightException;
 
 class BpostInvalidWeightExceptionTest extends \PHPUnit_Framework_TestCase
 {

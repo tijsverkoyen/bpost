@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\LogicException;
+namespace TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 
 /**
  * Class BpostInvalidDayException

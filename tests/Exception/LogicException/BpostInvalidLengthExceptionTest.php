@@ -2,7 +2,7 @@
 
 namespace TijsVerkoyen\Bpost\test\Exception\LogicException;
 
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class BpostInvalidLengthExceptionTest extends \PHPUnit_Framework_TestCase
 {
