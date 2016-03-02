@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\National\ShopHandlingInstruction;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
@@ -34,6 +35,9 @@ class AtBpost extends National
 
     /** @var string */
     private $receiverCompany;
+
+    /** @var ShopHandlingInstruction */
+    private $shopHandlingInstruction;
 
     /**
      * @param string $product Possible values are: bpack@bpost
@@ -155,6 +159,22 @@ class AtBpost extends National
     }
 
     /**
+     * @return string
+     */
+    public function getShopHandlingInstruction()
+    {
+        return $this->shopHandlingInstruction->getValue();
+    }
+
+    /**
+     * @param string $shopHandlingInstruction
+     */
+    public function setShopHandlingInstruction($shopHandlingInstruction)
+    {
+        $this->shopHandlingInstruction = new ShopHandlingInstruction($shopHandlingInstruction);
+    }
+
+    /**
      * Return the object as an array for usage in the XML
      *
      * @param  \DomDocument $document
@@ -206,6 +226,7 @@ class AtBpost extends National
             );
         }
         $this->addToXmlRequestedDeliveryDate($document, $boxElement, $prefix);
+        $this->addToXmlShopHandlingInstruction($document, $boxElement, $prefix);
 
         return $nationalElement;
     }
@@ -222,6 +243,18 @@ class AtBpost extends National
                 $document->createElement(
                     $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
                     $this->getRequestedDeliveryDate()
+                )
+            );
+        }
+    }
+
+    private function addToXmlShopHandlingInstruction(\DOMDocument $document, \DOMElement $typeElement, $prefix)
+    {
+        if ($this->getShopHandlingInstruction() !== null) {
+            $typeElement->appendChild(
+                $document->createElement(
+                    $this->getPrefixedTagName($prefix, 'shopHandlingInstruction'),
+                    $this->getShopHandlingInstruction()
                 )
             );
         }
@@ -310,6 +343,11 @@ class AtBpost extends National
         if (isset($xml->atBpost->requestedDeliveryDate) && $xml->atBpost->requestedDeliveryDate != '') {
             $atBpost->setRequestedDeliveryDate(
                 (string)$xml->atBpost->requestedDeliveryDate
+            );
+        }
+        if (isset($xml->atBpost->shopHandlingInstruction) && $xml->atBpost->shopHandlingInstruction != '') {
+            $atBpost->setShopHandlingInstruction(
+                (string)$xml->atBpost->shopHandlingInstruction
             );
         }
 

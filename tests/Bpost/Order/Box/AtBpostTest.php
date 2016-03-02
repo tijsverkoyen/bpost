@@ -2,6 +2,7 @@
 namespace Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\National\ShopHandlingInstruction;
 use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
@@ -42,6 +43,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
                 'receiverName' => 'Tijs Verkoyen',
                 'receiverCompany' => 'Sumo Coders',
                 'requestedDeliveryDate' => '2016-03-16',
+                'shopHandlingInstruction' => 'Do not break it please',
             ),
         );
 
@@ -87,6 +89,7 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
         $atBpost->setReceiverName($data['atBpost']['receiverName']);
         $atBpost->setReceiverCompany($data['atBpost']['receiverCompany']);
         $atBpost->setRequestedDeliveryDate($data['atBpost']['requestedDeliveryDate']);
+        $atBpost->setShopHandlingInstruction($data['atBpost']['shopHandlingInstruction']);
 
         $actualDocument->appendChild($atBpost->toXML($actualDocument));
 
