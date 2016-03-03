@@ -4,6 +4,7 @@ namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 abstract class BasicAttribute
@@ -77,6 +78,17 @@ abstract class BasicAttribute
     {
         if (!in_array($this->getValue(), $allowedValues)) {
             throw new BpostInvalidValueException($this->getKey(), $this->getValue(), $allowedValues);
+        }
+    }
+
+    /**
+     * @param string $regexPattern
+     * @throws BpostInvalidPatternException
+     */
+    public function validatePattern($regexPattern)
+    {
+        if (!preg_match("/^$regexPattern\$/", $this->getValue())) {
+            throw new BpostInvalidPatternException($this->getKey(), $this->getValue(), $regexPattern);
         }
     }
 

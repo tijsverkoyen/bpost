@@ -4,6 +4,7 @@ namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class BasicAttributeFake extends BasicAttribute
@@ -85,6 +86,25 @@ class BasicAttributeTest extends \PHPUnit_Framework_TestCase
             $fake->validateChoice(array('aze', 'wxc'));
             $this->fail('Exception uncaught for invalid value: "qsd" (tested with ["aze", "wxc"])');
         } catch (BpostInvalidValueException $e) {
+            $this->assertTrue(true);
+        }
+
+    }
+
+    public function testValidatePattern()
+    {
+        $fake = new BasicAttributeFake('pomme2016@antidot.com');
+        try {
+            $fake->validatePattern('([a-zA-Z0-9_\.\-+])+@(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+');
+            $this->assertTrue(true);
+        } catch (BpostInvalidPatternException $e) {
+            $this->fail('Exception launched for valid value: "pomme@antidot.com"');
+        }
+
+        try {
+            $fake->validatePattern('([a-zA-Z0-9_\.\-+])+(([a-zA-Z0-9-])+\.)+([a-zA-Z0-9]{2,4})+');
+            $this->fail('Exception uncaught for invalid value: "pomme2016@antidot.com"');
+        } catch (BpostInvalidPatternException $e) {
             $this->assertTrue(true);
         }
 
