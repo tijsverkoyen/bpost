@@ -1,5 +1,7 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+
+use TijsVerkoyen\Bpost\Bpost\Order\Box\National\ParcelLockerReducedMobilityZone;
+use TijsVerkoyen\Bpost\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
 
 class UnregisteredParcelLockerMemberTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,6 +1,9 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
 
+use TijsVerkoyen\Bpost\Common\BasicAttribute\EmailAddressCharacteristic;
+use TijsVerkoyen\Bpost\Common\BasicAttribute\Language;
+use TijsVerkoyen\Bpost\Common\BasicAttribute\PhoneNumber;
 use TijsVerkoyen\Bpost\ComplexAttribute;
 
 class UnregisteredParcelLockerMember extends ComplexAttribute

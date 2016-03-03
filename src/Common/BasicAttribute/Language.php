@@ -1,7 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace TijsVerkoyen\Bpost\Common\BasicAttribute;
 
 use TijsVerkoyen\Bpost\BasicAttribute;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class Language extends BasicAttribute
 {
@@ -10,6 +11,9 @@ class Language extends BasicAttribute
     const LANGUAGE_FR = 'FR';
     const LANGUAGE_NL = 'NL';
 
+    /**
+     * @throws BpostInvalidValueException
+     */
     public function validate()
     {
         $this->validateChoice(array(

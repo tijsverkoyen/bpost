@@ -1,27 +1,27 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
 
 use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Common\BasicAttribute\Language;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
-class PhoneNumberTest extends \PHPUnit_Framework_TestCase
+class LanguageTest extends \PHPUnit_Framework_TestCase
 {
 
     public function testValidate()
     {
-        $value = str_repeat('a', 20);
+        $value = 'FR';
         try {
-            $test = new PhoneNumber($value);
+            $test = new Language($value);
             $this->assertEquals($value, $test->getValue());
         } catch (BpostException $ex) {
             $this->fail('Exception launched for valid value: "' . $value . '"');
         }
 
-        $value = str_repeat('a', 21);
+        $value = 'ES';
         try {
-            new PhoneNumber($value);
+            new Language($value);
             $this->fail('Exception uncaught for invalid value: "' . $value . '"');
-        } catch (BpostInvalidLengthException $ex) {
+        } catch (BpostInvalidValueException $ex) {
             $this->assertTrue(true);
         }
     }

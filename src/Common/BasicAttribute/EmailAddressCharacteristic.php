@@ -1,5 +1,5 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace TijsVerkoyen\Bpost\Common\BasicAttribute;
 
 use TijsVerkoyen\Bpost\BasicAttribute;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;

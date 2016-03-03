@@ -1,7 +1,7 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
 
 use TijsVerkoyen\Bpost\BpostException;
+use TijsVerkoyen\Bpost\Common\BasicAttribute\EmailAddressCharacteristic;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
 
