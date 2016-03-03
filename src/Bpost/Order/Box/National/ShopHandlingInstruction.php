@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
 
-use TijsVerkoyen\Bpost\BasicAttribute;
+use TijsVerkoyen\Bpost\Common\BasicAttribute;
 
 class ShopHandlingInstruction extends BasicAttribute
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost;
+namespace TijsVerkoyen\Bpost\Common;
 
-abstract class ComplexAttribute implements IComplexAttribute
+abstract class ComplexAttribute
 {
     /**
      * Prefix $tagName with the $prefix, if needed

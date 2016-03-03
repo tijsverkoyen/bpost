@@ -1,6 +1,6 @@
 <?php
 
-namespace TijsVerkoyen\Bpost;
+namespace TijsVerkoyen\Bpost\Common;
 
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
@@ -57,6 +57,20 @@ abstract class BasicAttribute
     public function __toString()
     {
         return (string)$this->getValue();
+    }
+
+    /**
+     * Prefix $tagName with the $prefix, if needed
+     * @param string $prefix
+     * @param string $tagName
+     * @return string
+     */
+    public function getPrefixedTagName($tagName, $prefix = null)
+    {
+        if (empty($prefix)) {
+            return $tagName;
+        }
+        return $prefix . ':' . $tagName;
     }
 
     /**

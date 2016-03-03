@@ -1,7 +1,6 @@
 <?php
 
-namespace TijsVerkoyen\Bpost;
-
+use TijsVerkoyen\Bpost\Common\BasicAttribute;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;

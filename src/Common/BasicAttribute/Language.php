@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Common\BasicAttribute;
 
-use TijsVerkoyen\Bpost\BasicAttribute;
+use TijsVerkoyen\Bpost\Common\BasicAttribute;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class Language extends BasicAttribute

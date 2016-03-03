@@ -2,10 +2,8 @@
 
 namespace TijsVerkoyen\Bpost;
 
+use TijsVerkoyen\Bpost\Common\ComplexAttribute;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class ComplexAttributeFake extends ComplexAttribute
 {

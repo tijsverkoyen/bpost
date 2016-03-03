@@ -1,7 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
 
-use TijsVerkoyen\Bpost\ComplexAttribute;
+use TijsVerkoyen\Bpost\Common\ComplexAttribute;
 
 class ParcelLockerReducedMobilityZone extends ComplexAttribute
 {

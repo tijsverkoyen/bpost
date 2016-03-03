@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost;
+namespace TijsVerkoyen\Bpost\Common;
 
-interface IComplexAttribute
+interface IAttribute
 {
     /**
      * @param \DOMDocument $document
@@ -14,7 +14,7 @@ interface IComplexAttribute
 
     /**
      * @param \SimpleXMLElement $xml
-     * @return IComplexAttribute
+     * @return IAttribute
      */
     static function createFromXml(\SimpleXMLElement $xml);
 }
