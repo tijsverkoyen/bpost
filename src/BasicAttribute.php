@@ -4,6 +4,7 @@ namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 abstract class BasicAttribute
 {
@@ -65,6 +66,17 @@ abstract class BasicAttribute
     {
         if (mb_strlen($this->getValue()) > $length) {
             throw new BpostInvalidLengthException($this->getKey(), mb_strlen($this->getValue()), $length);
+        }
+    }
+
+    /**
+     * @param array $allowedValues
+     * @throws BpostInvalidValueException
+     */
+    public function validateChoice(array $allowedValues)
+    {
+        if (!in_array($this->getValue(), $allowedValues)) {
+            throw new BpostInvalidValueException($this->getKey(), $this->getValue(), $allowedValues);
         }
     }
 

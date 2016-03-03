@@ -4,6 +4,7 @@ namespace TijsVerkoyen\Bpost;
 
 use TijsVerkoyen\Bpost\Exception\BpostLogicException;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 
 class BasicAttributeFake extends BasicAttribute
 {
@@ -65,6 +66,25 @@ class BasicAttributeTest extends \PHPUnit_Framework_TestCase
             $fake->validateLength(2);
             $this->fail('Exception uncaught for invalid value: "qsd" (tested with length=2)');
         } catch (BpostInvalidLengthException $e) {
+            $this->assertTrue(true);
+        }
+
+    }
+
+    public function testValidateChoice()
+    {
+        $fake = new BasicAttributeFake('qsd');
+        try {
+            $fake->validateChoice(array('aze', 'qsd'));
+            $this->assertTrue(true);
+        } catch (BpostInvalidValueException $e) {
+            $this->fail('Exception launched for valid value: "qsd" (tested with ["aze", "qsd"])');
+        }
+
+        try {
+            $fake->validateChoice(array('aze', 'wxc'));
+            $this->fail('Exception uncaught for invalid value: "qsd" (tested with ["aze", "wxc"])');
+        } catch (BpostInvalidValueException $e) {
             $this->assertTrue(true);
         }
 
