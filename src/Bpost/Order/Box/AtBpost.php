@@ -36,6 +36,9 @@ class AtBpost extends National
     /** @var string */
     private $receiverCompany;
 
+    /** @var string */
+    protected $requestedDeliveryDate;
+
     /** @var ShopHandlingInstruction */
     private $shopHandlingInstruction;
 
