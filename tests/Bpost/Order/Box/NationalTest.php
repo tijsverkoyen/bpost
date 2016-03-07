@@ -63,6 +63,17 @@ class NationalTest extends \PHPUnit_Framework_TestCase
         $self->addOption(new SaturdayDelivery());
         $self->setWeight(500);
 
+        $self->setOpeningHours(array(
+            new Day('Monday', '07:00-15:00'),
+            new Day('Tuesday', '07:00-15:00'),
+            new Day('Wednesday', '-/-'),
+            new Day('Thursday', '07:00-15:00'),
+            new Day('Friday', '10:00-12:00/13:00-17:30'),
+        ));
+        $self->addOpeningHour(new Day('Saturday', '10:00-12:00/13:00-17:30'));
+
+        $self->setDesiredDeliveryPlace('Place your delivery instructions here');
+
         // Normal
         $rootDom = $this->createDomDocument();
         $document = $this->generateDomDocument($rootDom, $self->toXml($rootDom, 'tns'));
@@ -82,6 +93,12 @@ class NationalTest extends \PHPUnit_Framework_TestCase
         // @todo Fix options feeding and test it
 
         $this->assertSame(500, $self->getWeight());
+
+        $openingHours = $self->getOpeningHours();
+        $this->assertCount(6, $openingHours);
+        $this->assertSame('-/-', $openingHours[2]->getValue());
+
+        $this->assertSame('Place your delivery instructions here', $self->getDesiredDeliveryPlace());
     }
 
     private function getXml()
@@ -104,6 +121,15 @@ class NationalTest extends \PHPUnit_Framework_TestCase
       <common:saturdayDelivery/>
     </options>
     <weight>500</weight>
+    <openingHours>
+      <Monday>07:00-15:00</Monday>
+      <Tuesday>07:00-15:00</Tuesday>
+      <Wednesday>-/-</Wednesday>
+      <Thursday>07:00-15:00</Thursday>
+      <Friday>10:00-12:00/13:00-17:30</Friday>
+      <Saturday>10:00-12:00/13:00-17:30</Saturday>
+    </openingHours>
+    <desiredDeliveryPlace>Place your delivery instructions here</desiredDeliveryPlace>
   </nationalFake>
 </tns:nationalBox>
 

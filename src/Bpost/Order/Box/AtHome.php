@@ -1,12 +1,11 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
 use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
+use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * bPost AtHome class
@@ -18,57 +17,11 @@ use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
  */
 class AtHome extends National
 {
-    /** @var array */
-    private $openingHours;
-
-    /** @var string */
-    private $desiredDeliveryPlace;
-
     /** @var \TijsVerkoyen\Bpost\Bpost\Order\Receiver */
     private $receiver;
 
     /** @var string */
     protected $requestedDeliveryDate;
-
-    /**
-     * @param string $desiredDeliveryPlace
-     */
-    public function setDesiredDeliveryPlace($desiredDeliveryPlace)
-    {
-        $this->desiredDeliveryPlace = $desiredDeliveryPlace;
-    }
-
-    /**
-     * @return string
-     */
-    public function getDesiredDeliveryPlace()
-    {
-        return $this->desiredDeliveryPlace;
-    }
-
-    /**
-     * @param array $openingHours
-     */
-    public function setOpeningHours($openingHours)
-    {
-        $this->openingHours = $openingHours;
-    }
-
-    /**
-     * @param Day $day
-     */
-    public function addOpeningHour(Day $day)
-    {
-        $this->openingHours[] = $day;
-    }
-
-    /**
-     * @return array
-     */
-    public function getOpeningHours()
-    {
-        return $this->openingHours;
-    }
 
     /**
      * @param string $product
@@ -144,27 +97,6 @@ class AtHome extends National
         $boxElement = parent::toXML($document, null, 'atHome');
         $nationalElement->appendChild($boxElement);
 
-        $openingHours = $this->getOpeningHours();
-        if (!empty($openingHours)) {
-            $openingHoursElement = $document->createElement('openingHours');
-            foreach ($openingHours as $day) {
-                /** @var $day \TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day */
-                $openingHoursElement->appendChild(
-                    $day->toXML($document)
-                );
-            }
-            $boxElement->appendChild($openingHoursElement);
-        }
-
-        if ($this->getDesiredDeliveryPlace() !== null) {
-            $boxElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('desiredDeliveryPlace', $prefix),
-                    $this->getDesiredDeliveryPlace()
-                )
-            );
-        }
-
         if ($this->getReceiver() !== null) {
             $boxElement->appendChild(
                 $this->getReceiver()->toXML($document)
@@ -194,70 +126,37 @@ class AtHome extends National
 
     /**
      * @param  \SimpleXMLElement $xml
-     *
      * @return AtHome
-     * @throws BpostInvalidValueException
      * @throws BpostNotImplementedException
+     * @throws BpostXmlInvalidItemException
+     * @throws \TijsVerkoyen\Bpost\BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
-        $atHome = new AtHome();
+        $self = new self();
 
-        if (isset($xml->atHome->product) && $xml->atHome->product != '') {
-            $atHome->setProduct(
-                (string)$xml->atHome->product
-            );
+        if (!isset($xml->atHome)) {
+            throw new BpostXmlInvalidItemException();
         }
-        if (isset($xml->atHome->options) && !empty($xml->atHome->options)) {
-            /** @var \SimpleXMLElement $optionData */
-            foreach ($xml->atHome->options as $optionData) {
-                $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
 
-                if (in_array($optionData->getName(), array(Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED))) {
-                    $option = Messaging::createFromXML($optionData);
-                } else {
-                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
-                    if (!method_exists($className, 'createFromXML')) {
-                        throw new BpostNotImplementedException();
-                    }
-                    $option = call_user_func(
-                        array($className, 'createFromXML'),
-                        $optionData
-                    );
-                }
+        $atHomeXml = $xml->atHome[0];
 
-                $atHome->addOption($option);
-            }
-        }
-        if (isset($xml->atHome->weight) && $xml->atHome->weight != '') {
-            $atHome->setWeight(
-                (int)$xml->atHome->weight
-            );
-        }
-        if (isset($xml->atHome->openingHours) && $xml->atHome->openingHours != '') {
-            throw new BpostNotImplementedException();
-            $atHome->setProduct(
-                (string)$xml->atHome->openingHours
-            );
-        }
-        if (isset($xml->atHome->desiredDeliveryPlace) && $xml->atHome->desiredDeliveryPlace != '') {
-            $atHome->setDesiredDeliveryPlace(
-                (string)$xml->atHome->desiredDeliveryPlace
-            );
-        }
-        if (isset($xml->atHome->receiver)) {
-            $atHome->setReceiver(
+        $self = parent::createFromXML($atHomeXml, $self);
+
+        if (isset($atHomeXml->receiver)) {
+            $self->setReceiver(
                 Receiver::createFromXML(
-                    $xml->atHome->receiver->children('http://schema.post.be/shm/deepintegration/v3/common')
+                    $atHomeXml->receiver->children('http://schema.post.be/shm/deepintegration/v3/common')
                 )
             );
         }
-        if (isset($xml->atHome->requestedDeliveryDate) && $xml->atHome->requestedDeliveryDate != '') {
-            $atHome->setRequestedDeliveryDate(
-                $xml->atHome->requestedDeliveryDate
+
+        if (isset($atHomeXml->requestedDeliveryDate) && $atHomeXml->requestedDeliveryDate != '') {
+            $self->setRequestedDeliveryDate(
+                $atHomeXml->requestedDeliveryDate
             );
         }
 
-        return $atHome;
+        return $self;
     }
 }

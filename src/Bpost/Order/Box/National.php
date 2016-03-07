@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
 use TijsVerkoyen\Bpost\BpostException;
@@ -25,6 +26,12 @@ abstract class National extends ComplexAttribute implements IBox
 
     /** @var int */
     protected $weight;
+
+    /** @var Day[] */
+    private $openingHours;
+
+    /** @var string */
+    private $desiredDeliveryPlace;
 
     /**
      * @param Option[] $options
@@ -92,6 +99,46 @@ abstract class National extends ComplexAttribute implements IBox
     }
 
     /**
+     * @param Day[] $openingHours
+     */
+    public function setOpeningHours(array $openingHours)
+    {
+        $this->openingHours = $openingHours;
+    }
+
+    /**
+     * @param Day $day
+     */
+    public function addOpeningHour(Day $day)
+    {
+        $this->openingHours[] = $day;
+    }
+
+    /**
+     * @return Day[]
+     */
+    public function getOpeningHours()
+    {
+        return $this->openingHours;
+    }
+
+    /**
+     * @param string $desiredDeliveryPlace
+     */
+    public function setDesiredDeliveryPlace($desiredDeliveryPlace)
+    {
+        $this->desiredDeliveryPlace = $desiredDeliveryPlace;
+    }
+
+    /**
+     * @return string
+     */
+    public function getDesiredDeliveryPlace()
+    {
+        return $this->desiredDeliveryPlace;
+    }
+
+    /**
      * Return the object as an array for usage in the XML
      *
      * @param  \DomDocument $document
@@ -130,6 +177,27 @@ abstract class National extends ComplexAttribute implements IBox
         if ($this->getWeight() !== null) {
             $typeElement->appendChild(
                 $document->createElement($this->getPrefixedTagName('weight', $prefix), $this->getWeight())
+            );
+        }
+
+        $openingHours = $this->getOpeningHours();
+        if (!empty($openingHours)) {
+            $openingHoursElement = $document->createElement('openingHours');
+            /** @var Day $day */
+            foreach ($openingHours as $day) {
+                $openingHoursElement->appendChild(
+                    $day->toXML($document)
+                );
+            }
+            $typeElement->appendChild($openingHoursElement);
+        }
+
+        if ($this->getDesiredDeliveryPlace() !== null) {
+            $typeElement->appendChild(
+                $document->createElement(
+                    $this->getPrefixedTagName('desiredDeliveryPlace', $prefix),
+                    $this->getDesiredDeliveryPlace()
+                )
             );
         }
 
@@ -187,6 +255,18 @@ abstract class National extends ComplexAttribute implements IBox
         if (isset($nationalXml->weight) && $nationalXml->weight != '') {
             $self->setWeight(
                 (int)$nationalXml->weight
+            );
+        }
+
+        if (isset($nationalXml->openingHours) && $nationalXml->openingHours != '') {
+            foreach ($nationalXml->openingHours->children() as $day => $value) {
+                $self->addOpeningHour(new Day($day, (string)$value));
+            }
+        }
+
+        if (isset($nationalXml->desiredDeliveryPlace) && $nationalXml->desiredDeliveryPlace != '') {
+            $self->setDesiredDeliveryPlace(
+                (string)$nationalXml->desiredDeliveryPlace
             );
         }
 
