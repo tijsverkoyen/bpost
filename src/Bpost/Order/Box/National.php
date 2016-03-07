@@ -1,8 +1,11 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
+use TijsVerkoyen\Bpost\BpostException;
 use TijsVerkoyen\Bpost\Common\ComplexAttribute;
+use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * bPost National class
@@ -133,4 +136,61 @@ abstract class National extends ComplexAttribute implements IBox
         return $typeElement;
     }
 
+
+    /**
+     * @param \SimpleXMLElement $nationalXml
+     * @param National          $self
+     * @return AtHome
+     * @throws BpostException
+     * @throws BpostXmlInvalidItemException
+     */
+    public static function createFromXML(\SimpleXMLElement $nationalXml, self $self = null)
+    {
+        if ($self === null) {
+            throw new BpostException('Set an instance of National');
+        }
+
+        if (isset($nationalXml->product) && $nationalXml->product != '') {
+            $self->setProduct(
+                (string)$nationalXml->product
+            );
+        }
+
+        if (isset($nationalXml->options) && !empty($nationalXml->options)) {
+            /** @var \SimpleXMLElement $optionData */
+            foreach ($nationalXml->options as $optionData) {
+                $optionData = $optionData->children('http://schema.post.be/shm/deepintegration/v3/common');
+
+                if (in_array($optionData->getName(), array(
+                        Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED,
+                        Messaging::MESSAGING_TYPE_INFO_NEXT_DAY,
+                        Messaging::MESSAGING_TYPE_INFO_REMINDER,
+                        Messaging::MESSAGING_TYPE_KEEP_ME_INFORMED,
+                    ))
+                ) {
+                    $option = Messaging::createFromXML($optionData);
+                } else {
+                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    if (!method_exists($className, 'createFromXML')) {
+                        throw new BpostXmlInvalidItemException();
+                    }
+                    $option = call_user_func(
+                        array($className, 'createFromXML'),
+                        $optionData
+                    );
+                }
+
+                $self->addOption($option);
+            }
+        }
+
+        if (isset($nationalXml->weight) && $nationalXml->weight != '') {
+            $self->setWeight(
+                (int)$nationalXml->weight
+            );
+        }
+
+        return $self;
+
+    }
 }
