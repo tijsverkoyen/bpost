@@ -20,7 +20,7 @@ class Day
     const DAY_WEDNESDAY = 'Wednesday';
     const DAY_THURSDAY = 'Thursday';
     const DAY_FRIDAY = 'Friday';
-    const DAY_SATURDAY = 'Saterday';
+    const DAY_SATURDAY = 'Saturday';
     const DAY_SUNDAY = 'Sunday';
 
     /**
