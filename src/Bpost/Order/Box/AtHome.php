@@ -171,7 +171,7 @@ class AtHome extends National
             );
         }
 
-        $this->addToXmlRequestedDeliveryDate($document, $boxElement, $prefix);
+        $this->addToXmlRequestedDeliveryDate($document, $boxElement);
 
         return $nationalElement;
     }
@@ -179,14 +179,13 @@ class AtHome extends National
     /**
      * @param \DOMDocument $document
      * @param \DOMElement  $typeElement
-     * @param string       $prefix
      */
-    protected function addToXmlRequestedDeliveryDate(\DOMDocument $document, \DOMElement $typeElement, $prefix)
+    protected function addToXmlRequestedDeliveryDate(\DOMDocument $document, \DOMElement $typeElement)
     {
         if ($this->getRequestedDeliveryDate() !== null) {
             $typeElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName('requestedDeliveryDate', $prefix),
+                    'requestedDeliveryDate',
                     $this->getRequestedDeliveryDate()
                 )
             );
