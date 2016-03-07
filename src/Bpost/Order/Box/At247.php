@@ -1,6 +1,7 @@
 <?php
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
+use TijsVerkoyen\Bpost\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
 use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
@@ -31,6 +32,9 @@ class At247 extends National
 
     /** @var string */
     private $memberId;
+
+    /** @var UnregisteredParcelLockerMember */
+    private $unregisteredParcelLockerMember;
 
     /** @var string */
     private $receiverName;
@@ -103,6 +107,22 @@ class At247 extends National
     public function getParcelsDepotName()
     {
         return $this->parcelsDepotName;
+    }
+
+    /**
+     * @return UnregisteredParcelLockerMember
+     */
+    public function getUnregisteredParcelLockerMember()
+    {
+        return $this->unregisteredParcelLockerMember;
+    }
+
+    /**
+     * @param UnregisteredParcelLockerMember $unregisteredParcelLockerMember
+     */
+    public function setUnregisteredParcelLockerMember(UnregisteredParcelLockerMember $unregisteredParcelLockerMember)
+    {
+        $this->unregisteredParcelLockerMember = $unregisteredParcelLockerMember;
     }
 
     /**
@@ -220,6 +240,7 @@ class At247 extends National
                 )
             );
         }
+        $this->addToXmlUnregisteredParcelLockerMember($document, $boxElement, $prefix);
         if ($this->getReceiverName() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
@@ -254,6 +275,20 @@ class At247 extends National
                     $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
                     $this->getRequestedDeliveryDate()
                 )
+            );
+        }
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param \DOMElement  $typeElement
+     * @param string       $prefix
+     */
+    protected function addToXmlUnregisteredParcelLockerMember(\DOMDocument $document, \DOMElement $typeElement, $prefix)
+    {
+        if ($this->getUnregisteredParcelLockerMember() !== null) {
+            $typeElement->appendChild(
+                $this->getUnregisteredParcelLockerMember()->toXml($document)
             );
         }
     }
