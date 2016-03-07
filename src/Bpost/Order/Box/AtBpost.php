@@ -184,14 +184,14 @@ class AtBpost extends National
      */
     public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $nationalElement = $document->createElement($this->getPrefixedTagName($prefix, 'nationalBox'));
+        $nationalElement = $document->createElement($this->getPrefixedTagName('nationalBox', $prefix));
         $boxElement = parent::toXML($document, null, 'atBpost');
         $nationalElement->appendChild($boxElement);
 
         if ($this->getPugoId() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'pugoId'),
+                    $this->getPrefixedTagName('pugoId', $prefix),
                     $this->getPugoId()
                 )
             );
@@ -199,7 +199,7 @@ class AtBpost extends National
         if ($this->getPugoName() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'pugoName'),
+                    $this->getPrefixedTagName('pugoName', $prefix),
                     $this->getPugoName()
                 )
             );
@@ -212,7 +212,7 @@ class AtBpost extends National
         if ($this->getReceiverName() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'receiverName'),
+                    $this->getPrefixedTagName('receiverName', $prefix),
                     $this->getReceiverName()
                 )
             );
@@ -220,7 +220,7 @@ class AtBpost extends National
         if ($this->getReceiverCompany() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'receiverCompany'),
+                    $this->getPrefixedTagName('receiverCompany', $prefix),
                     $this->getReceiverCompany()
                 )
             );
@@ -241,7 +241,7 @@ class AtBpost extends National
         if ($this->getRequestedDeliveryDate() !== null) {
             $typeElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
+                    $this->getPrefixedTagName('requestedDeliveryDate', $prefix),
                     $this->getRequestedDeliveryDate()
                 )
             );
@@ -253,7 +253,7 @@ class AtBpost extends National
         if ($this->getShopHandlingInstruction() !== null) {
             $typeElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'shopHandlingInstruction'),
+                    $this->getPrefixedTagName('shopHandlingInstruction', $prefix),
                     $this->getShopHandlingInstruction()
                 )
             );

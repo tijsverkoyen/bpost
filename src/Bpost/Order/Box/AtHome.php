@@ -140,7 +140,7 @@ class AtHome extends National
      */
     public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $nationalElement = $document->createElement($this->getPrefixedTagName($prefix, 'nationalBox'));
+        $nationalElement = $document->createElement($this->getPrefixedTagName('nationalBox', $prefix));
         $boxElement = parent::toXML($document, null, 'atHome');
         $nationalElement->appendChild($boxElement);
 
@@ -159,7 +159,7 @@ class AtHome extends National
         if ($this->getDesiredDeliveryPlace() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'desiredDeliveryPlace'),
+                    $this->getPrefixedTagName('desiredDeliveryPlace', $prefix),
                     $this->getDesiredDeliveryPlace()
                 )
             );
@@ -186,7 +186,7 @@ class AtHome extends National
         if ($this->getRequestedDeliveryDate() !== null) {
             $typeElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
+                    $this->getPrefixedTagName('requestedDeliveryDate', $prefix),
                     $this->getRequestedDeliveryDate()
                 )
             );

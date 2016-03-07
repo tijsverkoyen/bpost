@@ -2,6 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
+use TijsVerkoyen\Bpost\Common\ComplexAttribute;
 
 /**
  * bPost National class
@@ -11,7 +12,7 @@ use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
  * @copyright Copyright (c), Tijs Verkoyen. All rights reserved.
  * @license   BSD License
  */
-abstract class National implements IBox
+abstract class National extends ComplexAttribute implements IBox
 {
     /** @var string */
     protected $product;
@@ -125,25 +126,11 @@ abstract class National implements IBox
 
         if ($this->getWeight() !== null) {
             $typeElement->appendChild(
-                $document->createElement($this->getPrefixedTagName($prefix, 'weight'), $this->getWeight())
+                $document->createElement($this->getPrefixedTagName('weight', $prefix), $this->getWeight())
             );
         }
 
         return $typeElement;
-    }
-
-    /**
-     * Prefix $tagName with the $prefix, if needed
-     * @param string $prefix
-     * @param string $tagName
-     * @return string
-     */
-    protected function getPrefixedTagName($prefix, $tagName)
-    {
-        if ($prefix !== null) {
-            return $prefix . ':' . $tagName;
-        }
-        return $tagName;
     }
 
 }

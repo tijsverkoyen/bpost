@@ -58,7 +58,7 @@ class BpostOnAppointment extends National
      */
     public function toXML(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $nationalElement = $document->createElement($this->getPrefixedTagName($prefix, 'nationalBox'));
+        $nationalElement = $document->createElement($this->getPrefixedTagName('nationalBox', $prefix));
         $boxElement = parent::toXML($document, null, 'bpostOnAppointment');
         $nationalElement->appendChild($boxElement);
 
@@ -92,7 +92,7 @@ class BpostOnAppointment extends National
         if ($this->getInNetworkCutOff() !== null) {
             $typeElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'inNetworkCutOff'),
+                    $this->getPrefixedTagName('inNetworkCutOff', $prefix),
                     $this->getInNetworkCutOff()
                 )
             );

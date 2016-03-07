@@ -272,7 +272,7 @@ class At247 extends National
         if ($this->getRequestedDeliveryDate() !== null) {
             $typeElement->appendChild(
                 $document->createElement(
-                    $this->getPrefixedTagName($prefix, 'requestedDeliveryDate'),
+                    $this->getPrefixedTagName('requestedDeliveryDate', $prefix),
                     $this->getRequestedDeliveryDate()
                 )
             );
