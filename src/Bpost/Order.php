@@ -4,6 +4,7 @@ namespace TijsVerkoyen\Bpost\Bpost;
 
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Line;
+use TijsVerkoyen\Bpost\Exception\BpostNotImplementedException;
 use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoReferenceFoundException;
 
 /**
@@ -232,7 +233,7 @@ class Order
      *
      * @return Order
      * @throws BpostXmlNoReferenceFoundException
-     * @throws \TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostNotImplementedException
+     * @throws BpostNotImplementedException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {

@@ -2,7 +2,7 @@
 namespace TijsVerkoyen\Bpost\Bpost\Order;
 
 use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostNotImplementedException;
+use TijsVerkoyen\Bpost\Exception\BpostNotImplementedException;
 
 /**
  * bPost Box class
