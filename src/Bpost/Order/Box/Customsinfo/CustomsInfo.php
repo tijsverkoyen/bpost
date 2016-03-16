@@ -21,6 +21,7 @@ class CustomsInfo
 
     const CUSTOM_INFO_SHIPMENT_TYPE_SAMPLE = 'SAMPLE';
     const CUSTOM_INFO_SHIPMENT_TYPE_GIFT = 'GIFT';
+    const CUSTOM_INFO_SHIPMENT_TYPE_GOODS = 'GOODS';
     const CUSTOM_INFO_SHIPMENT_TYPE_DOCUMENTS = 'DOCUMENTS';
     const CUSTOM_INFO_SHIPMENT_TYPE_OTHER = 'OTHER';
 
@@ -173,6 +174,7 @@ class CustomsInfo
         return array(
             self::CUSTOM_INFO_SHIPMENT_TYPE_SAMPLE,
             self::CUSTOM_INFO_SHIPMENT_TYPE_GIFT,
+            self::CUSTOM_INFO_SHIPMENT_TYPE_GOODS,
             self::CUSTOM_INFO_SHIPMENT_TYPE_DOCUMENTS,
             self::CUSTOM_INFO_SHIPMENT_TYPE_OTHER,
         );
