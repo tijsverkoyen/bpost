@@ -59,9 +59,9 @@ class Order
     }
 
     /**
-     * @param array $boxes
+     * @param Box[] $boxes
      */
-    public function setBoxes($boxes)
+    public function setBoxes(array $boxes)
     {
         $this->boxes = $boxes;
     }
@@ -101,9 +101,9 @@ class Order
     }
 
     /**
-     * @param array $lines
+     * @param Line[] $lines
      */
-    public function setLines($lines)
+    public function setLines(array $lines)
     {
         $this->lines = $lines;
     }
