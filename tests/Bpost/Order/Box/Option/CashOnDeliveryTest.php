@@ -33,10 +33,10 @@ class CashOnDeliveryTest extends \PHPUnit_Framework_TestCase
         );
 
         $expectedDocument = self::createDomDocument();
-        $cod = $expectedDocument->createElement('cod');
+        $cod = $expectedDocument->createElement('common:cod');
         foreach ($data['cod'] as $key => $value) {
             $cod->appendChild(
-                $expectedDocument->createElement($key, $value)
+                $expectedDocument->createElement('common:'.$key, $value)
             );
         }
         $expectedDocument->appendChild($cod);
@@ -51,7 +51,7 @@ class CashOnDeliveryTest extends \PHPUnit_Framework_TestCase
             $cashOnDelivery->toXML($actualDocument)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertEquals($expectedDocument->saveXML(), $actualDocument->saveXML());
 
         $data = array(
             'cod' => array(
