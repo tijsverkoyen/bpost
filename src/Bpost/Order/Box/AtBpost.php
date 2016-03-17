@@ -196,18 +196,12 @@ class AtBpost extends National
 
         if ($this->getPugoId() !== null) {
             $boxElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('pugoId', $prefix),
-                    $this->getPugoId()
-                )
+                $document->createElement('pugoId', $this->getPugoId())
             );
         }
         if ($this->getPugoName() !== null) {
             $boxElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('pugoName', $prefix),
-                    $this->getPugoName()
-                )
+                $document->createElement('pugoName', $this->getPugoName())
             );
         }
         if ($this->getPugoAddress() !== null) {
@@ -217,18 +211,12 @@ class AtBpost extends National
         }
         if ($this->getReceiverName() !== null) {
             $boxElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('receiverName', $prefix),
-                    $this->getReceiverName()
-                )
+                $document->createElement('receiverName', $this->getReceiverName())
             );
         }
         if ($this->getReceiverCompany() !== null) {
             $boxElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('receiverCompany', $prefix),
-                    $this->getReceiverCompany()
-                )
+                $document->createElement('receiverCompany', $this->getReceiverCompany())
             );
         }
         $this->addToXmlRequestedDeliveryDate($document, $boxElement, $prefix);
@@ -246,10 +234,7 @@ class AtBpost extends National
     {
         if ($this->getRequestedDeliveryDate() !== null) {
             $typeElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('requestedDeliveryDate', $prefix),
-                    $this->getRequestedDeliveryDate()
-                )
+                $document->createElement('requestedDeliveryDate', $this->getRequestedDeliveryDate())
             );
         }
     }
@@ -258,10 +243,7 @@ class AtBpost extends National
     {
         if ($this->getShopHandlingInstruction() !== null) {
             $typeElement->appendChild(
-                $document->createElement(
-                    $this->getPrefixedTagName('shopHandlingInstruction', $prefix),
-                    $this->getShopHandlingInstruction()
-                )
+                $document->createElement('shopHandlingInstruction', $this->getShopHandlingInstruction())
             );
         }
     }
