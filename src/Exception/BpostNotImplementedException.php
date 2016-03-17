@@ -1,6 +1,6 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\LogicException;
+namespace TijsVerkoyen\Bpost\Exception;
 
 use TijsVerkoyen\Bpost\BpostException;
 
