@@ -188,37 +188,14 @@ class BpostTest extends \PHPUnit_Framework_TestCase
     {
         $order = $this->createAtHomeOrderObject();
         $this->bpost->createOrReplaceOrder($order);
-
-        var_dump($order->getReference());
-
-        var_dump('--------------------');
-
-        $labels = $this->bpost->createLabelForOrder($order->getReference());
-        $barcode = $labels[0]->getBarcode();
-
-        $labels = $this->bpost->createLabelForBox($barcode);
-        var_dump($labels);
-
-        var_dump('--------------------');
-
-        $labels = $this->bpost->createLabelForOrder($order->getReference());
-        $barcode = $labels[0]->getBarcode();
-
-        $labels = $this->bpost->createLabelForBox($barcode);
-        var_dump($labels);
-
-        var_dump('--------------------');
-
-        $labels = $this->bpost->createLabelForBox($barcode);
-        var_dump($labels);
-
-
-        $this->assertInternalType('array', $labels);
-        foreach ($labels as $label) {
+        $response = $this->bpost->createLabelForOrder($order->getReference());
+        $response = $this->bpost->createLabelForBox($response[0]->getBarcode());
+        $this->assertInternalType('array', $response);
+        foreach ($response as $label) {
             $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
         }
 
-        //$this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
+        $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
     }
 
     /**
@@ -234,57 +211,15 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $this->bpost->createOrReplaceOrder($order2);
 
         $this->bpost->setTimeOut(60);
-        $labels = $this->bpost->createLabelInBulkForOrders(
-            array(
-                $order1->getReference(),
-//                $order2->getReference(),
-            )
-        );
-
-        var_dump(count($labels));
-
-        var_dump('------------------------');
-
-        $this->assertInternalType('array', $labels);
-        $i = 0;
-        $barcodes = array();
-        foreach ($labels as $label) {
-            var_dump($label->getBarcode());
-            $barcodes[] = $label->getBarcode();
-            file_put_contents('/tmp/' . $i++ . $label->getBarcode() . '.png', $label->getBytes());
-            $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
-        }
-
-        var_dump('------------------------');
-
-        $order1 = $this->bpost->fetchOrder($order1->getReference());
-
-        foreach ($order1->getBoxes() as $box) {
-            $this->assertEquals('PRINTED', $box->getStatus());
-        }
-
-        var_dump('------------------------');
-
-        foreach ($barcodes as $barcode) {
-            $barcodeLabels = $this->bpost->createLabelForBox($barcode);
-            var_dump($barcodeLabels);
-        }
-
-        var_dump('------------------------');
-
-        $this->bpost->setTimeOut(60);
-        $labels = $this->bpost->createLabelInBulkForOrders(
+        $response = $this->bpost->createLabelInBulkForOrders(
             array(
                 $order1->getReference(),
                 $order2->getReference(),
             )
         );
 
-        var_dump('------------------------');
-
-        $this->assertInternalType('array', $labels);
-        foreach ($labels as $label) {
-            var_dump($label->getBarcode());
+        $this->assertInternalType('array', $response);
+        foreach ($response as $label) {
             $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
         }
 
