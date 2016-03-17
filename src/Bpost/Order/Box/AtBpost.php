@@ -166,7 +166,10 @@ class AtBpost extends National
      */
     public function getShopHandlingInstruction()
     {
-        return $this->shopHandlingInstruction->getValue();
+        if ($this->shopHandlingInstruction !== null) {
+            return $this->shopHandlingInstruction->getValue();
+        }
+        return null;
     }
 
     /**
