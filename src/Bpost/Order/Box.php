@@ -51,6 +51,9 @@ class Box
     /** @var string */
     private $barcode;
 
+    /** @var string */
+    private $additionalCustomerReference;
+
     /**
      * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\International $internationalBox
      */
@@ -154,6 +157,22 @@ class Box
     }
 
     /**
+     * @param string $additionalCustomerReference
+     */
+    public function setAdditionalCustomerReference($additionalCustomerReference)
+    {
+        $this->additionalCustomerReference = (string)$additionalCustomerReference;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalCustomerReference()
+    {
+        return $this->additionalCustomerReference;
+    }
+
+    /**
      * @return array
      */
     public static function getPossibleStatusValues()
@@ -212,6 +231,18 @@ class Box
                 $document->createElement(
                     $tagName,
                     $this->getRemark()
+                )
+            );
+        }
+        if ($this->getAdditionalCustomerReference() !== null) {
+            $tagName = 'additionalCustomerReference';
+            if ($prefix !== null) {
+                $tagName = $prefix . ':' . $tagName;
+            }
+            $box->appendChild(
+                $document->createElement(
+                    $tagName,
+                    $this->getAdditionalCustomerReference()
                 )
             );
         }
@@ -292,6 +323,9 @@ class Box
         }
         if (isset($xml->remark) && $xml->remark != '') {
             $box->setRemark((string) $xml->remark);
+        }
+        if (isset($xml->additionalCustomerReference) && $xml->additionalCustomerReference != '') {
+            $box->setAdditionalCustomerReference((string)$xml->additionalCustomerReference);
         }
         if (!empty($xml->barcode)) {
             $box->setBarcode((string) $xml->barcode);
