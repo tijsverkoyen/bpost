@@ -3,6 +3,7 @@ namespace TijsVerkoyen\Bpost;
 
 use Psr\Log\LoggerInterface;
 use TijsVerkoyen\Bpost\Bpost\Label;
+use TijsVerkoyen\Bpost\Bpost\Labels;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
@@ -559,15 +560,7 @@ class Bpost
             $headers
         );
 
-        $labels = array();
-
-        if (isset($xml->label)) {
-            foreach ($xml->label as $label) {
-                $labels[] = Label::createFromXML($label);
-            }
-        }
-
-        return $labels;
+        return Labels::createFromXML($xml);
     }
 
     /**
