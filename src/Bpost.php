@@ -2,12 +2,13 @@
 namespace TijsVerkoyen\Bpost;
 
 use Psr\Log\LoggerInterface;
-use TijsVerkoyen\Bpost\Bpost\Label;
+use TijsVerkoyen\Bpost\Bpost\CreateLabelInBulkForOrders;
 use TijsVerkoyen\Bpost\Bpost\Labels;
 use TijsVerkoyen\Bpost\Bpost\Order;
 use TijsVerkoyen\Bpost\Bpost\Order\Box;
 use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
 use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
+use TijsVerkoyen\Bpost\Common\ValidatedValue\LabelFormat;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
 use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidSelectionException;
@@ -629,61 +630,20 @@ class Bpost
      */
     public function createLabelInBulkForOrders(
         array $references,
-        $format = self::LABEL_FORMAT_A6,
+        $format = LabelFormat::FORMAT_A6,
         $withReturnLabels = false,
         $asPdf = false
     ) {
-        $format = strtoupper($format);
-        if (!in_array($format, self::getPossibleLabelFormatValues())) {
-            throw new BpostInvalidValueException('format', $format, self::getPossibleLabelFormatValues());
-        }
-
-        $url = '/labels/' . $format;
-
-        if ($withReturnLabels) {
-            $url .= '/withReturnLabels';
-        }
-
-        if ($asPdf) {
-            $headers = array(
-                'Accept: application/vnd.bpost.shm-label-pdf-v3+XML',
-            );
-        } else {
-            $headers = array(
-                'Accept: application/vnd.bpost.shm-label-image-v3+XML',
-            );
-        }
-        $headers[] = 'Content-Type: application/vnd.bpost.shm-labelRequest-v3+XML';
-
-        $document = new \DOMDocument('1.0', 'utf-8');
-        $document->preserveWhiteSpace = false;
-        $document->formatOutput = true;
-
-        $batchLabels = $document->createElement('batchLabels');
-        $batchLabels->setAttribute('xmlns', 'http://schema.post.be/shm/deepintegration/v3/');
-        foreach ($references as $reference) {
-            $batchLabels->appendChild(
-                $document->createElement('order', $reference)
-            );
-        }
-        $document->appendChild($batchLabels);
+        $createLabelInBulkForOrders = new CreateLabelInBulkForOrders();
 
         $xml = $this->doCall(
-            $url,
-            $document->saveXML(),
-            $headers,
+            $createLabelInBulkForOrders->getUrl(new LabelFormat($format), $withReturnLabels),
+            $createLabelInBulkForOrders->getXml($references),
+            $createLabelInBulkForOrders->getHeaders($asPdf),
             'POST'
         );
 
-        $labels = array();
-
-        if (isset($xml->label)) {
-            foreach ($xml->label as $label) {
-                $labels[] = Label::createFromXML($label);
-            }
-        }
-
-        return $labels;
+        return Labels::createFromXML($xml);
     }
 
     /**
