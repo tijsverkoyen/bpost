@@ -1,5 +1,5 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
 
 class ParcelLockerReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +59,7 @@ class ParcelLockerReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
         $xml = new \SimpleXMLElement('<parcelLockerReducedMobilityZone/>');
 
         $this->assertInstanceOf(
-            'TijsVerkoyen\Bpost\Bpost\Order\Box\National\ParcelLockerReducedMobilityZone',
+            'Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLockerReducedMobilityZone',
             ParcelLockerReducedMobilityZone::createFromXml($xml)
         );
     }

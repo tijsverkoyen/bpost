@@ -1,12 +1,12 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\National\ShopHandlingInstruction;
-use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\BpostNotImplementedException;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ShopHandlingInstruction;
+use Bpost\BpostApiClient\Bpost\Order\PugoAddress;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 
 /**
  * bPost AtBpost class
@@ -27,7 +27,7 @@ class AtBpost extends National
     /** @var string */
     private $pugoName;
 
-    /** @var \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress */
+    /** @var \Bpost\BpostApiClient\Bpost\Order\PugoAddress */
     private $pugoAddress;
 
     /** @var string */
@@ -66,7 +66,7 @@ class AtBpost extends National
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress $pugoAddress
+     * @param \Bpost\BpostApiClient\Bpost\Order\PugoAddress $pugoAddress
      */
     public function setPugoAddress($pugoAddress)
     {
@@ -74,7 +74,7 @@ class AtBpost extends National
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\PugoAddress
+     * @return \Bpost\BpostApiClient\Bpost\Order\PugoAddress
      */
     public function getPugoAddress()
     {
@@ -281,7 +281,7 @@ class AtBpost extends National
                 ) {
                     $option = Messaging::createFromXML($optionData);
                 } else {
-                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
                         throw new BpostNotImplementedException();
                     }

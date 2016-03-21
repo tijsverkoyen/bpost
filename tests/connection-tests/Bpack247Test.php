@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpack247\test;
+namespace Bpost\BpostApiClient\Bpack247\test;
 
-use TijsVerkoyen\Bpost\Bpack247;
+use Bpost\BpostApiClient\Bpack247;
 
 class Bpack247Test extends \PHPUnit_Framework_TestCase
 {

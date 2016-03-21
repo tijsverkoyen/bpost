@@ -1,7 +1,7 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
 
-use TijsVerkoyen\Bpost\Common\BasicAttribute;
+use Bpost\BpostApiClient\Common\BasicAttribute;
 
 class ShopHandlingInstruction extends BasicAttribute
 {

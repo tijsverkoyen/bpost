@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\BpostLogicException;
+namespace Bpost\BpostApiClient\test\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class BpostInvalidValueExceptionTest extends \PHPUnit_Framework_TestCase
 

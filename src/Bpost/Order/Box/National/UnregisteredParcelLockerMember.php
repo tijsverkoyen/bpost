@@ -1,10 +1,10 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
 
-use TijsVerkoyen\Bpost\Common\BasicAttribute\EmailAddressCharacteristic;
-use TijsVerkoyen\Bpost\Common\BasicAttribute\Language;
-use TijsVerkoyen\Bpost\Common\BasicAttribute\PhoneNumber;
-use TijsVerkoyen\Bpost\Common\ComplexAttribute;
+use Bpost\BpostApiClient\Common\BasicAttribute\EmailAddressCharacteristic;
+use Bpost\BpostApiClient\Common\BasicAttribute\Language;
+use Bpost\BpostApiClient\Common\BasicAttribute\PhoneNumber;
+use Bpost\BpostApiClient\Common\ComplexAttribute;
 
 class UnregisteredParcelLockerMember extends ComplexAttribute
 {

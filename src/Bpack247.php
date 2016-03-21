@@ -1,11 +1,11 @@
 <?php
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
-use TijsVerkoyen\Bpost\Bpack247\Customer;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostApiBusinessException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostApiValidationException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
+use Bpost\BpostApiClient\Bpack247\Customer;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostApiBusinessException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostApiValidationException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidResponseException;
 
 /**
  * bPost Bpack24/7 class

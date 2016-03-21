@@ -1,8 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpack247;
+namespace Bpost\BpostApiClient\Bpack247;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoUserIdFoundException;
 
 /**
  * bPost Customer class

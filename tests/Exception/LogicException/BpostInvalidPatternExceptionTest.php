@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\BpostLogicException;
+namespace Bpost\BpostApiClient\test\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternException;
 
 class BpostInvalidPatternExceptionTest extends \PHPUnit_Framework_TestCase
 {

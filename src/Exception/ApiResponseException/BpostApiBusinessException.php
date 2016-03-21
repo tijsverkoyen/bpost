@@ -1,12 +1,12 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\Exception\ApiResponseException;
 
-use TijsVerkoyen\Bpost\Exception\ApiResponseException;
+use Bpost\BpostApiClient\Exception\ApiResponseException;
 
 /**
  * Class BpostApiBusinessException
- * @package TijsVerkoyen\Bpost\Exception\ApiResponseException
+ * @package Bpost\BpostApiClient\Exception\ApiResponseException
  */
 class BpostApiBusinessException extends ApiResponseException
 {

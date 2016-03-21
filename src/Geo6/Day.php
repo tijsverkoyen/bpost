@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Geo6;
+namespace Bpost\BpostApiClient\Geo6;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidDayException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidDayException;
 
 /**
  * Geo6 class

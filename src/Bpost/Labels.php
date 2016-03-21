@@ -1,6 +1,6 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost;
+namespace Bpost\BpostApiClient\Bpost;
 
 /**
  * Class Labels

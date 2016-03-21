@@ -1,7 +1,7 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order;
+namespace Bpost\BpostApiClient\Bpost\Order;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 /**
  * bPost Customer class
@@ -38,7 +38,7 @@ class Customer
     private $phoneNumber;
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Address $address
+     * @param \Bpost\BpostApiClient\Bpost\Order\Address $address
      */
     public function setAddress($address)
     {
@@ -46,7 +46,7 @@ class Customer
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Address
+     * @return \Bpost\BpostApiClient\Bpost\Order\Address
      */
     public function getAddress()
     {

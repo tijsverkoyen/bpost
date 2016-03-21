@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\test\Exception\ApiResponseException;
 
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostApiBusinessException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostApiBusinessException;
 
 class BpostApiBusinessExceptionTest extends \PHPUnit_Framework_TestCase
 {

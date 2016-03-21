@@ -1,7 +1,7 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Signature;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Signature;
 
 class SignatureTest extends \PHPUnit_Framework_TestCase
 {

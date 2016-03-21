@@ -1,12 +1,12 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * Class BpostOnAppointment
- * @package TijsVerkoyen\Bpost\Bpost\Order\Box
+ * @package Bpost\BpostApiClient\Bpost\Order\Box
  */
 class BpostOnAppointment extends National
 {

@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\LogicException;
+namespace Bpost\BpostApiClient\test\Exception\LogicException;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidDayException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidDayException;
 
 class BpostInvalidDayExceptionTest extends \PHPUnit_Framework_TestCase
 

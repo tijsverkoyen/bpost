@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Geo6\test\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\Geo6\test\Exception\ApiResponseException;
 
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidXmlResponseException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidXmlResponseException;
 
 class BpostInvalidXmlResponseExceptionTest extends \PHPUnit_Framework_TestCase
 {

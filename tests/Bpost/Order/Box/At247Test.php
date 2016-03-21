@@ -1,11 +1,11 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
-use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
-use TijsVerkoyen\Bpost\Common\BasicAttribute\Language;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Bpost\Order\Box\At247;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
+use Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress;
+use Bpost\BpostApiClient\Common\BasicAttribute\Language;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class At247Test extends \PHPUnit_Framework_TestCase
 {

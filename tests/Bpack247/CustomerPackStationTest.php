@@ -1,7 +1,7 @@
 <?php
 namespace Bpost\Bpack;
 
-use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
+use Bpost\BpostApiClient\Bpack247\CustomerPackStation;
 
 class CustomerPackStationTest extends \PHPUnit_Framework_TestCase
 {

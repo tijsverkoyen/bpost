@@ -1,8 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * bPost Form handler class

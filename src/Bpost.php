@@ -1,19 +1,19 @@
 <?php
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
 use Psr\Log\LoggerInterface;
-use TijsVerkoyen\Bpost\Bpost\CreateLabelInBulkForOrders;
-use TijsVerkoyen\Bpost\Bpost\Labels;
-use TijsVerkoyen\Bpost\Bpost\Order;
-use TijsVerkoyen\Bpost\Bpost\Order\Box;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
-use TijsVerkoyen\Bpost\Common\ValidatedValue\LabelFormat;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidResponseException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidSelectionException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
+use Bpost\BpostApiClient\Bpost\CreateLabelInBulkForOrders;
+use Bpost\BpostApiClient\Bpost\Labels;
+use Bpost\BpostApiClient\Bpost\Order;
+use Bpost\BpostApiClient\Bpost\Order\Box;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Insurance;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration;
+use Bpost\BpostApiClient\Common\ValidatedValue\LabelFormat;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidResponseException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidSelectionException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * Bpost class

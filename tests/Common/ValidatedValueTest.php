@@ -1,10 +1,10 @@
 <?php
 
-use TijsVerkoyen\Bpost\Common\ValidatedValue;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Common\ValidatedValue;
+use Bpost\BpostApiClient\Exception\BpostLogicException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class ValidatedValueFake extends ValidatedValue
 {
@@ -31,7 +31,7 @@ class ValidatedValueTest extends \PHPUnit_Framework_TestCase
         $fake = new ValidatedValueFake('qsd');
         $this->assertSame('qsd', (string)$fake);
 
-        $this->setExpectedException('TijsVerkoyen\Bpost\Exception\BpostLogicException');
+        $this->setExpectedException('Bpost\BpostApiClient\Exception\BpostLogicException');
         new ValidatedValueFake('aze');
     }
 

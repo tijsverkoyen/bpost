@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost;
+namespace Bpost\BpostApiClient\Bpost;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * bPost Label class

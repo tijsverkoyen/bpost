@@ -1,8 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order;
+namespace Bpost\BpostApiClient\Bpost\Order;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\BpostNotImplementedException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 
 /**
  * bPost Box class
@@ -24,17 +24,17 @@ class Box
     const BOX_STATUS_BACK_TO_SENDER = 'BACK_TO_SENDER';
 
     /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\Sender
+     * @var \Bpost\BpostApiClient\Bpost\Order\Sender
      */
     private $sender;
 
     /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome
+     * @var \Bpost\BpostApiClient\Bpost\Order\Box\AtHome
      */
     private $nationalBox;
 
     /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\Box\International
+     * @var \Bpost\BpostApiClient\Bpost\Order\Box\International
      */
     private $internationalBox;
 
@@ -55,7 +55,7 @@ class Box
     private $additionalCustomerReference;
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\International $internationalBox
+     * @param \Bpost\BpostApiClient\Bpost\Order\Box\International $internationalBox
      */
     public function setInternationalBox(Box\International $internationalBox)
     {
@@ -63,7 +63,7 @@ class Box
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Box\International
+     * @return \Bpost\BpostApiClient\Bpost\Order\Box\International
      */
     public function getInternationalBox()
     {
@@ -71,7 +71,7 @@ class Box
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\National $nationalBox
+     * @param \Bpost\BpostApiClient\Bpost\Order\Box\National $nationalBox
      */
     public function setNationalBox(Box\National $nationalBox)
     {
@@ -79,7 +79,7 @@ class Box
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Box\National
+     * @return \Bpost\BpostApiClient\Bpost\Order\Box\National
      */
     public function getNationalBox()
     {
@@ -103,7 +103,7 @@ class Box
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Sender $sender
+     * @param \Bpost\BpostApiClient\Bpost\Order\Sender $sender
      */
     public function setSender(Sender $sender)
     {
@@ -111,7 +111,7 @@ class Box
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Sender
+     * @return \Bpost\BpostApiClient\Bpost\Order\Sender
      */
     public function getSender()
     {
@@ -286,9 +286,9 @@ class Box
             $nationalBoxData = $xml->nationalBox->children('http://schema.post.be/shm/deepintegration/v3/national');
 
             // build classname based on the tag name
-            $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\' . ucfirst($nationalBoxData->getName());
+            $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\' . ucfirst($nationalBoxData->getName());
             if ($nationalBoxData->getName() == 'at24-7') {
-                $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\At247';
+                $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\At247';
             }
 
             if (!method_exists($className, 'createFromXML')) {
@@ -307,7 +307,7 @@ class Box
             $internationalBoxData = $xml->internationalBox->children('http://schema.post.be/shm/deepintegration/v3/international');
 
             // build classname based on the tag name
-            $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\' . ucfirst($internationalBoxData->getName());
+            $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\' . ucfirst($internationalBoxData->getName());
 
             if (!method_exists($className, 'createFromXML')) {
                 var_dump($className);

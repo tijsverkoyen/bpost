@@ -1,12 +1,12 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\BpostLogicException;
+namespace Bpost\BpostApiClient\Exception\BpostLogicException;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException;
+use Bpost\BpostApiClient\Exception\BpostLogicException;
 
 /**
  * Class BpostInvalidValueException
- * @package TijsVerkoyen\Bpost\Exception\LogicException
+ * @package Bpost\BpostApiClient\Exception\LogicException
  */
 class BpostInvalidPatternException extends BpostLogicException
 {

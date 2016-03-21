@@ -1,7 +1,7 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Line;
+use Bpost\BpostApiClient\Bpost\Order\Line;
 
 class LineTest extends \PHPUnit_Framework_TestCase
 {

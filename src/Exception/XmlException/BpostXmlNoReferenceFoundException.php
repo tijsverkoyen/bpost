@@ -1,12 +1,12 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception\XmlException;
+namespace Bpost\BpostApiClient\Exception\XmlException;
 
-use TijsVerkoyen\Bpost\Exception\BpostXmlException;
+use Bpost\BpostApiClient\Exception\BpostXmlException;
 
 /**
  * Class BpostXmlNoReferenceFoundException
- * @package TijsVerkoyen\Bpost\Exception\XmlException
+ * @package Bpost\BpostApiClient\Exception\XmlException
  */
 class BpostXmlNoReferenceFoundException extends BpostXmlException
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost;
+namespace Bpost\BpostApiClient\Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box;
-use TijsVerkoyen\Bpost\Bpost\Order\Line;
-use TijsVerkoyen\Bpost\Exception\BpostNotImplementedException;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoReferenceFoundException;
+use Bpost\BpostApiClient\Bpost\Order\Box;
+use Bpost\BpostApiClient\Bpost\Order\Line;
+use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoReferenceFoundException;
 
 /**
  * bPost Order class
@@ -208,7 +208,7 @@ class Order
         $lines = $this->getLines();
         if (!empty($lines)) {
             foreach ($lines as $line) {
-                /** @var $line \TijsVerkoyen\Bpost\Bpost\Order\Line */
+                /** @var $line \Bpost\BpostApiClient\Bpost\Order\Line */
                 $order->appendChild(
                     $line->toXML($document, 'tns')
                 );
@@ -218,7 +218,7 @@ class Order
         $boxes = $this->getBoxes();
         if (!empty($boxes)) {
             foreach ($boxes as $box) {
-                /** @var $box \TijsVerkoyen\Bpost\Bpost\Order\Box */
+                /** @var $box \Bpost\BpostApiClient\Bpost\Order\Box */
                 $order->appendChild(
                     $box->toXML($document, 'tns')
                 );

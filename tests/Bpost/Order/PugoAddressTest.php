@@ -1,8 +1,8 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Bpost\Order\PugoAddress;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class PugoAddressTest extends \PHPUnit_Framework_TestCase
 {

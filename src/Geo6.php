@@ -1,10 +1,10 @@
 <?php
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostCurlException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidXmlResponseException;
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostTaxipostLocatorException;
-use TijsVerkoyen\Bpost\Geo6\Poi;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidXmlResponseException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostTaxipostLocatorException;
+use Bpost\BpostApiClient\Geo6\Poi;
 
 /**
  * Geo6 class

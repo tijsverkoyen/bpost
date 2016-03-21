@@ -1,8 +1,8 @@
 <?php
 
-use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Common\BasicAttribute\PhoneNumber;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\BpostException;
+use Bpost\BpostApiClient\Common\BasicAttribute\PhoneNumber;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class PhoneNumberTest extends \PHPUnit_Framework_TestCase
 {

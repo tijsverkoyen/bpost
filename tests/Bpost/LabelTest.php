@@ -1,8 +1,8 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Label;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Bpost\Label;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class LabelTest extends \PHPUnit_Framework_TestCase
 {

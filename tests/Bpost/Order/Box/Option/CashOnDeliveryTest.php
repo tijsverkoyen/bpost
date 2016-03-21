@@ -1,7 +1,7 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\CashOnDelivery;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\CashOnDelivery;
 
 class CashOnDeliveryTest extends \PHPUnit_Framework_TestCase
 {

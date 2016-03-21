@@ -1,7 +1,7 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
 
-use TijsVerkoyen\Bpost\Common\ComplexAttribute;
+use Bpost\BpostApiClient\Common\ComplexAttribute;
 
 class ParcelLockerReducedMobilityZone extends ComplexAttribute
 {
@@ -24,7 +24,7 @@ class ParcelLockerReducedMobilityZone extends ComplexAttribute
     /**
      * @todo Implement it, because today, nothing is specified
      * @param \SimpleXMLElement $xml
-     * @return ParcelLockerReducedMobilityZone|\TijsVerkoyen\Bpost\IComplexAttribute
+     * @return ParcelLockerReducedMobilityZone|\Bpost\BpostApiClient\IComplexAttribute
      */
     static function createFromXml(\SimpleXMLElement $xml)
     {

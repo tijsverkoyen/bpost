@@ -1,12 +1,12 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\LogicException\BpostNotImplementedException;
 
 /**
  * bPost At247 class
@@ -24,7 +24,7 @@ class At247 extends National
     /** @var string */
     private $parcelsDepotName;
 
-    /** @var \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress */
+    /** @var \Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress */
     private $parcelsDepotAddress;
 
     /** @var string */
@@ -62,7 +62,7 @@ class At247 extends National
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress $parcelsDepotAddress
+     * @param \Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress $parcelsDepotAddress
      */
     public function setParcelsDepotAddress($parcelsDepotAddress)
     {
@@ -70,7 +70,7 @@ class At247 extends National
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress
+     * @return \Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress
      */
     public function getParcelsDepotAddress()
     {
@@ -317,7 +317,7 @@ class At247 extends National
                 if (in_array($optionData->getName(), array(Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED))) {
                     $option = Messaging::createFromXML($optionData);
                 } else {
-                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
                         throw new BpostNotImplementedException();
                     }

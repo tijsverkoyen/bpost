@@ -1,8 +1,8 @@
 <?php
 
-use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Common\BasicAttribute\Language;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\BpostException;
+use Bpost\BpostApiClient\Common\BasicAttribute\Language;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class LanguageTest extends \PHPUnit_Framework_TestCase
 {

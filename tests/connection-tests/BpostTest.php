@@ -1,16 +1,16 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\tests;
+namespace Bpost\BpostApiClient\tests;
 
-use \TijsVerkoyen\Bpost\Bpost;
-use \TijsVerkoyen\Bpost\Bpost\Order;
-use \TijsVerkoyen\Bpost\Bpost\Order\Address;
-use \TijsVerkoyen\Bpost\Bpost\Order\Box;
-use \TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
-use \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use \TijsVerkoyen\Bpost\Bpost\Order\Line as OrderLine;
-use \TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use \TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use \Bpost\BpostApiClient\Bpost;
+use \Bpost\BpostApiClient\Bpost\Order;
+use \Bpost\BpostApiClient\Bpost\Order\Address;
+use \Bpost\BpostApiClient\Bpost\Order\Box;
+use \Bpost\BpostApiClient\Bpost\Order\Box\AtHome;
+use \Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use \Bpost\BpostApiClient\Bpost\Order\Line as OrderLine;
+use \Bpost\BpostApiClient\Bpost\Order\Receiver;
+use \Bpost\BpostApiClient\Bpost\Order\Sender;
 
 /**
  * test case.
@@ -158,7 +158,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $order = $this->createAtHomeOrderObject();
         $this->bpost->createOrReplaceOrder($order);
         $response = $this->bpost->fetchOrder($order->getReference());
-        $this->assertInstanceOf('\\TijsVerkoyen\Bpost\\Bpost\\Order', $response);
+        $this->assertInstanceOf('\\Bpost\BpostApiClient\\Bpost\\Order', $response);
         $this->assertEquals($order->getReference(), $response->getReference());
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
@@ -174,7 +174,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $response = $this->bpost->createLabelForOrder($order->getReference());
         $this->assertInternalType('array', $response);
         foreach ($response as $label) {
-            $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
+            $this->assertInstanceOf('\\Bpost\\BpostApiClient\BPost\Label', $label);
         }
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
@@ -192,7 +192,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
         $response = $this->bpost->createLabelForBox($response[0]->getBarcode());
         $this->assertInternalType('array', $response);
         foreach ($response as $label) {
-            $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
+            $this->assertInstanceOf('\\Bpost\\BpostApiClient\BPost\Label', $label);
         }
 
         $this->bpost->modifyOrderStatus($order->getReference(), 'CANCELLED');
@@ -220,7 +220,7 @@ class BpostTest extends \PHPUnit_Framework_TestCase
 
         $this->assertInternalType('array', $response);
         foreach ($response as $label) {
-            $this->assertInstanceOf('\\TijsVerkoyen\\Bpost\BPost\Label', $label);
+            $this->assertInstanceOf('\\Bpost\\BpostApiClient\BPost\Label', $label);
         }
 
         $this->bpost->modifyOrderStatus($order1->getReference(), 'CANCELLED');

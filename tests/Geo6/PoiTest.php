@@ -2,7 +2,7 @@
 
 namespace Geo6;
 
-use TijsVerkoyen\Bpost\Geo6\Poi;
+use Bpost\BpostApiClient\Geo6\Poi;
 
 class PoiTest extends \PHPUnit_Framework_TestCase
 {

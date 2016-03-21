@@ -1,13 +1,13 @@
 <?php
 
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
 
 use Psr\Log\LoggerInterface;
 
 /**
  * Class Logger
- * @package TijsVerkoyen\Bpost
+ * @package Bpost\BpostApiClient
  */
 class Logger
 {

@@ -1,12 +1,12 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Exception;
+namespace Bpost\BpostApiClient\Exception;
 
-use TijsVerkoyen\Bpost\BpostException;
+use Bpost\BpostApiClient\BpostException;
 
 /**
  * Class BpostNotImplementedException
- * @package TijsVerkoyen\Bpost\Exception\LogicException
+ * @package Bpost\BpostApiClient\Exception\LogicException
  */
 class BpostNotImplementedException extends BpostException
 {

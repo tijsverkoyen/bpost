@@ -1,9 +1,9 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Common\ValidatedValue\LabelFormat;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\BpostException;
+use Bpost\BpostApiClient\Common\ValidatedValue\LabelFormat;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class LabelFormatTest extends \PHPUnit_Framework_TestCase
 {

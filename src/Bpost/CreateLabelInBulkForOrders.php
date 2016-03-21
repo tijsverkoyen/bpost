@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost;
+namespace Bpost\BpostApiClient\Bpost;
 
-use TijsVerkoyen\Bpost\Common\ValidatedValue\LabelFormat;
+use Bpost\BpostApiClient\Common\ValidatedValue\LabelFormat;
 
 /**
  * Class CreateLabelInBulkForOrders

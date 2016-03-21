@@ -1,11 +1,11 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\National;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\SaturdayDelivery;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Option;
+use Bpost\BpostApiClient\Bpost\Order\Box\National;
+use Bpost\BpostApiClient\Bpost\Order\Box\Openinghour\Day;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\SaturdayDelivery;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\Option;
 
 class NationalFake extends National
 {

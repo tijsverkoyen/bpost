@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\test\Exception\ApiResponseException;
 
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostInvalidSelectionException;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidSelectionException;
 
 class BpostInvalidSelectionExceptionTest extends \PHPUnit_Framework_TestCase
 {

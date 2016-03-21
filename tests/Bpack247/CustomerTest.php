@@ -1,9 +1,9 @@
 <?php
 namespace Bpost\Bpack;
 
-use TijsVerkoyen\Bpost\Bpack247\Customer;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
+use Bpost\BpostApiClient\Bpack247\Customer;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoUserIdFoundException;
 
 class CustomerTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,9 +1,9 @@
 <?php
 
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
-use TijsVerkoyen\Bpost\Common\ComplexAttribute;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException;
+use Bpost\BpostApiClient\Common\ComplexAttribute;
+use Bpost\BpostApiClient\Exception\BpostLogicException;
 
 class ComplexAttributeFake extends ComplexAttribute
 {

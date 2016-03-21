@@ -1,13 +1,13 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostNotImplementedException;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Option;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
+use Bpost\BpostApiClient\Bpost\Order\Box\Customsinfo\CustomsInfo;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostNotImplementedException;
 
 /**
  * bPost International class
@@ -30,7 +30,7 @@ class International implements IBox
     private $options;
 
     /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\Receiver
+     * @var \Bpost\BpostApiClient\Bpost\Order\Receiver
      */
     private $receiver;
 
@@ -40,12 +40,12 @@ class International implements IBox
     private $parcelWeight;
 
     /**
-     * @var \TijsVerkoyen\Bpost\Bpost\Order\Box\CustomsInfo\CustomsInfo
+     * @var \Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo
      */
     private $customsInfo;
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\CustomsInfo\CustomsInfo $customsInfo
+     * @param \Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo $customsInfo
      */
     public function setCustomsInfo($customsInfo)
     {
@@ -53,7 +53,7 @@ class International implements IBox
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Box\CustomsInfo\CustomsInfo
+     * @return \Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo
      */
     public function getCustomsInfo()
     {
@@ -134,7 +134,7 @@ class International implements IBox
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Receiver $receiver
+     * @param \Bpost\BpostApiClient\Bpost\Order\Receiver $receiver
      */
     public function setReceiver($receiver)
     {
@@ -142,7 +142,7 @@ class International implements IBox
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Receiver
+     * @return \Bpost\BpostApiClient\Bpost\Order\Receiver
      */
     public function getReceiver()
     {
@@ -235,7 +235,7 @@ class International implements IBox
                 if (in_array($optionData->getName(), array(Messaging::MESSAGING_TYPE_INFO_DISTRIBUTED))) {
                     $option = Messaging::createFromXML($optionData);
                 } else {
-                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
                         throw new BpostNotImplementedException();
                     }

@@ -1,9 +1,9 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Common\ValidatedValue;
+namespace Bpost\BpostApiClient\Common\ValidatedValue;
 
-use TijsVerkoyen\Bpost\Common\ValidatedValue;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Common\ValidatedValue;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * Class LabelFormat

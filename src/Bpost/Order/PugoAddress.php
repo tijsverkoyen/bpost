@@ -1,5 +1,5 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order;
+namespace Bpost\BpostApiClient\Bpost\Order;
 
 /**
  * bPost PugoAddress class

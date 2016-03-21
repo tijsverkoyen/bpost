@@ -1,13 +1,13 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
+namespace Bpost\BpostApiClient\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidWeightException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidWeightException;
 
 /**
  * Class Price
- * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ * @package Bpost\BpostApiClient\Bpost\ProductConfiguration
  */
 class Price
 {

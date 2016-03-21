@@ -1,8 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\Customsinfo;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * bPost CustomsInfo class

@@ -1,6 +1,6 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Common;
+namespace Bpost\BpostApiClient\Common;
 
 abstract class ComplexAttribute
 {

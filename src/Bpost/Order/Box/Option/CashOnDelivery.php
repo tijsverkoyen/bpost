@@ -1,5 +1,5 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\Option;
 
 /**
  * bPost CashOnDelivery class

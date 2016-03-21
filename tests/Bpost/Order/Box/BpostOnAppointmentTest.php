@@ -1,10 +1,10 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\BpostOnAppointment;
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Box\BpostOnAppointment;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
 
 class BpostOnAppointmentTest extends \PHPUnit_Framework_TestCase
 {
@@ -104,7 +104,7 @@ class BpostOnAppointmentTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromNotBpostOnAppointmentXml()
     {
-        $this->setExpectedException('TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException');
+        $this->setExpectedException('Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException');
         BpostOnAppointment::createFromXml(new \SimpleXMLElement($this->getNotBpostOnAppointmentXml()));
     }
 

@@ -27,7 +27,7 @@
   },
   "autoload": {
     "psr-4": {
-      "TijsVerkoyen\\Bpost\\": "src/"
+      "Bpost\\BpostApiClient\\": "src/"
     }
   }
 }

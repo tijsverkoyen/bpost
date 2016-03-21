@@ -1,8 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost\Common\BasicAttribute;
+namespace Bpost\BpostApiClient\Common\BasicAttribute;
 
-use TijsVerkoyen\Bpost\Common\BasicAttribute;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Common\BasicAttribute;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class Language extends BasicAttribute
 {

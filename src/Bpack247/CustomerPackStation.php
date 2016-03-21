@@ -1,5 +1,5 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpack247;
+namespace Bpost\BpostApiClient\Bpack247;
 
 /**
  * bPost Customer Pack Station class

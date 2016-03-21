@@ -1,10 +1,10 @@
 <?php
 
-use TijsVerkoyen\Bpost\Common\BasicAttribute;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Common\BasicAttribute;
+use Bpost\BpostApiClient\Exception\BpostLogicException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class BasicAttributeFake extends BasicAttribute
 {
@@ -48,7 +48,7 @@ class BasicAttributeTest extends \PHPUnit_Framework_TestCase
         $fake = new BasicAttributeFake('qsd');
         $this->assertSame('qsd', (string)$fake);
 
-        $this->setExpectedException('TijsVerkoyen\Bpost\Exception\BpostLogicException');
+        $this->setExpectedException('Bpost\BpostApiClient\Exception\BpostLogicException');
         new BasicAttributeFake('aze');
     }
 

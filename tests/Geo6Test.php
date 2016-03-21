@@ -1,9 +1,9 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Geo6\test;
+namespace Bpost\BpostApiClient\Geo6\test;
 
-use TijsVerkoyen\Bpost\Exception\ApiResponseException\BpostTaxipostLocatorException;
-use TijsVerkoyen\Bpost\Geo6;
+use Bpost\BpostApiClient\Exception\ApiResponseException\BpostTaxipostLocatorException;
+use Bpost\BpostApiClient\Geo6;
 
 class Geo6Test extends \PHPUnit_Framework_TestCase
 {
@@ -60,7 +60,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         foreach ($response as $item) {
             $this->assertArrayHasKey('poi', $item);
             $this->assertArrayHasKey('distance', $item);
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Geo6\Poi', $item['poi']);
+            $this->assertInstanceOf('Bpost\BpostApiClient\Geo6\Poi', $item['poi']);
         }
     }
 
@@ -73,7 +73,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $type = '1';
         $response = $this->geo6->getServicePointDetails($id, 'nl', $type);
 
-        $this->assertInstanceOf('TijsVerkoyen\Bpost\Geo6\Poi', $response);
+        $this->assertInstanceOf('Bpost\BpostApiClient\Geo6\Poi', $response);
         $this->assertSame($response->getId(), $id);
         $this->assertSame($response->getType(), $type);
 

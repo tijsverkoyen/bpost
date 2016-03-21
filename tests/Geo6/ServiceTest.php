@@ -2,7 +2,7 @@
 
 namespace Geo6;
 
-use TijsVerkoyen\Bpost\Geo6\Service;
+use Bpost\BpostApiClient\Geo6\Service;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {

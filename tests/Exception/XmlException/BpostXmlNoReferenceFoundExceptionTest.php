@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\XmlException;
+namespace Bpost\BpostApiClient\test\Exception\XmlException;
 
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoReferenceFoundException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoReferenceFoundException;
 
 class BpostXmlNoReferenceFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

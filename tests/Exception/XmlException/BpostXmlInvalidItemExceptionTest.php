@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\XmlException;
+namespace Bpost\BpostApiClient\test\Exception\XmlException;
 
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 
 class BpostXmlInvalidItemExceptionTest extends \PHPUnit_Framework_TestCase
 {

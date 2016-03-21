@@ -1,8 +1,8 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\National;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
 
-use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\BpostException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class ShopHandlingInstructionTest extends \PHPUnit_Framework_TestCase
 {

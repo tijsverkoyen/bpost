@@ -1,10 +1,10 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Box\AtHome;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class AtHomeTest extends \PHPUnit_Framework_TestCase
 {
@@ -101,7 +101,7 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
     }
 
     public function testCreateFromBadXml() {
-        $this->setExpectedException('TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException');
+        $this->setExpectedException('Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException');
         AtHome::createFromXml(new \SimpleXMLElement($this->getNotAtHomeXml()));
     }
 

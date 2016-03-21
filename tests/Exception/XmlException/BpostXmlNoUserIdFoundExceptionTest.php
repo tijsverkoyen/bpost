@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\XmlException;
+namespace Bpost\BpostApiClient\test\Exception\XmlException;
 
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoUserIdFoundException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoUserIdFoundException;
 
 class BpostXmlNoUserIdFoundExceptionTest extends \PHPUnit_Framework_TestCase
 {

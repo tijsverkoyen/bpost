@@ -1,9 +1,9 @@
 <?php
-namespace TijsVerkoyen\Bpost\Common\BasicAttribute;
+namespace Bpost\BpostApiClient\Common\BasicAttribute;
 
-use TijsVerkoyen\Bpost\Common\BasicAttribute;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
+use Bpost\BpostApiClient\Common\BasicAttribute;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternException;
 
 class EmailAddressCharacteristic extends BasicAttribute
 {

@@ -1,10 +1,10 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\National\ShopHandlingInstruction;
-use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Bpost\Order\Box\AtBpost;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ShopHandlingInstruction;
+use Bpost\BpostApiClient\Bpost\Order\PugoAddress;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class AtBpostTest extends \PHPUnit_Framework_TestCase
 {

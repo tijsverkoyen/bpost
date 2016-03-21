@@ -1,12 +1,12 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
+namespace Bpost\BpostApiClient\Bpost\ProductConfiguration;
 
 use SimpleXMLElement;
 
 /**
  * Class Product
- * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ * @package Bpost\BpostApiClient\Bpost\ProductConfiguration
  */
 class Product
 {

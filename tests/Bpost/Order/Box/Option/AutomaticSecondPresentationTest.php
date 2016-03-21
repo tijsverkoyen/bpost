@@ -1,7 +1,7 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\AutomaticSecondPresentation;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\AutomaticSecondPresentation;
 
 class AutomaticSecondPresentationTest extends \PHPUnit_Framework_TestCase
 {

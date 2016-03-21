@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\LogicException;
+namespace Bpost\BpostApiClient\test\Exception\LogicException;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidWeightException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidWeightException;
 
 class BpostInvalidWeightExceptionTest extends \PHPUnit_Framework_TestCase
 {

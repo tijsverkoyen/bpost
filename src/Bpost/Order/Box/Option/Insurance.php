@@ -1,7 +1,7 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Option;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\Option;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * bPost Insurance class

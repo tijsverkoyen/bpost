@@ -1,7 +1,7 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Labels;
+use Bpost\BpostApiClient\Bpost\Labels;
 
 class LabelsTest extends \PHPUnit_Framework_TestCase
 {

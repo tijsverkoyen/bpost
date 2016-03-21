@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\test\Exception\LogicException;
+namespace Bpost\BpostApiClient\test\Exception\LogicException;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class BpostInvalidLengthExceptionTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,13 +1,13 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost;
+namespace Bpost\BpostApiClient\Bpost;
 
 use SimpleXMLElement;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\DeliveryMethod;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\DeliveryMethod;
 
 /**
  * Class ProductConfiguration
- * @package TijsVerkoyen\Bpost\Bpost
+ * @package Bpost\BpostApiClient\Bpost
  */
 class ProductConfiguration
 {

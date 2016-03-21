@@ -1,6 +1,6 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Geo6;
+namespace Bpost\BpostApiClient\Geo6;
 
 /**
  * Geo6 class

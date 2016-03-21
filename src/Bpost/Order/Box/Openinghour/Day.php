@@ -1,8 +1,8 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\Openinghour;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
  * bPost Day class

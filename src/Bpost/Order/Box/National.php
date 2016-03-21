@@ -1,12 +1,12 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option;
-use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Common\ComplexAttribute;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
+use Bpost\BpostApiClient\Bpost\Order\Box\Openinghour\Day;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Option;
+use Bpost\BpostApiClient\BpostException;
+use Bpost\BpostApiClient\Common\ComplexAttribute;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * bPost National class
@@ -238,7 +238,7 @@ abstract class National extends ComplexAttribute implements IBox
                 ) {
                     $option = Messaging::createFromXML($optionData);
                 } else {
-                    $className = '\\TijsVerkoyen\\Bpost\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+                    $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
                     if (!method_exists($className, 'createFromXML')) {
                         throw new BpostXmlInvalidItemException();
                     }

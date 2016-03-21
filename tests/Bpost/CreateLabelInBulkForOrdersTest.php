@@ -1,8 +1,8 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\CreateLabelInBulkForOrders;
-use TijsVerkoyen\Bpost\Common\ValidatedValue\LabelFormat;
+use Bpost\BpostApiClient\Bpost\CreateLabelInBulkForOrders;
+use Bpost\BpostApiClient\Common\ValidatedValue\LabelFormat;
 
 class CreateLabelInBulkForOrdersTest extends \PHPUnit_Framework_TestCase
 {

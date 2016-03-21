@@ -1,16 +1,16 @@
 <?php
 namespace Bpost;
 
-use TijsVerkoyen\Bpost\Bpost\Order;
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Box;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\CashOnDelivery;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\SaturdayDelivery;
-use TijsVerkoyen\Bpost\Bpost\Order\Line;
-use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
-use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use Bpost\BpostApiClient\Bpost\Order;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Box;
+use Bpost\BpostApiClient\Bpost\Order\Box\AtBpost;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\CashOnDelivery;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\SaturdayDelivery;
+use Bpost\BpostApiClient\Bpost\Order\Line;
+use Bpost\BpostApiClient\Bpost\Order\PugoAddress;
+use Bpost\BpostApiClient\Bpost\Order\Sender;
 
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
@@ -83,7 +83,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlNoReferenceFoundException
+     * @expectedException \Bpost\BpostApiClient\Exception\XmlException\BpostXmlNoReferenceFoundException
      */
     public function testCreateFromXmlWithException()
     {
@@ -119,7 +119,7 @@ class OrderTest extends \PHPUnit_Framework_TestCase
 
         /** @var AtBpost $nationalBox */
         $nationalBox = $box->getNationalBox();
-        $this->assertInstanceOf('TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost', $nationalBox);
+        $this->assertInstanceOf('Bpost\BpostApiClient\Bpost\Order\Box\AtBpost', $nationalBox);
         $this->assertSame('bpack@bpost', $nationalBox->getProduct());
         $this->assertSame(1234, $nationalBox->getWeight());
         $this->assertNull($nationalBox->getOpeningHours());

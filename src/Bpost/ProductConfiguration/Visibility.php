@@ -1,10 +1,10 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost\ProductConfiguration;
+namespace Bpost\BpostApiClient\Bpost\ProductConfiguration;
 
 /**
  * Class Visibility
- * @package TijsVerkoyen\Bpost\Bpost\ProductConfiguration
+ * @package Bpost\BpostApiClient\Bpost\ProductConfiguration
  */
 class Visibility
 {

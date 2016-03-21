@@ -2,8 +2,8 @@
 
 namespace Geo6;
 
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidDayException;
-use TijsVerkoyen\Bpost\Geo6\Day;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidDayException;
+use Bpost\BpostApiClient\Geo6\Day;
 
 class DayTest extends \PHPUnit_Framework_TestCase
 {

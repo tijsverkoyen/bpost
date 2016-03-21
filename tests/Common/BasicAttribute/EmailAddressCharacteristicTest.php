@@ -1,9 +1,9 @@
 <?php
 
-use TijsVerkoyen\Bpost\BpostException;
-use TijsVerkoyen\Bpost\Common\BasicAttribute\EmailAddressCharacteristic;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidLengthException;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidPatternException;
+use Bpost\BpostApiClient\BpostException;
+use Bpost\BpostApiClient\Common\BasicAttribute\EmailAddressCharacteristic;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternException;
 
 class EmailAddressCharacteristicTest extends \PHPUnit_Framework_TestCase
 {

@@ -1,10 +1,10 @@
 <?php
 
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
 /**
  * Interface IBox
- * @package TijsVerkoyen\Bpost\Bpost\Order\Box
+ * @package Bpost\BpostApiClient\Bpost\Order\Box
  */
 interface IBox
 {
@@ -20,7 +20,7 @@ interface IBox
     public function getOptions();
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Option $option
+     * @param \Bpost\BpostApiClient\Bpost\Order\Box\Option\Option $option
      */
     public function addOption(Option\Option $option);
 

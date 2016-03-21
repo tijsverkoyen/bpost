@@ -1,5 +1,5 @@
 <?php
-namespace TijsVerkoyen\Bpost;
+namespace Bpost\BpostApiClient;
 
 /**
  * bPost Exception class

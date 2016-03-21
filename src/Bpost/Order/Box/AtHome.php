@@ -1,11 +1,11 @@
 <?php
-namespace TijsVerkoyen\Bpost\Bpost\Order\Box;
+namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Bpost\ProductConfiguration\Product;
-use TijsVerkoyen\Bpost\Exception\BpostLogicException\BpostInvalidValueException;
-use TijsVerkoyen\Bpost\Exception\LogicException\BpostNotImplementedException;
-use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
+use Bpost\BpostApiClient\Exception\LogicException\BpostNotImplementedException;
+use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**
  * bPost AtHome class
@@ -17,7 +17,7 @@ use TijsVerkoyen\Bpost\Exception\XmlException\BpostXmlInvalidItemException;
  */
 class AtHome extends National
 {
-    /** @var \TijsVerkoyen\Bpost\Bpost\Order\Receiver */
+    /** @var \Bpost\BpostApiClient\Bpost\Order\Receiver */
     private $receiver;
 
     /** @var string */
@@ -52,7 +52,7 @@ class AtHome extends National
     }
 
     /**
-     * @param \TijsVerkoyen\Bpost\Bpost\Order\Receiver $receiver
+     * @param \Bpost\BpostApiClient\Bpost\Order\Receiver $receiver
      */
     public function setReceiver($receiver)
     {
@@ -60,7 +60,7 @@ class AtHome extends National
     }
 
     /**
-     * @return \TijsVerkoyen\Bpost\Bpost\Order\Receiver
+     * @return \Bpost\BpostApiClient\Bpost\Order\Receiver
      */
     public function getReceiver()
     {
@@ -129,7 +129,7 @@ class AtHome extends National
      * @return AtHome
      * @throws BpostNotImplementedException
      * @throws BpostXmlInvalidItemException
-     * @throws \TijsVerkoyen\Bpost\BpostException
+     * @throws \Bpost\BpostApiClient\BpostException
      */
     public static function createFromXML(\SimpleXMLElement $xml)
     {
