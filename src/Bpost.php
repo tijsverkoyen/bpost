@@ -33,7 +33,7 @@ class Bpost
     const API_URL = 'https://api.bpost.be/services/shm';
 
     // current version
-    const VERSION = '3.0.2';
+    const VERSION = '3.3.0';
 
     /** Min weight, in grams, for a shipping */
     const MIN_WEIGHT = 0;
