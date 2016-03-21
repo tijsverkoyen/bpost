@@ -7,3 +7,5 @@
 
 # Tests & reports
 /tests/reports
+/tests/phpunit-credentials.php
+
