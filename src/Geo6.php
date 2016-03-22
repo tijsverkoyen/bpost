@@ -23,6 +23,14 @@ class Geo6
     const VERSION = '3';
 
     /**
+     * @see getServicePointPageUrl
+     */
+    const POINT_TYPE_POST_OFFICE = 1;
+    const POINT_TYPE_POST_POINT = 2;
+    const POINT_TYPE_BPACK_247 = 4;
+    const POINT_TYPE_CLICK_COLLECT_SHOP = 8;
+
+    /**
      * @var string
      */
     private $appId;
