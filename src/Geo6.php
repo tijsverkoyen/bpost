@@ -99,13 +99,16 @@ class Geo6
      */
     private function doCall($method, array $parameters = array())
     {
-        $options[CURLOPT_URL] = $this->buildUrl($method, $parameters);
+        $options[CURLOPT_URL] = self::API_URL;
         $options[CURLOPT_USERAGENT] = $this->getUserAgent();
         $options[CURLOPT_FOLLOWLOCATION] = true;
         $options[CURLOPT_SSL_VERIFYPEER] = false;
         $options[CURLOPT_SSL_VERIFYHOST] = false;
         $options[CURLOPT_RETURNTRANSFER] = true;
         $options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
+
+        $options[CURLOPT_POST] = true;
+        $options[CURLOPT_POSTFIELDS] = $this->buildParameters($method, $parameters);
 
         $curl = curl_init();
 
