@@ -53,8 +53,8 @@ class Geo6
      */
     public function __construct($partner, $appId)
     {
-        $this->setPartner((string) $partner);
-        $this->setAppId((string) $appId);
+        $this->setPartner((string)$partner);
+        $this->setAppId((string)$appId);
     }
 
     /**
@@ -105,7 +105,7 @@ class Geo6
         $options[CURLOPT_SSL_VERIFYPEER] = false;
         $options[CURLOPT_SSL_VERIFYHOST] = false;
         $options[CURLOPT_RETURNTRANSFER] = true;
-        $options[CURLOPT_TIMEOUT] = (int) $this->getTimeOut();
+        $options[CURLOPT_TIMEOUT] = (int)$this->getTimeOut();
 
         $options[CURLOPT_POST] = true;
         $options[CURLOPT_POSTFIELDS] = $this->buildParameters($method, $parameters);
@@ -134,8 +134,8 @@ class Geo6
         }
 
         // catch generic errors
-        if (isset($xml['type']) && (string) $xml['type'] == 'TaxipostLocatorError') {
-            throw new BpostTaxipostLocatorException((string) $xml->txt, (int)$xml->status);
+        if (isset($xml['type']) && (string)$xml['type'] == 'TaxipostLocatorError') {
+            throw new BpostTaxipostLocatorException((string)$xml->txt, (int)$xml->status);
         }
 
         // return
@@ -182,7 +182,7 @@ class Geo6
      */
     public function setTimeOut($seconds)
     {
-        $this->timeOut = (int) $seconds;
+        $this->timeOut = (int)$seconds;
     }
 
     /**
@@ -192,7 +192,7 @@ class Geo6
      */
     public function getTimeOut()
     {
-        return (int) $this->timeOut;
+        return (int)$this->timeOut;
     }
 
     /**
@@ -204,7 +204,7 @@ class Geo6
      */
     public function getUserAgent()
     {
-        return (string) 'PHP Bpost Geo6/' . self::VERSION . ' ' . $this->userAgent;
+        return (string)'PHP Bpost Geo6/' . self::VERSION . ' ' . $this->userAgent;
     }
 
     /**
@@ -215,7 +215,7 @@ class Geo6
      */
     public function setUserAgent($userAgent)
     {
-        $this->userAgent = (string) $userAgent;
+        $this->userAgent = (string)$userAgent;
     }
 
     // webservice methods
@@ -241,12 +241,12 @@ class Geo6
     public function getNearestServicePoint($street, $number, $zone, $language = 'nl', $type = 3, $limit = 10)
     {
         $parameters = array();
-        $parameters['Street'] = (string) $street;
-        $parameters['Number'] = (string) $number;
-        $parameters['Zone'] = (string) $zone;
-        $parameters['Language'] = (string) $language;
-        $parameters['Type'] = (int) $type;
-        $parameters['Limit'] = (int) $limit;
+        $parameters['Street'] = (string)$street;
+        $parameters['Number'] = (string)$number;
+        $parameters['Zone'] = (string)$zone;
+        $parameters['Language'] = (string)$language;
+        $parameters['Type'] = (int)$type;
+        $parameters['Limit'] = (int)$limit;
 
         $xml = $this->doCall('search', $parameters);
 
@@ -258,7 +258,7 @@ class Geo6
         foreach ($xml->PoiList->Poi as $poi) {
             $pois[] = array(
                 'poi' => Poi::createFromXML($poi->Record),
-                'distance' => (float) $poi->Distance,
+                'distance' => (float)$poi->Distance,
             );
         }
 
@@ -284,9 +284,9 @@ class Geo6
     public function getServicePointDetails($id, $language = 'nl', $type = 3)
     {
         $parameters = array();
-        $parameters['Id'] = (string) $id;
-        $parameters['Language'] = (string) $language;
-        $parameters['Type'] = (int) $type;
+        $parameters['Id'] = (string)$id;
+        $parameters['Language'] = (string)$language;
+        $parameters['Type'] = (int)$type;
 
         $xml = $this->doCall('info', $parameters);
 
@@ -306,9 +306,9 @@ class Geo6
     public function getServicePointPage($id, $language = 'nl', $type = 3)
     {
         $parameters = array();
-        $parameters['Id'] = (string) $id;
-        $parameters['Language'] = (string) $language;
-        $parameters['Type'] = (int) $type;
+        $parameters['Id'] = (string)$id;
+        $parameters['Language'] = (string)$language;
+        $parameters['Type'] = (int)$type;
 
         return $this->buildUrl('page', $parameters);
     }
