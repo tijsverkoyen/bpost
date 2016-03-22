@@ -303,7 +303,7 @@ class Geo6
      * @param  int    $type
      * @return string
      */
-    public function getServicePointPage($id, $language = 'nl', $type = 3)
+    public function getServicePointPageUrl($id, $language = 'nl', $type = 3)
     {
         $parameters = array();
         $parameters['Id'] = (string)$id;
@@ -311,5 +311,19 @@ class Geo6
         $parameters['Type'] = (int)$type;
 
         return $this->buildUrl('page', $parameters);
+    }
+
+    /**
+     * @param int    $id
+     * @param string $language
+     * @param int    $type
+     * @return string
+     *
+     * @deprecated Renamed
+     * @see        getServicePointPageUrl
+     */
+    public function getServicePointPage($id, $language = 'nl', $type = 3)
+    {
+        return $this->getServicePointPageUrl($id, $language, $type);
     }
 }
