@@ -60,11 +60,23 @@ class Geo6
     /**
      * Build the url to be called
      *
-     * @param  string     $method
-     * @param  array|null $parameters
+     * @param string $method
+     * @param array  $parameters
      * @return string
      */
-    private function buildUrl($method, $parameters = null)
+    private function buildUrl($method, array $parameters = array())
+    {
+        return self::API_URL . '?' . $this->buildParameters($method, $parameters);
+    }
+
+    /**
+     * Build the parameters to send (URL-encoded string)
+     *
+     * @param  string $method
+     * @param  array  $parameters
+     * @return string
+     */
+    private function buildParameters($method, array $parameters = array())
     {
         // add credentials
         $parameters['Function'] = $method;
@@ -72,7 +84,7 @@ class Geo6
         $parameters['AppId'] = $this->getAppId();
         $parameters['Format'] = 'xml';
 
-        return self::API_URL . '?' . http_build_query($parameters);
+        return http_build_query($parameters);
     }
 
     /**
