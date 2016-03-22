@@ -107,7 +107,7 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         $response = $this->geo6->getServicePointPage($id, 'nl', $type);
 
         $this->assertSame(
-            'http://taxipost.geo6.be/Locator?Id=' . $id . '&Language=nl&Type=' . $type . '&Function=page&Partner=' . GEO6_PARTNER . '&AppId=' . GEO6_APP_ID . '&Format=xml',
+            'https://taxipost.geo6.be/Locator?Id=' . $id . '&Language=nl&Type=' . $type . '&Function=page&Partner=' . GEO6_PARTNER . '&AppId=' . GEO6_APP_ID . '&Format=xml',
             $response
         );
     }
