@@ -90,14 +90,14 @@ class Geo6
     /**
      * Make the real call
      *
-     * @param  string     $method
-     * @param  array|null $parameters
+     * @param  string $method
+     * @param  array  $parameters
      * @return \SimpleXMLElement
      * @throws BpostCurlException
      * @throws BpostInvalidXmlResponseException
      * @throws BpostTaxipostLocatorException
      */
-    private function doCall($method, $parameters = null)
+    private function doCall($method, array $parameters = array())
     {
         $options[CURLOPT_URL] = $this->buildUrl($method, $parameters);
         $options[CURLOPT_USERAGENT] = $this->getUserAgent();
