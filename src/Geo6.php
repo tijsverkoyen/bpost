@@ -23,6 +23,7 @@ class Geo6
     const VERSION = '3';
 
     /**
+     * @see getPointType
      * @see getServicePointPageUrl
      */
     const POINT_TYPE_POST_OFFICE = 1;
@@ -306,10 +307,12 @@ class Geo6
     }
 
     /**
-     * @param         $id
+     * @param  int    $id
      * @param  string $language
      * @param  int    $type
      * @return string
+     *
+     * @see getPointType to feed the param $type
      */
     public function getServicePointPageUrl($id, $language = 'nl', $type = 3)
     {
@@ -333,5 +336,25 @@ class Geo6
     public function getServicePointPage($id, $language = 'nl', $type = 3)
     {
         return $this->getServicePointPageUrl($id, $language, $type);
+    }
+
+    /**
+     * @param bool $withPostOffice
+     * @param bool $withPostPoint
+     * @param bool $withBpack247
+     * @param bool $withClickAndCollectShop
+     * @return int
+     */
+    public function getPointType(
+        $withPostOffice = true,
+        $withPostPoint = true,
+        $withBpack247 = false,
+        $withClickAndCollectShop = false
+    ) {
+        return
+            ($withPostOffice ? self::POINT_TYPE_POST_OFFICE : 0)
+            + ($withPostPoint ? self::POINT_TYPE_POST_POINT : 0)
+            + ($withBpack247 ? self::POINT_TYPE_BPACK_247 : 0)
+            + ($withClickAndCollectShop ? self::POINT_TYPE_CLICK_COLLECT_SHOP : 0);
     }
 }
