@@ -28,7 +28,7 @@
     "psr/log": "~1.0.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "@stable"
+    "phpunit/phpunit": "^4.8 || ^5.3"
   },
   "autoload": {
     "psr-4": {
