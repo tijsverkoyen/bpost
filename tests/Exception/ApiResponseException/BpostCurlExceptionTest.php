@@ -1,8 +1,8 @@
 <?php
 
-namespace Bpost\BpostApiClient\test\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\test\Exception\BpostApiResponseException;
 
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostCurlException;
 
 class BpostCurlExceptionTest extends \PHPUnit_Framework_TestCase
 {

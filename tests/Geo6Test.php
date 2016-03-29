@@ -2,7 +2,7 @@
 
 namespace Bpost\BpostApiClient\Geo6\test;
 
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostTaxipostLocatorException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostTaxipostLocatorException;
 use Bpost\BpostApiClient\Geo6;
 
 class Geo6Test extends \PHPUnit_Framework_TestCase

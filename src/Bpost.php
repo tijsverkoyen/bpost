@@ -9,9 +9,9 @@ use Bpost\BpostApiClient\Bpost\Order\Box;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Insurance;
 use Bpost\BpostApiClient\Bpost\ProductConfiguration;
 use Bpost\BpostApiClient\Common\ValidatedValue\LabelFormat;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidResponseException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidSelectionException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostInvalidResponseException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostInvalidSelectionException;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 

@@ -1,14 +1,14 @@
 <?php
 
-namespace Bpost\BpostApiClient\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\Exception\BpostApiResponseException;
 
-use Bpost\BpostApiClient\Exception\ApiResponseException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException;
 
 /**
  * Class BpostInvalidResponseException
- * @package Bpost\BpostApiClient\Exception\ApiResponseException
+ * @package Bpost\BpostApiClient\Exception\BpostApiResponseException
  */
-class BpostInvalidResponseException extends ApiResponseException
+class BpostInvalidResponseException extends BpostApiResponseException
 {
     /**
      * @param string     $message

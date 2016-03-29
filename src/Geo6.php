@@ -1,9 +1,9 @@
 <?php
 namespace Bpost\BpostApiClient;
 
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidXmlResponseException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostTaxipostLocatorException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostInvalidXmlResponseException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostTaxipostLocatorException;
 use Bpost\BpostApiClient\Geo6\Poi;
 
 /**

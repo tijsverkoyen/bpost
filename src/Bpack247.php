@@ -2,10 +2,10 @@
 namespace Bpost\BpostApiClient;
 
 use Bpost\BpostApiClient\Bpack247\Customer;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostApiBusinessException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostApiValidationException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostCurlException;
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostInvalidResponseException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostApiBusinessException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostApiValidationException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostCurlException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostInvalidResponseException;
 
 /**
  * bPost Bpack24/7 class

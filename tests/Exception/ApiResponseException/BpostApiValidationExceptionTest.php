@@ -1,8 +1,8 @@
 <?php
 
-namespace Bpost\BpostApiClient\test\Exception\ApiResponseException;
+namespace Bpost\BpostApiClient\test\Exception\BpostApiResponseException;
 
-use Bpost\BpostApiClient\Exception\ApiResponseException\BpostApiValidationException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostApiValidationException;
 
 class BpostApiValidationExceptionTest extends \PHPUnit_Framework_TestCase
 {
