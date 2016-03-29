@@ -1,6 +1,7 @@
 <?php
 namespace Bpost\BpostApiClient;
 
+use Bpost\BpostApiClient\ApiCaller\ApiCaller;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostCurlException;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostInvalidXmlResponseException;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostTaxipostLocatorException;
@@ -30,6 +31,9 @@ class Geo6
     const POINT_TYPE_POST_POINT = 2;
     const POINT_TYPE_BPACK_247 = 4;
     const POINT_TYPE_CLICK_COLLECT_SHOP = 8;
+
+    /** @var ApiCaller */
+    private $apiCaller;
 
     /**
      * @var string
@@ -64,6 +68,25 @@ class Geo6
     {
         $this->setPartner((string)$partner);
         $this->setAppId((string)$appId);
+    }
+
+    /**
+     * @return ApiCaller
+     */
+    public function getApiCaller()
+    {
+        if ($this->apiCaller === null) {
+            $this->apiCaller = new ApiCaller(new Logger());
+        }
+        return $this->apiCaller;
+    }
+
+    /**
+     * @param ApiCaller $apiCaller
+     */
+    public function setApiCaller(ApiCaller $apiCaller)
+    {
+        $this->apiCaller = $apiCaller;
     }
 
     /**
@@ -121,23 +144,10 @@ class Geo6
             CURLOPT_POSTFIELDS => $this->buildParameters($method, $parameters),
         );
 
-        $curl = curl_init();
-
-        // set options
-        curl_setopt_array($curl, $options);
-
-        // execute
-        $response = curl_exec($curl);
-        $errorNumber = curl_errno($curl);
-        $errorMessage = curl_error($curl);
-
-        // error?
-        if ($errorNumber != '') {
-            throw new BpostCurlException($errorMessage, $errorNumber);
-        }
+        $this->getApiCaller()->doCall($options);
 
         // we expect XML so decode it
-        $xml = @simplexml_load_string($response);
+        $xml = @simplexml_load_string($this->getApiCaller()->getResponseBody());
 
         // validate xml
         if ($xml === false || (isset($xml->head) && isset($xml->body))) {
