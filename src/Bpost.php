@@ -1,6 +1,7 @@
 <?php
 namespace Bpost\BpostApiClient;
 
+use Bpost\BpostApiClient\ApiCaller\ApiCaller;
 use Psr\Log\LoggerInterface;
 use Bpost\BpostApiClient\Bpost\CreateLabelInBulkForOrders;
 use Bpost\BpostApiClient\Bpost\Labels;
@@ -40,6 +41,9 @@ class Bpost
 
     /** Max weight, in grams, for a shipping */
     const MAX_WEIGHT = 30000;
+
+    /** @var ApiCaller */
+    private $apiCaller;
 
     /**
      * The account id
@@ -102,6 +106,25 @@ class Bpost
         $this->passPhrase = (string)$passPhrase;
         $this->apiUrl = (string)$apiUrl;
         $this->logger = new Logger();
+    }
+
+    /**
+     * @return ApiCaller
+     */
+    public function getApiCaller()
+    {
+        if ($this->apiCaller === null) {
+            $this->apiCaller = new ApiCaller(new Logger());
+        }
+        return $this->apiCaller;
+    }
+
+    /**
+     * @param ApiCaller $apiCaller
+     */
+    public function setApiCaller(ApiCaller $apiCaller)
+    {
+        $this->apiCaller = $apiCaller;
     }
 
     /**
@@ -213,35 +236,14 @@ class Bpost
             $options[CURLOPT_POSTFIELDS] = $body;
         }
 
-        // init
-        $this->curl = curl_init();
+        $this->getApiCaller()->doCall($options);
 
-        // set options
-        curl_setopt_array($this->curl, $options);
-
-        $this->logger->debug('curl request', $options);
-
-        // execute
-        $response = curl_exec($this->curl);
-        $headers = curl_getinfo($this->curl);
-
-        // fetch errors
-        $errorNumber = curl_errno($this->curl);
-        $errorMessage = curl_error($this->curl);
-
-        $this->logger->debug('curl response', array(
-            'status' => $errorNumber . ' (' . $errorMessage . ')',
-            'headers' => $headers,
-            'response' => $response
-        ));
-
-        // error?
-        if ($errorNumber != '') {
-            throw new BpostCurlException($errorMessage, $errorNumber);
-        }
+        $response = $this->getApiCaller()->getResponseBody();
+        $httpCode = $this->getApiCaller()->getResponseHttpCode();
+        $contentType = $this->getApiCaller()->getResponseContentType();
 
         // valid HTTP-code
-        if (!in_array($headers['http_code'], array(0, 200, 201))) {
+        if (!in_array($httpCode, array(0, 200, 201))) {
             // convert into XML
             $xml = @simplexml_load_string($response);
 
@@ -258,13 +260,13 @@ class Bpost
 
             $message = '';
             if (
-                (isset($headers['content_type']) && substr_count($headers['content_type'], 'text/plain') > 0) ||
-                (in_array($headers['http_code'], array(400, 404)))
+                ($contentType !== null && substr_count($contentType, 'text/plain') > 0) ||
+                (in_array($httpCode, array(400, 404)))
             ) {
                 $message = $response;
             }
 
-            throw new BpostInvalidResponseException($message, $headers['http_code']);
+            throw new BpostInvalidResponseException($message, $httpCode);
         }
 
         // if we don't expect XML we can return the content here
