@@ -5,9 +5,9 @@ namespace Bpost\BpostApiClient\Exception\BpostApiResponseException;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException;
 
 /**
- * Class BpostApiValidationException
+ * Class BpostApiSystemException
  * @package Bpost\BpostApiClient\Exception\BpostApiResponseException
  */
-class BpostApiValidationException extends BpostApiResponseException
+class BpostApiSystemException extends BpostApiResponseException
 {
 }

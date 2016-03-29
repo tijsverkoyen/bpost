@@ -3,7 +3,7 @@ namespace Bpost\BpostApiClient;
 
 use Bpost\BpostApiClient\Bpack247\Customer;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostApiBusinessException;
-use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostApiValidationException;
+use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostApiSystemException;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostCurlException;
 use Bpost\BpostApiClient\Exception\BpostApiResponseException\BpostInvalidResponseException;
 
@@ -73,7 +73,7 @@ class Bpack247
      * @param  string $method The HTTP-method to use.
      * @return \SimpleXMLElement
      * @throws BpostApiBusinessException
-     * @throws BpostApiValidationException
+     * @throws BpostApiSystemException
      * @throws BpostCurlException
      * @throws BpostInvalidResponseException
      */
@@ -120,15 +120,15 @@ class Bpack247
 
             if (
                 $xml !== false
-                && ($xml->getName() == 'businessException' || $xml->getName() == 'validationException')
+                && ($xml->getName() == 'businessException' || $xml->getName() == 'systemException')
             ) {
                 $message = (string) $xml->message;
                 $code = isset($xml->code) ? (int) $xml->code : null;
                 switch ($xml->getName()) {
                     case 'businessException':
                         throw new BpostApiBusinessException($message, $code);
-                    case 'validationException':
-                        throw new BpostApiValidationException($message, $code);
+                    case 'systemException':
+                        throw new BpostApiSystemException($message, $code);
                 }
             }
 
@@ -221,7 +221,7 @@ class Bpack247
      *
      * @return \SimpleXMLElement
      * @throws BpostApiBusinessException
-     * @throws BpostApiValidationException
+     * @throws BpostApiSystemException
      * @throws BpostCurlException
      * @throws BpostInvalidResponseException
      */
@@ -253,7 +253,7 @@ class Bpack247
      *
      * @return Customer
      * @throws BpostApiBusinessException
-     * @throws BpostApiValidationException
+     * @throws BpostApiSystemException
      * @throws BpostCurlException
      * @throws BpostInvalidResponseException
      * @throws Exception\XmlException\BpostXmlNoUserIdFoundException
