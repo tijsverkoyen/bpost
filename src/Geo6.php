@@ -108,16 +108,18 @@ class Geo6
      */
     private function doCall($method, array $parameters = array())
     {
-        $options[CURLOPT_URL] = self::API_URL;
-        $options[CURLOPT_USERAGENT] = $this->getUserAgent();
-        $options[CURLOPT_FOLLOWLOCATION] = true;
-        $options[CURLOPT_SSL_VERIFYPEER] = false;
-        $options[CURLOPT_SSL_VERIFYHOST] = false;
-        $options[CURLOPT_RETURNTRANSFER] = true;
-        $options[CURLOPT_TIMEOUT] = (int)$this->getTimeOut();
+        $options = array(
+            CURLOPT_URL => self::API_URL,
+            CURLOPT_USERAGENT => $this->getUserAgent(),
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_SSL_VERIFYPEER => false,
+            CURLOPT_SSL_VERIFYHOST => false,
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_TIMEOUT => (int)$this->getTimeOut(),
 
-        $options[CURLOPT_POST] = true;
-        $options[CURLOPT_POSTFIELDS] = $this->buildParameters($method, $parameters);
+            CURLOPT_POST => true,
+            CURLOPT_POSTFIELDS => $this->buildParameters($method, $parameters),
+        );
 
         $curl = curl_init();
 
@@ -249,13 +251,14 @@ class Geo6
      */
     public function getNearestServicePoint($street, $number, $zone, $language = 'nl', $type = 3, $limit = 10)
     {
-        $parameters = array();
-        $parameters['Street'] = (string)$street;
-        $parameters['Number'] = (string)$number;
-        $parameters['Zone'] = (string)$zone;
-        $parameters['Language'] = (string)$language;
-        $parameters['Type'] = (int)$type;
-        $parameters['Limit'] = (int)$limit;
+        $parameters = array(
+            'Street' => (string)$street,
+            'Number' => (string)$number,
+            'Zone' => (string)$zone,
+            'Language' => (string)$language,
+            'Type' => (int)$type,
+            'Limit' => (int)$limit
+        );
 
         $xml = $this->doCall('search', $parameters);
 
@@ -292,10 +295,11 @@ class Geo6
      */
     public function getServicePointDetails($id, $language = 'nl', $type = 3)
     {
-        $parameters = array();
-        $parameters['Id'] = (string)$id;
-        $parameters['Language'] = (string)$language;
-        $parameters['Type'] = (int)$type;
+        $parameters = array(
+            'Id' => (string)$id,
+            'Language' => (string)$language,
+            'Type' => (int)$type,
+        );
 
         $xml = $this->doCall('info', $parameters);
 
@@ -316,10 +320,11 @@ class Geo6
      */
     public function getServicePointPageUrl($id, $language = 'nl', $type = 3)
     {
-        $parameters = array();
-        $parameters['Id'] = (string)$id;
-        $parameters['Language'] = (string)$language;
-        $parameters['Type'] = (int)$type;
+        $parameters = array(
+            'Id' => (string)$id,
+            'Language' => (string)$language,
+            'Type' => (int)$type,
+        );
 
         return $this->buildUrl('page', $parameters);
     }
