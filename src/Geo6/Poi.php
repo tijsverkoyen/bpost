@@ -118,7 +118,7 @@ class Poi
     }
 
     /**
-     * @param array $hours
+     * @param Day[] $hours
      */
     public function setHours($hours)
     {
@@ -126,7 +126,7 @@ class Poi
     }
 
     /**
-     * @return array
+     * @return Day[]
      */
     public function getHours()
     {
@@ -238,15 +238,15 @@ class Poi
     }
 
     /**
-     * @param array $services
+     * @param Service[] $services
      */
-    public function setServices($services)
+    public function setServices(array $services)
     {
         $this->services = $services;
     }
 
     /**
-     * @return array
+     * @return Service[]
      */
     public function getServices()
     {
