@@ -65,7 +65,7 @@ class Poi
      */
     public function setCity($city)
     {
-        $this->city = $city;
+        $this->city = (string)$city;
     }
 
     /**
@@ -79,7 +79,7 @@ class Poi
     /**
      * @param array $closedFrom
      */
-    public function setClosedFrom($closedFrom)
+    public function setClosedFrom(array $closedFrom)
     {
         $this->closedFrom = $closedFrom;
     }
@@ -95,7 +95,7 @@ class Poi
     /**
      * @param array $closedTo
      */
-    public function setClosedTo($closedTo)
+    public function setClosedTo(array $closedTo)
     {
         $this->closedTo = $closedTo;
     }
@@ -114,13 +114,13 @@ class Poi
      */
     public function addHour($index, Day $day)
     {
-        $this->hours[$index] = $day;
+        $this->hours[(int)$index] = $day;
     }
 
     /**
      * @param Day[] $hours
      */
-    public function setHours($hours)
+    public function setHours(array $hours)
     {
         $this->hours = $hours;
     }
@@ -138,7 +138,7 @@ class Poi
      */
     public function setId($id)
     {
-        $this->id = $id;
+        $this->id = (string)$id;
     }
 
     /**
@@ -154,7 +154,7 @@ class Poi
      */
     public function setLatitude($latitude)
     {
-        $this->latitude = $latitude;
+        $this->latitude = (float)$latitude;
     }
 
     /**
@@ -170,7 +170,7 @@ class Poi
      */
     public function setLongitude($longitude)
     {
-        $this->longitude = $longitude;
+        $this->longitude = (float)$longitude;
     }
 
     /**
@@ -186,7 +186,7 @@ class Poi
      */
     public function setNote($note)
     {
-        $this->note = $note;
+        $this->note = (string)$note;
     }
 
     /**
@@ -202,7 +202,7 @@ class Poi
      */
     public function setNr($nr)
     {
-        $this->nr = $nr;
+        $this->nr = (string)$nr;
     }
 
     /**
@@ -218,7 +218,7 @@ class Poi
      */
     public function setOffice($office)
     {
-        $this->office = $office;
+        $this->office = (string)$office;
     }
 
     /**
@@ -258,7 +258,7 @@ class Poi
      */
     public function setStreet($street)
     {
-        $this->street = $street;
+        $this->street = (string)$street;
     }
 
     /**
@@ -274,7 +274,7 @@ class Poi
      */
     public function setType($type)
     {
-        $this->type = $type;
+        $this->type = (string)$type;
     }
 
     /**
@@ -290,7 +290,7 @@ class Poi
      */
     public function setX($x)
     {
-        $this->x = $x;
+        $this->x = (int)$x;
     }
 
     /**
@@ -306,7 +306,7 @@ class Poi
      */
     public function setY($y)
     {
-        $this->y = $y;
+        $this->y = (int)$y;
     }
 
     /**
@@ -322,7 +322,7 @@ class Poi
      */
     public function setZip($zip)
     {
-        $this->zip = $zip;
+        $this->zip = (string)$zip;
     }
 
     /**
