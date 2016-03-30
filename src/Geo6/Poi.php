@@ -12,84 +12,52 @@ namespace Bpost\BpostApiClient\Geo6;
  */
 class Poi
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     private $id;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $type;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $office;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $street;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $nr;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $zip;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $city;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $x;
 
-    /**
-     * @var int
-     */
+    /** @var int */
     private $y;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $latitude;
 
-    /**
-     * @var float
-     */
+    /** @var float */
     private $longitude;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $services;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $hours;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $closedFrom;
 
-    /**
-     * @var array
-     */
+    /** @var array */
     private $closedTo;
 
-    /**
-     * @var string
-     */
+    /** @var string */
     private $note;
 
     /**
