@@ -344,55 +344,55 @@ class Poi
         $poi = new Poi();
 
         if (isset($xml->Id) && $xml->Id != '') {
-            $poi->setId((string) $xml->Id);
+            $poi->setId((string)$xml->Id);
         }
         if (isset($xml->ID) && $xml->ID != '') {
-            $poi->setId((string) $xml->ID);
+            $poi->setId((string)$xml->ID);
         }
         if (isset($xml->Type) && $xml->Type != '') {
-            $poi->setType((string) $xml->Type);
+            $poi->setType((string)$xml->Type);
         }
         if (isset($xml->Name) && $xml->Name != '') {
-            $poi->setOffice((string) $xml->Name);
+            $poi->setOffice((string)$xml->Name);
         }
         if (isset($xml->OFFICE) && $xml->OFFICE != '') {
-            $poi->setOffice((string) $xml->OFFICE);
+            $poi->setOffice((string)$xml->OFFICE);
         }
         if (isset($xml->Street) && $xml->Street != '') {
-            $poi->setStreet((string) $xml->Street);
+            $poi->setStreet((string)$xml->Street);
         }
         if (isset($xml->STREET) && $xml->STREET != '') {
-            $poi->setStreet((string) $xml->STREET);
+            $poi->setStreet((string)$xml->STREET);
         }
         if (isset($xml->Number) && $xml->Number != '') {
-            $poi->setNr((string) $xml->Number);
+            $poi->setNr((string)$xml->Number);
         }
         if (isset($xml->NR) && $xml->NR != '') {
-            $poi->setNr((string) $xml->NR);
+            $poi->setNr((string)$xml->NR);
         }
         if (isset($xml->Zip) && $xml->Zip != '') {
-            $poi->setZip((string) $xml->Zip);
+            $poi->setZip((string)$xml->Zip);
         }
         if (isset($xml->ZIP) && $xml->ZIP != '') {
-            $poi->setZip((string) $xml->ZIP);
+            $poi->setZip((string)$xml->ZIP);
         }
         if (isset($xml->City) && $xml->City != '') {
-            $poi->setCity((string) $xml->City);
+            $poi->setCity((string)$xml->City);
         }
         if (isset($xml->CITY) && $xml->CITY != '') {
-            $poi->setCity((string) $xml->CITY);
+            $poi->setCity((string)$xml->CITY);
         }
         if (isset($xml->X) && $xml->X != '') {
-            $poi->setX((int) $xml->X);
+            $poi->setX((int)$xml->X);
         }
         if (isset($xml->Y) && $xml->Y != '') {
-            $poi->setY((int) $xml->Y);
+            $poi->setY((int)$xml->Y);
         }
         if (isset($xml->Longitude) && $xml->Longitude != '') {
-            $poi->setLongitude((float) $xml->Longitude);
+            $poi->setLongitude((float)$xml->Longitude);
         }
         if (isset($xml->Latitude) && $xml->Latitude != '') {
-            $poi->setLatitude((float) $xml->Latitude);
+            $poi->setLatitude((float)$xml->Latitude);
         }
         if (isset($xml->Services->Service)) {
             foreach ($xml->Services->Service as $service) {
@@ -422,13 +422,13 @@ class Poi
             $poi->addHour(Day::DAY_INDEX_SUNDAY, Day::createFromXML($xml->Hours->Sunday));
         }
         if (isset($xml->ClosedFrom) && $xml->ClosedFrom != '') {
-            $poi->setClosedFrom((string) $xml->ClosedFrom);
+            $poi->setClosedFrom((string)$xml->ClosedFrom);
         }
         if (isset($xml->ClosedTo) && $xml->ClosedTo != '') {
-            $poi->setClosedTo((string) $xml->ClosedTo);
+            $poi->setClosedTo((string)$xml->ClosedTo);
         }
         if (isset($xml->NOTE) && $xml->NOTE != '') {
-            $poi->setNote((string) $xml->NOTE);
+            $poi->setNote((string)$xml->NOTE);
         }
 
         return $poi;
