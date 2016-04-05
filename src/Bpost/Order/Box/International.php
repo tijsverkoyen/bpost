@@ -128,6 +128,7 @@ class International implements IBox
     {
         return array(
             Product::PRODUCT_NAME_BPACK_WORLD_BUSINESS,
+            Product::PRODUCT_NAME_BPACK_WORLD_EASY_RETURN,
             Product::PRODUCT_NAME_BPACK_WORLD_EXPRESS_PRO,
             Product::PRODUCT_NAME_BPACK_EUROPE_BUSINESS,
         );
