@@ -1,42 +1,42 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <phpunit
-        colors="true"
-	bootstrap="tests/phpunit-bootstrap.php"
-        strict="true"
+    colors="true"
+    bootstrap="tests/phpunit-bootstrap.php"
+    strict="true"
 >
 
-    <testsuites>
-        <testsuite name="unit-tests">
-            <directory>tests</directory>
-	    <exclude>tests/connection-tests</exclude>
-        </testsuite>
-    </testsuites>
+  <testsuites>
+    <testsuite name="unit-tests">
+      <directory>tests</directory>
+      <exclude>tests/connection-tests</exclude>
+    </testsuite>
+  </testsuites>
 
-    <filter processUncoveredFilesFromWhitelist="true">
-        <whitelist>
-            <directory suffix=".php">src</directory>
-            <exclude>
-                <!-- Classes with connection to API -->
-                <directory>src/Bpack247.php</directory>
-                <directory>src/Bpost.php</directory>
-                <directory>src/Geo6.php</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+  <filter processUncoveredFilesFromWhitelist="true">
+    <whitelist>
+      <directory suffix=".php">src</directory>
+      <exclude>
+        <!-- Classes with connection to API -->
+        <directory>src/Bpack247.php</directory>
+        <directory>src/Bpost.php</directory>
+        <directory>src/Geo6.php</directory>
+      </exclude>
+    </whitelist>
+  </filter>
 
-    <filter>
-        <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src</directory>
-            <exclude>
-                <directory>tests/reports</directory>
-            </exclude>
-        </whitelist>
-    </filter>
+  <filter>
+    <whitelist processUncoveredFilesFromWhitelist="true">
+      <directory suffix=".php">src</directory>
+      <exclude>
+        <directory>tests/reports</directory>
+      </exclude>
+    </whitelist>
+  </filter>
 
-    <logging>
-        <log type="junit" target="tests/reports/phpunit.xml"/>
-        <log type="coverage-html" target="tests/reports/coverage-clover-html" showUncoveredFiles="true"/>
-        <log type="coverage-clover" target="tests/reports/coverage-clover.xml" showUncoveredFiles="true"/>
-    </logging>
+  <logging>
+    <log type="junit" target="tests/reports/phpunit.xml"/>
+    <log type="coverage-html" target="tests/reports/coverage-clover-html" showUncoveredFiles="true"/>
+    <log type="coverage-clover" target="tests/reports/coverage-clover.xml" showUncoveredFiles="true"/>
+  </logging>
 
 </phpunit>
