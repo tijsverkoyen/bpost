@@ -403,33 +403,38 @@ class Poi
         if (isset($recordXml->Latitude) && $recordXml->Latitude != '') {
             $poi->setLatitude((float)$recordXml->Latitude);
         }
-        if (isset($recordXml->Services->Service)) {
+        if (isset($recordXml->Services) && isset($recordXml->Services->Service)) {
             foreach ($recordXml->Services->Service as $service) {
                 $poi->addService(Service::createFromXML($service));
             }
         }
 
-        if (isset($recordXml->Hours->Monday)) {
-            $poi->addHour(Day::DAY_INDEX_MONDAY, Day::createFromXML($recordXml->Hours->Monday));
+        if (isset($recordXml->Hours)) {
+            $recordHoursXml = $recordXml->Hours;
+
+            if (isset($recordHoursXml->Monday)) {
+                $poi->addHour(Day::DAY_INDEX_MONDAY, Day::createFromXML($recordHoursXml->Monday));
+            }
+            if (isset($recordHoursXml->Tuesday)) {
+                $poi->addHour(Day::DAY_INDEX_TUESDAY, Day::createFromXML($recordHoursXml->Tuesday));
+            }
+            if (isset($recordHoursXml->Wednesday)) {
+                $poi->addHour(Day::DAY_INDEX_WEDNESDAY, Day::createFromXML($recordHoursXml->Wednesday));
+            }
+            if (isset($recordHoursXml->Thursday)) {
+                $poi->addHour(Day::DAY_INDEX_THURSDAY, Day::createFromXML($recordHoursXml->Thursday));
+            }
+            if (isset($recordHoursXml->Friday)) {
+                $poi->addHour(Day::DAY_INDEX_FRIDAY, Day::createFromXML($recordHoursXml->Friday));
+            }
+            if (isset($recordHoursXml->Saturday)) {
+                $poi->addHour(Day::DAY_INDEX_SATURDAY, Day::createFromXML($recordHoursXml->Saturday));
+            }
+            if (isset($recordHoursXml->Sunday)) {
+                $poi->addHour(Day::DAY_INDEX_SUNDAY, Day::createFromXML($recordHoursXml->Sunday));
+            }
         }
-        if (isset($recordXml->Hours->Tuesday)) {
-            $poi->addHour(Day::DAY_INDEX_TUESDAY, Day::createFromXML($recordXml->Hours->Tuesday));
-        }
-        if (isset($recordXml->Hours->Wednesday)) {
-            $poi->addHour(Day::DAY_INDEX_WEDNESDAY, Day::createFromXML($recordXml->Hours->Wednesday));
-        }
-        if (isset($recordXml->Hours->Thursday)) {
-            $poi->addHour(Day::DAY_INDEX_THURSDAY, Day::createFromXML($recordXml->Hours->Thursday));
-        }
-        if (isset($recordXml->Hours->Friday)) {
-            $poi->addHour(Day::DAY_INDEX_FRIDAY, Day::createFromXML($recordXml->Hours->Friday));
-        }
-        if (isset($recordXml->Hours->Saturday)) {
-            $poi->addHour(Day::DAY_INDEX_SATURDAY, Day::createFromXML($recordXml->Hours->Saturday));
-        }
-        if (isset($recordXml->Hours->Sunday)) {
-            $poi->addHour(Day::DAY_INDEX_SUNDAY, Day::createFromXML($recordXml->Hours->Sunday));
-        }
+
         if (isset($recordXml->ClosedFrom) && $recordXml->ClosedFrom != '') {
             $poi->setClosedFrom((string)$recordXml->ClosedFrom);
         }
