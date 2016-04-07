@@ -41,6 +41,11 @@ class PoiTest extends \PHPUnit_Framework_TestCase
         $this->assertNull($poi->getClosedTo());
         $this->assertNull($poi->getNote());
 
+        $this->assertSame(
+            'https://taxipost.geo6.be/Locator?Function=page&Partner=999999&Id=220000&Type=1&Language=NL',
+            $poi->getPage()
+        );
+
     }
 
     /**

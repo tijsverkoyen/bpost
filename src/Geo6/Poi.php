@@ -62,6 +62,9 @@ class Poi
     /** @var string */
     private $note;
 
+    /** @var string */
+    private $page;
+
     /**
      * @param string $city
      */
@@ -336,6 +339,23 @@ class Poi
     }
 
     /**
+     * @return string
+     */
+    public function getPage()
+    {
+        return $this->page;
+    }
+
+    /**
+     * @param string $page
+     */
+    public function setPage($page)
+    {
+        $this->page = (string)$page;
+    }
+
+
+    /**
      * Create a POI based on an XML-object
      *
      * @param  \SimpleXMLElement $xml
@@ -443,6 +463,10 @@ class Poi
         }
         if (isset($recordXml->NOTE) && $recordXml->NOTE != '') {
             $poi->setNote((string)$recordXml->NOTE);
+        }
+
+        if (isset($xml->Page) && isset($xml->Page['ServiceRef']) && $xml->Page['ServiceRef'] != '') {
+            $poi->setPage($xml->Page['ServiceRef']);
         }
 
         return $poi;
