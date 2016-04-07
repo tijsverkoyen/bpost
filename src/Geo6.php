@@ -279,7 +279,7 @@ class Geo6
         $pois = array();
         foreach ($xml->PoiList->Poi as $poi) {
             $pois[] = array(
-                'poi' => Poi::createFromXML($poi->Record),
+                'poi' => Poi::createFromXML($poi),
                 'distance' => (float)$poi->Distance,
             );
         }
@@ -313,11 +313,11 @@ class Geo6
 
         $xml = $this->doCall('info', $parameters);
 
-        if (!isset($xml->Poi->Record)) {
+        if (!isset($xml->Poi)) {
             throw new BpostInvalidXmlResponseException();
         }
 
-        return Poi::createFromXML($xml->Poi->Record);
+        return Poi::createFromXML($xml->Poi);
     }
 
     /**

@@ -49,69 +49,72 @@ class PoiTest extends \PHPUnit_Framework_TestCase
     private function getXml()
     {
         return <<< XML
-<Record>
-  <ID>220000</ID>
-  <Type>1</Type>
-  <OFFICE>GENT CENTRUM</OFFICE>
-  <STREET>Lange Kruisstraat</STREET>
-  <NR>55</NR>
-  <ZIP>9000</ZIP>
-  <CITY>Gent</CITY>
-  <X>104918</X>
-  <Y>193708</Y>
-  <Longitude>3.72581</Longitude>
-  <Latitude>51.05178</Latitude>
-  <Services>
-    <Service category="2" flag="10">Loket met Bancontact/Mistercash</Service>
-  </Services>
-  <Hours>
-    <Monday>
-      <AMOpen>9:00</AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose>18:00</PMClose>
-    </Monday>
-    <Tuesday>
-      <AMOpen>9:00</AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose>18:00</PMClose>
-    </Tuesday>
-    <Wednesday>
-      <AMOpen>9:00</AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose>18:00</PMClose>
-    </Wednesday>
-    <Thursday>
-      <AMOpen>9:00</AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose>18:00</PMClose>
-    </Thursday>
-    <Friday>
-      <AMOpen>9:00</AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose>18:00</PMClose>
-    </Friday>
-    <Saturday>
-      <AMOpen>9:00</AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose>15:00</PMClose>
-    </Saturday>
-    <Sunday>
-      <AMOpen></AMOpen>
-      <AMClose></AMClose>
-      <PMOpen></PMOpen>
-      <PMClose></PMClose>
-    </Sunday>
-  </Hours>
-  <ClosedFrom></ClosedFrom>
-  <ClosedTo></ClosedTo>
-  <NOTE></NOTE>
-</Record>
+<Poi>
+  <Record>
+    <ID>220000</ID>
+    <Type>1</Type>
+    <OFFICE>GENT CENTRUM</OFFICE>
+    <STREET>Lange Kruisstraat</STREET>
+    <NR>55</NR>
+    <ZIP>9000</ZIP>
+    <CITY>Gent</CITY>
+    <X>104918</X>
+    <Y>193708</Y>
+    <Longitude>3.72581</Longitude>
+    <Latitude>51.05178</Latitude>
+    <Services>
+      <Service category="2" flag="10">Loket met Bancontact/Mistercash</Service>
+    </Services>
+    <Hours>
+      <Monday>
+        <AMOpen>9:00</AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose>18:00</PMClose>
+      </Monday>
+      <Tuesday>
+        <AMOpen>9:00</AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose>18:00</PMClose>
+      </Tuesday>
+      <Wednesday>
+        <AMOpen>9:00</AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose>18:00</PMClose>
+      </Wednesday>
+      <Thursday>
+        <AMOpen>9:00</AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose>18:00</PMClose>
+      </Thursday>
+      <Friday>
+        <AMOpen>9:00</AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose>18:00</PMClose>
+      </Friday>
+      <Saturday>
+        <AMOpen>9:00</AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose>15:00</PMClose>
+      </Saturday>
+      <Sunday>
+        <AMOpen></AMOpen>
+        <AMClose></AMClose>
+        <PMOpen></PMOpen>
+        <PMClose></PMClose>
+      </Sunday>
+    </Hours>
+    <ClosedFrom></ClosedFrom>
+    <ClosedTo></ClosedTo>
+    <NOTE></NOTE>
+  </Record>
+  <Page ServiceRef="https://taxipost.geo6.be/Locator?Function=page&amp;Partner=999999&amp;Id=220000&amp;Type=1&amp;Language=NL"/>
+</Poi>
 XML;
 
     }
