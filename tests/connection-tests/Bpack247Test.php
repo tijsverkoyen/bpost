@@ -55,6 +55,8 @@ class Bpack247Test extends \PHPUnit_Framework_TestCase
      */
     public function testGetMember()
     {
+        $this->markTestSkipped('Need to create a member before the test');
+
         $data = array(
             'id' => '344337728',
             'UserId' => '5f1f1b07-a8c4-4d4c-bd5b-cdace6cb7c84',
