@@ -132,7 +132,7 @@ class Insurance extends Option
      * @param  string       $prefix
      * @return \DomElement
      */
-    public function toXML(\DOMDocument $document, $prefix = null)
+    public function toXML(\DOMDocument $document, $prefix = 'common')
     {
         $tagName = 'insured';
         if ($prefix !== null) {
