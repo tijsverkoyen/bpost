@@ -85,14 +85,14 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
 
         // Normal
         $rootDom = $this->createDomDocument();
-        $document = $this->generateDomDocument($rootDom, $self->toXml($rootDom, 'tns'));
+        $document = $this->generateDomDocument($rootDom, $self->toXML($rootDom, 'tns'));
 
         $this->assertSame($this->getXml(), $document->saveXML());
     }
 
     public function testCreateFromNormalXml() {
 
-        $self = AtHome::createFromXml(new \SimpleXMLElement($this->getXml()));
+        $self = AtHome::createFromXML(new \SimpleXMLElement($this->getXml()));
 
         $this->assertSame('2016-03-16', $self->getRequestedDeliveryDate());
 
@@ -102,7 +102,7 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromBadXml() {
         $this->setExpectedException('Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException');
-        AtHome::createFromXml(new \SimpleXMLElement($this->getNotAtHomeXml()));
+        AtHome::createFromXML(new \SimpleXMLElement($this->getNotAtHomeXml()));
     }
 
     /**
