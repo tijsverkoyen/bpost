@@ -114,7 +114,7 @@ class Bpost
     public function getApiCaller()
     {
         if ($this->apiCaller === null) {
-            $this->apiCaller = new ApiCaller(new Logger());
+            $this->apiCaller = new ApiCaller($this->logger);
         }
         return $this->apiCaller;
     }
