@@ -6,7 +6,7 @@ use Bpost\BpostApiClient\BpostException;
 
 /**
  * Class BpostNotImplementedException
- * @package Bpost\BpostApiClient\Exception\LogicException
+ * @package Bpost\BpostApiClient\Exception
  */
 class BpostNotImplementedException extends BpostException
 {
