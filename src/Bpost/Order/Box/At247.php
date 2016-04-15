@@ -6,7 +6,7 @@ use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
 use Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress;
 use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
-use Bpost\BpostApiClient\Exception\LogicException\BpostNotImplementedException;
+use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 
 /**
  * bPost At247 class

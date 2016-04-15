@@ -7,7 +7,7 @@ use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
 use Bpost\BpostApiClient\Bpost\Order\Box\Customsinfo\CustomsInfo;
 use Bpost\BpostApiClient\Bpost\Order\Receiver;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
-use Bpost\BpostApiClient\Exception\BpostLogicException\BpostNotImplementedException;
+use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 
 /**
  * bPost International class
