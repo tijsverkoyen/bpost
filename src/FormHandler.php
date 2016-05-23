@@ -58,7 +58,13 @@ class FormHandler
 
         foreach ($keysToHash as $key) {
             if (isset($this->parameters[$key])) {
-                $base .= $key . '=' . $this->parameters[$key] . '&';
+                 if (! is_array($this->parameters[$key])) {
+                    $base .= $key.'='.$this->parameters[$key].'&';
+                } else {
+                    foreach ($this->parameters[$key] as $entry) {
+                        $base .= $key.'='.$entry.'&';
+                    }
+                }
             }
         }
 
@@ -196,6 +202,9 @@ class FormHandler
             case 'cancelUrl':
             case 'errorUrl':
             default:
+                if (is_array($value)) {
+                    sort($value);
+                }
                 $this->parameters[$key] = $value;
         }
     }
