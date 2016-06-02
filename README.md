@@ -10,17 +10,15 @@
 
 ## About
 
-_bpost API client_ is a PHP library to communicate with the [bpost API](http://bpost.be).
+_bpost API library_ is a PHP library which permit to your PHP application to communicate with the [bpost API](http://bpost.be).
 
 ## License
 
-_bpost API client_ is [BSD](https://github.com/Antidot-be/bpost-api-client/blob/master/LICENSE.md)
-licensed.
+_bpost API library_ is [BSD](https://github.com/Antidot-be/bpost-api-library/blob/master/LICENSE.md) licensed.
 
 ## Documentation
 
-The class is well documented inline. If you use a decent IDE you'll see that
-each method is documented with PHPDoc.
+The class is well documented inline. If you use a decent IDE you'll see that each method is documented with PHPDoc.
 
 Use the unit tests to see how work the library.
 
@@ -31,4 +29,4 @@ Use the unit tests to see how work the library.
 
 ## Would like contribute ?
 
-You can read the [CONTRIBUTING.md](https://github.com/Antidot-be/bpost-api-client/blob/master/CONTRIBUTING.md) file
+You can read the [CONTRIBUTING.md](https://github.com/Antidot-be/bpost-api-library/blob/master/CONTRIBUTING.md) file
