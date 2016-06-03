@@ -12,6 +12,12 @@
 
 _bpost API library_ is a PHP library which permit to your PHP application to communicate with the [bpost API](http://bpost.be).
 
+## Installation
+
+```bash
+composer install antidot-be/bpost-api-library
+```
+
 ## License
 
 _bpost API library_ is [BSD](https://github.com/Antidot-be/bpost-api-library/blob/master/LICENSE.md) licensed.
