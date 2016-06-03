@@ -134,16 +134,6 @@ $boxes = $order->getBoxes();
 $lines = $order->getLines();
 ```
 
-## License
-
-_bpost API library_ is [BSD](https://github.com/Antidot-be/bpost-api-library/blob/master/LICENSE.md) licensed.
-
-## Documentation
-
-The class is well documented inline. If you use a decent IDE you'll see that each method is documented with PHPDoc.
-
-Use the unit tests to see how work the library.
-
 ## Sites using this class
 
 * [Each site based on the Web Retail Shop Platform](http://www.webretailcompany.be)
