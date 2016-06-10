@@ -20,7 +20,9 @@ composer install antidot-be/bpost-api-library
 
 ## Usages
 
-### Create objects
+### Orders
+
+#### Common objects
 
 ```php
 
@@ -111,7 +113,7 @@ $box->setNationalBox($atHome);
 $order->addBox($box);
 ```
 
-### Create an order
+#### Create an order
 
 We use the variables set before.
 
@@ -119,13 +121,13 @@ We use the variables set before.
 $bpost->createOrReplaceOrder($order); // The order is created with status Box::BOX_STATUS_PENDING
 ```
 
-### Update order status
+#### Update order status
 
 ```php
 $bpost->modifyOrderStatus($orderReference, Box::BOX_STATUS_OPEN);
 ```
 
-### Get order info
+#### Get order info
 
 ```php
 $order = $bpost->fetchOrder($orderReference);
