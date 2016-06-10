@@ -136,6 +136,63 @@ $boxes = $order->getBoxes();
 $lines = $order->getLines();
 ```
 
+### Labels
+
+#### Get labels from an order
+
+```php
+$labels = $bpost->createLabelForOrder(
+    $orderReference,
+    Bpost::LABEL_FORMAT_A6, // $format
+    false, // $withReturnLabels
+    true // $asPdf
+);
+foreach ($labels as $label) {
+    $barcode = $label->getBarcode();
+    $mimeType = $label->getMimeType(); // Label::LABEL_MIME_TYPE_*
+    $bytes = $label->getBytes();
+    file_put_contents("$barcode.pdf", $bytes);
+}
+```
+
+#### Get labels from an existing barcode
+
+```php
+$labels = $bpost->createLabelForOrder(
+    $boxBarcode,
+    Bpost::LABEL_FORMAT_A6, // $format
+    false, // $withReturnLabels
+    true // $asPdf
+);
+foreach ($labels as $label) {
+    $barcode = $label->getBarcode(); // Can be different than $boxBarcode if this is a return label
+    $mimeType = $label->getMimeType(); // Label::LABEL_MIME_TYPE_*
+    $bytes = $label->getBytes();
+    file_put_contents("$barcode.pdf", $bytes);
+}
+```
+
+#### Get labels from an existing barcode
+
+```php
+$labels = $bpost->createLabelInBulkForOrders(
+    array(
+        $orderReference1,
+        $orderReference2,
+    ),
+    Bpost::LABEL_FORMAT_A6, // $format
+    false, // $withReturnLabels
+    true // $asPdf
+);
+foreach ($labels as $label) {
+    $barcode = $label->getBarcode(); // Can be different than $boxBarcode if this is a return label
+    $mimeType = $label->getMimeType(); // Label::LABEL_MIME_TYPE_*
+    $bytes = $label->getBytes();
+    file_put_contents("$barcode.pdf", $bytes);
+}
+```
+
+
 ## Sites using this class
 
 * [Each site based on the Web Retail Shop Platform](http://www.webretailcompany.be)
