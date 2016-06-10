@@ -192,6 +192,49 @@ foreach ($labels as $label) {
 }
 ```
 
+### Geo6 services
+
+```php
+$geo6Partner = '999999';
+$geo6AppId = 'A001';
+$geo6 = new Geo6($geo6Partner, $geo6AppId);
+```
+
+#### Get nearest points
+```php
+$points = $geo6->getNearestServicePoint(
+    'Grand Place', // Street name
+    '3', // Street number
+    '1000', // Zip code
+    'fr', // Language: 'fr' or 'nl'
+    3, // Point types: Sum of some Geo6::POINT_TYPE_*
+    5 // Points number
+);
+foreach ($points as $point) {
+    $distance = $point['distance']; // float
+    /** @var Poi $poi */
+    $poi = $point['poi'];
+}
+```
+
+#### Get point details
+```php
+/** @var Poi $poi */
+$poi = $geo6->getServicePointDetails(
+    200000, // Point ID
+    'fr', // Language: 'fr' or 'nl'
+    3 // Point types: Sum of some Geo6::POINT_TYPE_*
+);
+```
+
+#### Get point map URL
+```php
+$url = $geo6->getServicePointPageUrl(
+    200000, // Point ID
+    'fr', // Language: 'fr' or 'nl'
+    3 // Point types: Sum of some Geo6::POINT_TYPE_*
+);
+```
 
 ## Sites using this class
 
