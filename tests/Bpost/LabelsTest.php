@@ -13,8 +13,9 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
         $this->assertCount(1, $labels);
 
         $label = current($labels);
-        $this->assertSame('323210742359909732710038', $label->getBarcode());
+        $this->assertSame('323299901059912015292030', $label->getBarcode()); // Test retro-compatibility
         $this->assertSame('application/pdf', $label->getMimeType());
+        $this->assertCount(2, $label->getBarcodes());
         $this->assertSame($this->getCreateLabelForOrderBytes(), base64_encode($label->getBytes()));
     }
 
@@ -29,7 +30,14 @@ class LabelsTest extends \PHPUnit_Framework_TestCase
     xmlns:ns4="http://schema.post.be/shm/deepintegration/v3/international"
 >
   <label>
-    <barcode>323210742359909732710038</barcode>
+    <barcodeWithReference>
+      <barcode>323299901059912015292030</barcode>
+      <reference>test_barcode_with_reference</reference>
+    </barcodeWithReference>
+    <barcodeWithReference>
+      <barcode>323299901059912015293050</barcode>
+      <reference>test_barcode_with_reference</reference>
+    </barcodeWithReference>
     <mimeType>application/pdf</mimeType>
     <bytes>{bytes}</bytes>
   </label>

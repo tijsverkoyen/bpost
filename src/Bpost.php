@@ -549,11 +549,11 @@ class Bpost
 
         if ($asPdf) {
             $headers = array(
-                'Accept: application/vnd.bpost.shm-label-pdf-v3+XML',
+                'Accept: application/vnd.bpost.shm-label-pdf-v3.4+XML'
             );
         } else {
             $headers = array(
-                'Accept: application/vnd.bpost.shm-label-image-v3+XML',
+                'Accept: application/vnd.bpost.shm-label-image-v3.4+XML',
             );
         }
 

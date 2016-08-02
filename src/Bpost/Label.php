@@ -2,6 +2,7 @@
 
 namespace Bpost\BpostApiClient\Bpost;
 
+use Bpost\BpostApiClient\Bpost\Label\Barcode;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 /**
@@ -17,9 +18,9 @@ class Label
     const LABEL_MIME_TYPE_APPLICATION_PDF = 'application/pdf';
 
     /**
-     * @var string
+     * @var Barcode[]
      */
-    private $barcode;
+    private $barcodes;
 
     /**
      * @var string
@@ -32,11 +33,11 @@ class Label
     private $bytes;
 
     /**
-     * @param string $barcode
+     * @param Barcode $barcode
      */
-    public function setBarcode($barcode)
+    public function addBarcode(Barcode $barcode)
     {
-        $this->barcode = $barcode;
+        $this->barcodes[] = $barcode;
     }
 
     /**
@@ -44,7 +45,29 @@ class Label
      */
     public function getBarcode()
     {
-        return $this->barcode;
+        if (is_array($this->getBarcodes())) {
+            $barcode = current($this->getBarcodes());
+
+            return $barcode->getBarcode();
+        }
+
+        return '';
+    }
+
+    /**
+     * @param Barcode[] $barcodes
+     */
+    public function setBarcodes(array $barcodes)
+    {
+        $this->barcodes = $barcodes;
+    }
+
+    /**
+     * @return Barcode[]
+     */
+    public function getBarcodes()
+    {
+        return $this->barcodes;
     }
 
     /**
@@ -115,8 +138,10 @@ class Label
     public static function createFromXML(\SimpleXMLElement $xml)
     {
         $label = new Label();
-        if (isset($xml->barcode) && $xml->barcode != '') {
-            $label->setBarcode((string) $xml->barcode);
+        if (isset($xml->barcodeWithReference)) {
+            foreach ($xml->barcodeWithReference as $barcodeWithReference) {
+                $label->addBarcode(Barcode::createFromXML($barcodeWithReference));
+            }
         }
         if (isset($xml->mimeType) && $xml->mimeType != '') {
             $label->setMimeType((string) $xml->mimeType);
