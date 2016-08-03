@@ -623,6 +623,7 @@ class Bpost
      * @param  string $format           The desired format, allowed values are: A4, A6
      * @param  bool   $withReturnLabels Should return labels be returned?
      * @param  bool   $asPdf            Should we retrieve the PDF-version instead of PNG
+     * @param  bool   $forcePrinting    Reprint a already printed label
      *
      * @return Bpost\Label[]
      * @throws BpostCurlException
@@ -634,12 +635,13 @@ class Bpost
         array $references,
         $format = LabelFormat::FORMAT_A6,
         $withReturnLabels = false,
-        $asPdf = false
+        $asPdf = false,
+        $forcePrinting = false
     ) {
         $createLabelInBulkForOrders = new CreateLabelInBulkForOrders();
 
         $xml = $this->doCall(
-            $createLabelInBulkForOrders->getUrl(new LabelFormat($format), $withReturnLabels),
+            $createLabelInBulkForOrders->getUrl(new LabelFormat($format), $withReturnLabels, $forcePrinting),
             $createLabelInBulkForOrders->getXml($references),
             $createLabelInBulkForOrders->getHeaders($asPdf),
             'POST'

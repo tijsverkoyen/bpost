@@ -19,8 +19,22 @@ class CreateLabelInBulkForOrdersTest extends \PHPUnit_Framework_TestCase
     public function testGetUrl()
     {
         $self = new CreateLabelInBulkForOrders();
-        $this->assertSame('/labels/A4', $self->getUrl(new LabelFormat(LabelFormat::FORMAT_A4), false));
-        $this->assertSame('/labels/A6/withReturnLabels', $self->getUrl(new LabelFormat(LabelFormat::FORMAT_A6), true));
+        $this->assertSame(
+            '/labels/A4',
+            $self->getUrl(new LabelFormat(LabelFormat::FORMAT_A4), false)
+        );
+        $this->assertSame(
+            '/labels/A6/withReturnLabels',
+            $self->getUrl(new LabelFormat(LabelFormat::FORMAT_A6), true)
+        );
+        $this->assertSame(
+            '/labels/A6?forcePrinting=true',
+            $self->getUrl(new LabelFormat(LabelFormat::FORMAT_A6), false, true)
+        );
+        $this->assertSame(
+            '/labels/A4/withReturnLabels?forcePrinting=true',
+            $self->getUrl(new LabelFormat(LabelFormat::FORMAT_A4), true, true)
+        );
     }
 
     public function testHeaders()

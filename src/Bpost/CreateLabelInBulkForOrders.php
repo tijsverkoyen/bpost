@@ -48,8 +48,10 @@ class CreateLabelInBulkForOrders
      * @param bool        $withReturnLabels
      * @return string
      */
-    public function getUrl(LabelFormat $format, $withReturnLabels)
+    public function getUrl(LabelFormat $format, $withReturnLabels, $forcePrinting = false)
     {
-        return '/labels/' . $format->getValue() . ($withReturnLabels ? '/withReturnLabels' : '');
+        return '/labels/' . $format->getValue()
+               . ($withReturnLabels ? '/withReturnLabels' : '')
+               . ($forcePrinting ? '?forcePrinting=true' : '');
     }
 }
