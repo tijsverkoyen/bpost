@@ -146,6 +146,7 @@ class At247 extends National
     {
         return array(
             Product::PRODUCT_NAME_BPACK_24H_PRO,
+            Product::PRODUCT_NAME_BPACK_24_7,
         );
     }
 
