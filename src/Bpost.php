@@ -31,7 +31,7 @@ class Bpost
     const LABEL_FORMAT_A6 = 'A6';
 
     // URL for the api
-    const API_URL = 'https://api.bpost.be/services/shm';
+    const API_URL = 'https://api-parcel.bpost.be/services/shm';
 
     // current version
     const VERSION = '3.3.0';
