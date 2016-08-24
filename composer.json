@@ -1,7 +1,8 @@
 {
   "name": "antidot-be/bpost-api-library",
+  "version": "3.4.0",
   "type": "library",
-  "description": "bpost API client is a PHP library to communicate with the bpost API.",
+  "description": "bpost API library is a PHP library to communicate with the bpost API.",
   "homepage": "https://github.com/Antidot-be/bpost-api-library",
   "license": "BSD",
   "authors": [

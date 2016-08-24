@@ -1,6 +1,22 @@
 # Changelog
 
-### 3.3.0.b1
+### 3.4.0
+
+* Add retro-compatibility with tijsverkoyen library (namespace changes)
+* Complete the README (examples, broken links, ...)
+* Change API URL (api.bpost.be -> api-parcel.bpost.be)
+* Labels features
+  * Possibility to append field "order reference"
+  * Possibility to force printing
+* Geo6 features
+  * Geo6 is now called via HTTPS
+  * Send data to API via POST
+  * Add Geo6::getPointType() to calculate point types
+* Products features
+  * Add "bpack World Easy Return" to international products
+  * Box At247 can contain a product bpack 24/7
+
+### 3.3.0
 
 * Use bpost API version 3.3 (yet, bpack part only)
 * Change namespace TijsVerkoyen\Bpost to Bpost\BpostApiClient
