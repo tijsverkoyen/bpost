@@ -1,7 +1,7 @@
 <?php
 namespace Bpost;
 
-use Bpost\BpostApiClient\Bpost\Order\Box\Openinghour\Day;
+use Bpost\BpostApiClient\Bpost\Order\Box\OpeningHour\Day;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class DayTest extends \PHPUnit_Framework_TestCase

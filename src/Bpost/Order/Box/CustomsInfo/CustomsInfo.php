@@ -1,5 +1,6 @@
 <?php
-namespace Bpost\BpostApiClient\Bpost\Order\Box\Customsinfo;
+
+namespace Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo;
 
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;

@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use Bpost\BpostApiClient\Bpost\Order\Box\National;
-use Bpost\BpostApiClient\Bpost\Order\Box\Openinghour\Day;
+use Bpost\BpostApiClient\Bpost\Order\Box\OpeningHour\Day;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\SaturdayDelivery;
 use Bpost\BpostApiClient\Bpost\ProductConfiguration\Option;

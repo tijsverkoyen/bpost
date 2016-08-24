@@ -4,7 +4,7 @@ namespace Bpost\BpostApiClient\Bpost\Order\Box;
 use Bpost\BpostApiClient\Bpost\Order\Receiver;
 use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
-use Bpost\BpostApiClient\Exception\LogicException\BpostNotImplementedException;
+use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
 use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
 
 /**

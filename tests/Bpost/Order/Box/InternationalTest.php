@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use Bpost\BpostApiClient\Bpost\Order\Address;
-use Bpost\BpostApiClient\Bpost\Order\Box\Customsinfo\CustomsInfo;
+use Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo;
 use Bpost\BpostApiClient\Bpost\Order\Box\International;
 use Bpost\BpostApiClient\Bpost\Order\Receiver;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;

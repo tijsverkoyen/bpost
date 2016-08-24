@@ -1,6 +1,6 @@
 <?php
 
-namespace Bpost\BpostApiClient\Bpost\Order\Box\Openinghour;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\OpeningHour;
 
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 

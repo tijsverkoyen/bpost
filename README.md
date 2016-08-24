@@ -35,7 +35,7 @@ use Bpost\BpostApiClient\Bpost\Order\Address;
 use Bpost\BpostApiClient\Bpost\Order\Box;
 use Bpost\BpostApiClient\Bpost\Order\Box\AtBpost;
 use Bpost\BpostApiClient\Bpost\Order\Box\AtHome;
-use Bpost\BpostApiClient\Bpost\Order\Box\Customsinfo\CustomsInfo;
+use Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo;
 use Bpost\BpostApiClient\Bpost\Order\Box\International;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Insurance;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;

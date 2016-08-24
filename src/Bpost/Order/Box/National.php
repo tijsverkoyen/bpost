@@ -1,7 +1,7 @@
 <?php
 namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use Bpost\BpostApiClient\Bpost\Order\Box\Openinghour\Day;
+use Bpost\BpostApiClient\Bpost\Order\Box\OpeningHour\Day;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Option;
 use Bpost\BpostApiClient\BpostException;
