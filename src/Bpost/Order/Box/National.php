@@ -238,7 +238,14 @@ abstract class National extends ComplexAttribute implements IBox
                 ) {
                     $option = Messaging::createFromXML($optionData);
                 } else {
-                    $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
+					switch ($optionData->getName()) {
+						case 'insured':
+							$class = 'Insurance';
+							break;
+						default:
+							$class = ucfirst($optionData->getName());
+					}
+                    $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . $class;
                     if (!method_exists($className, 'createFromXML')) {
                         throw new BpostXmlInvalidItemException();
                     }

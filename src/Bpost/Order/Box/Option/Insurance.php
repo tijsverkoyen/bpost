@@ -153,4 +153,33 @@ class Insurance extends Option
 
         return $insured;
     }
+
+    /**
+     * @param \SimpleXMLElement $xml
+     *
+     * @return static
+     */
+    public static function createFromXML(\SimpleXMLElement $xml)
+    {
+        $data = $xml->{$xml->getName()}[0];
+
+        $type = '';
+        $value = 0;
+        if (isset($data->{static::INSURANCE_TYPE_BASIC_INSURANCE})) {
+            $type = static::INSURANCE_TYPE_BASIC_INSURANCE;
+            $value = (int)$data->{static::INSURANCE_TYPE_BASIC_INSURANCE}->attributes()->value;
+        }
+        elseif (isset($data->{static::INSURANCE_TYPE_ADDITIONAL_INSURANCE})) {
+            $value = (int)$data->{static::INSURANCE_TYPE_ADDITIONAL_INSURANCE}->attributes()->value;
+            if ($value == 1) {
+                $type = static::INSURANCE_TYPE_BASIC_INSURANCE;
+                $value = null;
+            }
+            else {
+                $type = static::INSURANCE_TYPE_ADDITIONAL_INSURANCE;
+            }
+        }
+
+        return new static($type, $value);
+    }
 }
