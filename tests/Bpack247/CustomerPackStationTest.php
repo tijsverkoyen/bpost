@@ -1,10 +1,7 @@
 <?php
 namespace Bpost\Bpack;
 
-require_once __DIR__ . '/../config.php';
-require_once __DIR__ . '/../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpack247\CustomerPackStation;
+use Bpost\BpostApiClient\Bpack247\CustomerPackStation;
 
 class CustomerPackStationTest extends \PHPUnit_Framework_TestCase
 {
@@ -48,8 +45,8 @@ class CustomerPackStationTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['CustomLabel'], $customerPackStation->getCustomLabel());
-        $this->assertEquals($data['OrderNumber'], $customerPackStation->getOrderNumber());
-        $this->assertEquals($data['PackstationID'], $customerPackStation->getPackstationId());
+        $this->assertSame($data['CustomLabel'], $customerPackStation->getCustomLabel());
+        $this->assertSame($data['OrderNumber'], $customerPackStation->getOrderNumber());
+        $this->assertSame($data['PackstationID'], $customerPackStation->getPackstationId());
     }
 }

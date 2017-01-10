@@ -1,9 +1,8 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Insurance;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Insurance;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class InsuranceTest extends \PHPUnit_Framework_TestCase
 {
@@ -12,11 +11,48 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
      *
      * @return \DOMDocument
      */
-    private static function createDomDocument()
+    private function createDomDocument()
     {
-        $document = new \DOMDocument('1.0', 'utf-8');
+        $document = new \DOMDocument('1.0', 'UTF-8');
         $document->preserveWhiteSpace = false;
         $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param \DOMElement  $element
+     * @return \DOMDocument
+     */
+    private function generateDomDocument(\DOMDocument $document, \DOMElement $element)
+    {
+        $element->setAttribute(
+            'xmlns:common',
+            'http://schema.post.be/shm/deepintegration/v3/common'
+        );
+        $element->setAttribute(
+            'xmlns:tns',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+        $element->setAttribute(
+            'xmlns',
+            'http://schema.post.be/shm/deepintegration/v3/national'
+        );
+        $element->setAttribute(
+            'xmlns:international',
+            'http://schema.post.be/shm/deepintegration/v3/international'
+        );
+        $element->setAttribute(
+            'xmlns:xsi',
+            'http://www.w3.org/2001/XMLSchema-instance'
+        );
+        $element->setAttribute(
+            'xsi:schemaLocation',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+
+        $document->appendChild($element);
 
         return $document;
     }
@@ -26,78 +62,22 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
      */
     public function testToXML()
     {
-        $expectedDocument = self::createDomDocument();
-        $insured = $expectedDocument->createElement('insured');
-        $insured->appendChild($expectedDocument->createElement('basicInsurance'));
-        $expectedDocument->appendChild($insured);
-
-        $actualDocument = self::createDomDocument();
-        $insurance = new Insurance('basicInsurance');
-        $actualDocument->appendChild(
-            $insurance->toXML($actualDocument)
-        );
-        $this->assertEquals($expectedDocument, $actualDocument);
-
-        $data = array(
-            'insured' => array(
-                'additionalInsurance' => array(
-                    '@attributes' => array(
-                        'value' => 3,
-                    ),
-                ),
-            ),
+        $self = new Insurance(
+            Insurance::INSURANCE_TYPE_ADDITIONAL_INSURANCE,
+            Insurance::INSURANCE_AMOUNT_UP_TO_2500_EUROS
         );
 
-        $expectedDocument = self::createDomDocument();
-        $insured = $expectedDocument->createElement('insured');
-        $additionalInsurance = $expectedDocument->createElement('additionalInsurance');
-        $additionalInsurance->setAttribute('value', $data['insured']['additionalInsurance']['@attributes']['value']);
-        $insured->appendChild($additionalInsurance);
-        $expectedDocument->appendChild($insured);
+        // Without specific prefix
+        $rootDom = $this->createDomDocument();
+        $document = $this->generateDomDocument($rootDom, $self->toXML($rootDom));
 
-        $actualDocument = self::createDomDocument();
-        $insurance = new Insurance(
-            'additionalInsurance',
-            $data['insured']['additionalInsurance']['@attributes']['value']
-        );
-        $actualDocument->appendChild(
-            $insurance->toXML($actualDocument)
-        );
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($this->getXml(), $document->saveXML());
 
-        $expectedDocument = self::createDomDocument();
-        $insured = $expectedDocument->createElement('insured');
-        $insured->appendChild($expectedDocument->createElement('basicInsurance'));
-        $expectedDocument->appendChild($insured);
+        // With specific prefix
+        $rootDom = $this->createDomDocument();
+        $document = $this->generateDomDocument($rootDom, $self->toXML($rootDom, 'mushroom'));
 
-        $actualDocument = self::createDomDocument();
-        $insurance = new Insurance('basicInsurance');
-        $actualDocument->appendChild(
-            $insurance->toXML($actualDocument)
-        );
-        $this->assertEquals($expectedDocument, $actualDocument);
-
-        $data = array(
-            'insured' => array(
-                'additionalInsurance' => array(
-                    '@attributes' => array(
-                        'value' => 3,
-                    ),
-                ),
-            ),
-        );
-
-        $expectedDocument = self::createDomDocument();
-        $insured = $expectedDocument->createElement('foo:insured');
-        $insured->appendChild($expectedDocument->createElement('foo:basicInsurance'));
-        $expectedDocument->appendChild($insured);
-
-        $actualDocument = self::createDomDocument();
-        $insurance = new Insurance('basicInsurance');
-        $actualDocument->appendChild(
-            $insurance->toXML($actualDocument, 'foo')
-        );
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($this->getNamespaceXml(), $document->saveXML());
     }
 
     /**
@@ -106,34 +86,47 @@ class InsuranceTest extends \PHPUnit_Framework_TestCase
     public function testFaultyProperties()
     {
         try {
-            new Insurance(
-                str_repeat('a', 10)
-            );
+            new Insurance(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Insurance::getPossibleTypeValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
 
         try {
-            new Insurance(
-                'additionalInsurance',
-                str_repeat('1', 10)
-            );
+            new Insurance('additionalInsurance', str_repeat('1', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Insurance::getPossibleValueValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
+
+    private function getXml()
+    {
+        return <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<common:insured xmlns="http://schema.post.be/shm/deepintegration/v3/national" xmlns:common="http://schema.post.be/shm/deepintegration/v3/common" xmlns:tns="http://schema.post.be/shm/deepintegration/v3/" xmlns:international="http://schema.post.be/shm/deepintegration/v3/international" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.post.be/shm/deepintegration/v3/">
+  <common:additionalInsurance value="2"/>
+</common:insured>
+
+XML;
+    }
+
+    private function getNamespaceXml()
+    {
+        return <<<XML
+<?xml version="1.0" encoding="UTF-8"?>
+<mushroom:insured xmlns="http://schema.post.be/shm/deepintegration/v3/national" xmlns:common="http://schema.post.be/shm/deepintegration/v3/common" xmlns:tns="http://schema.post.be/shm/deepintegration/v3/" xmlns:international="http://schema.post.be/shm/deepintegration/v3/international" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.post.be/shm/deepintegration/v3/">
+  <mushroom:additionalInsurance value="2"/>
+</mushroom:insured>
+
+XML;
+    }
+
 }

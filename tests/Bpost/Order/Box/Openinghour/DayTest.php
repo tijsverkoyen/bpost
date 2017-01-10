@@ -1,9 +1,8 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day;
+use Bpost\BpostApiClient\Bpost\Order\Box\OpeningHour\Day;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class DayTest extends \PHPUnit_Framework_TestCase
 {
@@ -59,7 +58,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
         foreach ($data as $key => $value) {
             $expectedDocument->appendChild(
                 $expectedDocument->createElement(
-                    'foo:'. $key,
+                    'foo:' . $key,
                     $value
                 )
             );
@@ -74,7 +73,7 @@ class DayTest extends \PHPUnit_Framework_TestCase
             );
         }
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -83,19 +82,15 @@ class DayTest extends \PHPUnit_Framework_TestCase
     public function testFaultyProperties()
     {
         try {
-            new Day(
-                str_repeat('a', 10),
-                '10:00-17:00'
-            );
+            new Day(str_repeat('a', 10), '10:00-17:00');
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Day::getPossibleDayValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

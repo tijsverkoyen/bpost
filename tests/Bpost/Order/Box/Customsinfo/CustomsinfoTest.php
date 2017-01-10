@@ -1,10 +1,9 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
-use TijsVerkoyen\Bpost\Exception;
+use Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class CustomsInfoTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,11 +95,11 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
     public function testCreateFromXML()
     {
         $data = array(
-            'parcelValue' => '700',
+            'parcelValue' => 700,
             'contentDescription' => 'BOOK',
             'shipmentType' => 'DOCUMENTS',
             'parcelReturnInstructions' => 'RTS',
-            'privateAddress' => false,
+            'privateAddress' => null,
         );
 
         $document = self::createDomDocument();
@@ -118,14 +117,14 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['parcelValue'], $customsInfo->getParcelValue());
-        $this->assertEquals($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
-        $this->assertEquals($data['contentDescription'], $customsInfo->getContentDescription());
-        $this->assertEquals($data['shipmentType'], $customsInfo->getShipmentType());
-        $this->assertEquals($data['privateAddress'], $customsInfo->getPrivateAddress());
+        $this->assertSame($data['parcelValue'], $customsInfo->getParcelValue());
+        $this->assertSame($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
+        $this->assertSame($data['contentDescription'], $customsInfo->getContentDescription());
+        $this->assertSame($data['shipmentType'], $customsInfo->getShipmentType());
+        $this->assertSame($data['privateAddress'], $customsInfo->getPrivateAddress());
 
         $data = array(
-            'parcelValue' => '700',
+            'parcelValue' => 700,
             'contentDescription' => 'BOOK',
             'shipmentType' => 'DOCUMENTS',
             'parcelReturnInstructions' => 'RTS',
@@ -147,11 +146,11 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['parcelValue'], $customsInfo->getParcelValue());
-        $this->assertEquals($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
-        $this->assertEquals($data['contentDescription'], $customsInfo->getContentDescription());
-        $this->assertEquals($data['shipmentType'], $customsInfo->getShipmentType());
-        $this->assertEquals(($data['privateAddress'] == 'true'), $customsInfo->getPrivateAddress());
+        $this->assertSame($data['parcelValue'], $customsInfo->getParcelValue());
+        $this->assertSame($data['parcelReturnInstructions'], $customsInfo->getParcelReturnInstructions());
+        $this->assertSame($data['contentDescription'], $customsInfo->getContentDescription());
+        $this->assertSame($data['shipmentType'], $customsInfo->getShipmentType());
+        $this->assertSame(($data['privateAddress'] == 'true'), $customsInfo->getPrivateAddress());
     }
 
     /**
@@ -162,42 +161,33 @@ class CustomsInfoTest extends \PHPUnit_Framework_TestCase
         $customsInfo = new CustomsInfo();
 
         try {
-            $customsInfo->setContentDescription(
-                str_repeat('a', 51)
-            );
+            $customsInfo->setContentDescription(str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 50.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
-            $customsInfo->setParcelReturnInstructions(
-                str_repeat('a', 10)
-            );
+            $customsInfo->setContentDescription(str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', CustomsInfo::getPossibleParcelReturnInstructionValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
-            $customsInfo->setShipmentType(
-                str_repeat('a', 10)
-            );
+            $customsInfo->setShipmentType(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', CustomsInfo::getPossibleShipmentTypeValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

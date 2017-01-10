@@ -1,10 +1,10 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\AtBpost;
-use TijsVerkoyen\Bpost\Bpost\Order\PugoAddress;
+use Bpost\BpostApiClient\Bpost\Order\Box\AtBpost;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ShopHandlingInstruction;
+use Bpost\BpostApiClient\Bpost\Order\PugoAddress;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class AtBpostTest extends \PHPUnit_Framework_TestCase
 {
@@ -42,6 +42,8 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
                 ),
                 'receiverName' => 'Tijs Verkoyen',
                 'receiverCompany' => 'Sumo Coders',
+                'requestedDeliveryDate' => '2016-03-16',
+                'shopHandlingInstruction' => 'Do not break it please',
             ),
         );
 
@@ -86,10 +88,12 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
         $atBpost->setPugoAddress($pugoAddress);
         $atBpost->setReceiverName($data['atBpost']['receiverName']);
         $atBpost->setReceiverCompany($data['atBpost']['receiverCompany']);
+        $atBpost->setRequestedDeliveryDate($data['atBpost']['requestedDeliveryDate']);
+        $atBpost->setShopHandlingInstruction($data['atBpost']['shopHandlingInstruction']);
 
         $actualDocument->appendChild($atBpost->toXML($actualDocument));
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -101,15 +105,14 @@ class AtBpostTest extends \PHPUnit_Framework_TestCase
 
         try {
             $atBpost->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', AtBpost::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

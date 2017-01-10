@@ -1,0 +1,11 @@
+# IDE
+/.idea/
+
+# Composer
+/vendor/
+/composer.phar
+
+# Tests & reports
+/tests/reports
+/tests/phpunit-credentials.php
+

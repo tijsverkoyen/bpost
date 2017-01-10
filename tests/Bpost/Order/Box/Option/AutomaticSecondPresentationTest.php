@@ -1,9 +1,7 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\AutomaticSecondPresentation;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\AutomaticSecondPresentation;
 
 class AutomaticSecondPresentationTest extends \PHPUnit_Framework_TestCase
 {
@@ -50,6 +48,6 @@ class AutomaticSecondPresentationTest extends \PHPUnit_Framework_TestCase
             $automaticSecondPresentation->toXML($actualDocument, 'foo')
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 }

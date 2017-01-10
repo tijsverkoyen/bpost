@@ -1,9 +1,8 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class AddressTest extends \PHPUnit_Framework_TestCase
 {
@@ -57,7 +56,7 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             $address->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -69,45 +68,60 @@ class AddressTest extends \PHPUnit_Framework_TestCase
 
         try {
             $address->setBox(str_repeat('a', 9));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 8.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setCountryCode(str_repeat('a', 3));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 2.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setLocality(str_repeat('a', 41));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setNumber(str_repeat('a', 9));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 8.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setPostalCode(str_repeat('a', 41));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $address->setStreetName(str_repeat('a', 41));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 40.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 
     /**
@@ -139,11 +153,11 @@ class AddressTest extends \PHPUnit_Framework_TestCase
             )
         );
 
-        $this->assertEquals($data['streetName'], $address->getStreetName());
-        $this->assertEquals($data['number'], $address->getNumber());
-        $this->assertEquals($data['box'], $address->getBox());
-        $this->assertEquals($data['postalCode'], $address->getPostalCode());
-        $this->assertEquals($data['locality'], $address->getLocality());
-        $this->assertEquals($data['countryCode'], $address->getCountryCode());
+        $this->assertSame($data['streetName'], $address->getStreetName());
+        $this->assertSame($data['number'], $address->getNumber());
+        $this->assertSame($data['box'], $address->getBox());
+        $this->assertSame($data['postalCode'], $address->getPostalCode());
+        $this->assertSame($data['locality'], $address->getLocality());
+        $this->assertSame($data['countryCode'], $address->getCountryCode());
     }
 }

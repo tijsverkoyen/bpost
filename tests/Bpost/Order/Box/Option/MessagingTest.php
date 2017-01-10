@@ -1,9 +1,9 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class MessagingTest extends \PHPUnit_Framework_TestCase
 {
@@ -96,58 +96,42 @@ class MessagingTest extends \PHPUnit_Framework_TestCase
     public function testFaultyProperties()
     {
         try {
-            new Messaging(
-                str_repeat('a', 10),
-                'NL'
-            );
+            new Messaging(str_repeat('a', 10), 'NL');
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Messaging::getPossibleTypeValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
 
         try {
-            new Messaging(
-                'infoDistributed',
-                str_repeat('a', 10)
-            );
+            new Messaging('infoDistributed', str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', Messaging::getPossibleLanguageValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
 
         try {
-            new Messaging(
-                'infoDistributed',
-                'NL',
-                str_repeat('a', 51)
-            );
+            new Messaging('infoDistributed', 'NL', str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 50.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
-            new Messaging(
-                'infoDistributed',
-                'NL',
-                null,
-                str_repeat('a', 21)
-            );
+            new Messaging('infoDistributed', 'NL', null, str_repeat('a', 21));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 20.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

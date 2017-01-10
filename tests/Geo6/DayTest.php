@@ -2,9 +2,8 @@
 
 namespace Geo6;
 
-require_once __DIR__ . '/../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Geo6\Day;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidDayException;
+use Bpost\BpostApiClient\Geo6\Day;
 
 class DayTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,10 +29,10 @@ class DayTest extends \PHPUnit_Framework_TestCase
 
         $day = Day::createFromXML($xml);
 
-        $this->assertEquals($data['AMOpen'], $day->getAmOpen());
-        $this->assertEquals($data['AMClose'], $day->getAmClose());
-        $this->assertEquals($data['PMOpen'], $day->getPmOpen());
-        $this->assertEquals($data['PMClose'], $day->getPmClose());
+        $this->assertSame($data['AMOpen'], $day->getAmOpen());
+        $this->assertSame($data['AMClose'], $day->getAmClose());
+        $this->assertSame($data['PMOpen'], $day->getPmOpen());
+        $this->assertSame($data['PMClose'], $day->getPmClose());
     }
 
     /**
@@ -43,26 +42,29 @@ class DayTest extends \PHPUnit_Framework_TestCase
     {
         $day = new Day();
         $day->setDay('Monday');
-        $this->assertEquals(1, $day->getDayIndex());
+        $this->assertSame(1, $day->getDayIndex());
         $day->setDay('Tuesday');
-        $this->assertEquals(2, $day->getDayIndex());
+        $this->assertSame(2, $day->getDayIndex());
         $day->setDay('Wednesday');
-        $this->assertEquals(3, $day->getDayIndex());
+        $this->assertSame(3, $day->getDayIndex());
         $day->setDay('Thursday');
-        $this->assertEquals(4, $day->getDayIndex());
+        $this->assertSame(4, $day->getDayIndex());
         $day->setDay('Friday');
-        $this->assertEquals(5, $day->getDayIndex());
+        $this->assertSame(5, $day->getDayIndex());
         $day->setDay('Saturday');
-        $this->assertEquals(6, $day->getDayIndex());
+        $this->assertSame(6, $day->getDayIndex());
         $day->setDay('Sunday');
-        $this->assertEquals(7, $day->getDayIndex());
+        $this->assertSame(7, $day->getDayIndex());
+
+        $day = new Day();
 
         try {
-            $day = new Day();
             $day->getDayIndex();
+            $this->fail('BpostInvalidDayException not launched');
+        } catch (BpostInvalidDayException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid day.', $e->getMessage());
+            $this->fail('BpostInvalidDayException not caught');
         }
 
     }

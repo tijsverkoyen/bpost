@@ -1,13 +1,12 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Customsinfo\CustomsInfo;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\International;
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Box\CustomsInfo\CustomsInfo;
+use Bpost\BpostApiClient\Bpost\Order\Box\International;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class InternationalTest extends \PHPUnit_Framework_TestCase
 {
@@ -174,7 +173,7 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
             $international->toXML($actualDocument)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -186,15 +185,14 @@ class InternationalTest extends \PHPUnit_Framework_TestCase
 
         try {
             $international->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', International::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

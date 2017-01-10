@@ -2,9 +2,7 @@
 
 namespace Geo6;
 
-require_once __DIR__ . '/../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Geo6\Service;
+use Bpost\BpostApiClient\Geo6\Service;
 
 class ServiceTest extends \PHPUnit_Framework_TestCase
 {
@@ -30,8 +28,8 @@ class ServiceTest extends \PHPUnit_Framework_TestCase
 
         $service = Service::createFromXML($xml);
 
-        $this->assertEquals($data['category'], $service->getCategory());
-        $this->assertEquals($data['flag'], $service->getFlag());
-        $this->assertEquals($data['Name'], $service->getName());
+        $this->assertSame($data['category'], $service->getCategory());
+        $this->assertSame($data['flag'], $service->getFlag());
+        $this->assertSame($data['Name'], $service->getName());
     }
 }

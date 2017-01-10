@@ -1,14 +1,13 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Box;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\International;
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Box;
+use Bpost\BpostApiClient\Bpost\Order\Box\AtHome;
+use Bpost\BpostApiClient\Bpost\Order\Box\International;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Bpost\Order\Sender;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class BoxTest extends \PHPUnit_Framework_TestCase
 {
@@ -66,6 +65,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
             'remark' => 'remark',
+            'barcode' => 'BARCODE',
         );
 
         $expectedDocument = self::createDomDocument();
@@ -116,6 +116,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->appendChild($sender);
         $box->appendChild($nationalBox);
         $box->appendChild($expectedDocument->createElement('remark', $data['remark']));
+        $box->appendChild($expectedDocument->createElement('barcode', $data['barcode']));
 
         $actualDocument = self::createDomDocument();
         $address = new Address(
@@ -159,12 +160,13 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->setSender($sender);
         $box->setNationalBox($atHome);
         $box->setRemark($data['remark']);
+        $box->setBarcode($data['barcode']);
 
         $actualDocument->appendChild(
             $box->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -207,6 +209,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
                 ),
             ),
             'remark' => 'remark',
+            'barcode' => 'BARCODE',
         );
         $expectedDocument = self::createDomDocument();
         $box = $expectedDocument->createElement('box');
@@ -260,6 +263,7 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->appendChild($sender);
         $box->appendChild($nationalBox);
         $box->appendChild($expectedDocument->createElement('remark', $data['remark']));
+        $box->appendChild($expectedDocument->createElement('barcode', $data['barcode']));
 
         $actualDocument = self::createDomDocument();
         $address = new Address(
@@ -302,12 +306,13 @@ class BoxTest extends \PHPUnit_Framework_TestCase
         $box->setSender($sender);
         $box->setInternationalBox($international);
         $box->setRemark($data['remark']);
+        $box->setBarcode($data['barcode']);
 
         $actualDocument->appendChild(
             $box->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -319,12 +324,14 @@ class BoxTest extends \PHPUnit_Framework_TestCase
 
         try {
             $box->setStatus(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                'Invalid value, possible values are: ' . implode(', ', Box::getPossibleStatusValues()) . '.',
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

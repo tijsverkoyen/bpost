@@ -1,21 +1,42 @@
 {
-	"name": "tijsverkoyen/bpost",
-	"type": "library",
-	"description": "PHP bPost is a (wrapper)class to communicate with the bPost Webservices.",
-	"homepage": "https://github.com/tijsverkoyen/bpost",
-	"license": "BSD",
-	"authors": [
-		{
-			"name": "Tijs Verkoyen",
-			"email": "bpost@verkoyen.eu",
-			"role": "Developer"
-		}
-	],
-	"require": {
-		"php": ">=5.3.0",
-		"ext-curl": "*"
-	},
-	"autoload": {
-		"classmap": [""]
-	}
+  "name": "antidot-be/bpost-api-library",
+  "version": "3.4.0",
+  "type": "library",
+  "description": "bpost API library is a PHP library to communicate with the bpost API.",
+  "homepage": "https://github.com/Antidot-be/bpost-api-library",
+  "license": "BSD",
+  "authors": [
+    {
+      "name": "Raphaël Pommier",
+      "email": "rpommier@antidot.com",
+      "role": "Developer"
+    },
+    {
+      "name": "kouinkouin",
+      "email": "me@kouinkouin.com",
+      "role": "Developer"
+    },
+    {
+      "name": "Tijs Verkoyen",
+      "email": "bpost@verkoyen.eu",
+      "role": "Developer"
+    }
+  ],
+  "require": {
+    "php": ">=5.3.0",
+    "ext-curl": "*",
+    "ext-mbstring": "*",
+    "psr/log": "~1.0.0"
+  },
+  "require-dev": {
+    "phpunit/phpunit": "^4.8 || ^5.3"
+  },
+  "autoload": {
+    "psr-4": {
+      "Bpost\\BpostApiClient\\": "src/"
+    },
+    "classmap": [
+      "src/tijsverkoyen_classes.php"
+    ]
+  }
 }

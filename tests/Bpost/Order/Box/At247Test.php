@@ -1,10 +1,11 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Box\At247;
-use TijsVerkoyen\Bpost\Bpost\Order\ParcelsDepotAddress;
+use Bpost\BpostApiClient\Bpost\Order\Box\At247;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
+use Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress;
+use Bpost\BpostApiClient\Common\BasicAttribute\Language;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class At247Test extends \PHPUnit_Framework_TestCase
 {
@@ -24,6 +25,10 @@ class At247Test extends \PHPUnit_Framework_TestCase
 
     /**
      * Tests At247->toXML
+     *
+     * @warning
+     * That is a bad test, we cannot have a memberId AND an unregisteredParcelLockerMember
+     * We must to have a XML with memberId, another one with unregisteredParcelLockerMember and another one without (to see comportment)
      */
     public function testToXML()
     {
@@ -42,8 +47,14 @@ class At247Test extends \PHPUnit_Framework_TestCase
                     'countryCode' => 'BE',
                 ),
                 'memberId' => '188565346',
+                'unregisteredParcelLockerMember' => array(
+                    'language' => 'EN',
+                    'mobilePhone' => '0471000000',
+                    'emailAddress' => 'pomme@antidot.com'
+                ), // Bad test: We cannot have a memberId AND an unregisteredParcelLockerMember
                 'receiverName' => 'Tijs Verkoyen',
                 'receiverCompany' => 'Sumo Coders',
+                'requestedDeliveryDate' => '2016-03-16',
             ),
         );
 
@@ -62,6 +73,14 @@ class At247Test extends \PHPUnit_Framework_TestCase
                     );
                 }
                 $at247->appendChild($address);
+            } elseif ($key == 'unregisteredParcelLockerMember') {
+                $child = $expectedDocument->createElement($key);
+                foreach ($value as $key2 => $value2) {
+                    $child->appendChild(
+                        $expectedDocument->createElement($key2, $value2)
+                    );
+                }
+                $at247->appendChild($child);
             } else {
                 $at247->appendChild(
                     $expectedDocument->createElement($key, $value)
@@ -78,20 +97,27 @@ class At247Test extends \PHPUnit_Framework_TestCase
             $data['at24-7']['parcelsDepotAddress']['locality'],
             $data['at24-7']['parcelsDepotAddress']['countryCode']
         );
+        $unregisteredParcelLockerMember = new UnregisteredParcelLockerMember();
+        $unregisteredParcelLockerMember->setLanguage($data['at24-7']['unregisteredParcelLockerMember']['language']);
+        $unregisteredParcelLockerMember->setMobilePhone($data['at24-7']['unregisteredParcelLockerMember']['mobilePhone']);
+        $unregisteredParcelLockerMember->setEmailAddress($data['at24-7']['unregisteredParcelLockerMember']['emailAddress']);
+
         $at247 = new At247();
         $at247->setProduct($data['at24-7']['product']);
         $at247->setWeight($data['at24-7']['weight']);
+        $at247->setRequestedDeliveryDate($data['at24-7']['requestedDeliveryDate']);
         $at247->setParcelsDepotId($data['at24-7']['parcelsDepotId']);
         $at247->setParcelsDepotName($data['at24-7']['parcelsDepotName']);
         $at247->setParcelsDepotAddress($parcelsDepotAddress);
         $at247->setMemberId($data['at24-7']['memberId']);
+        $at247->setUnregisteredParcelLockerMember($unregisteredParcelLockerMember);
         $at247->setReceiverName($data['at24-7']['receiverName']);
         $at247->setReceiverCompany($data['at24-7']['receiverCompany']);
         $actualDocument->appendChild(
             $at247->toXML($actualDocument)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -103,15 +129,14 @@ class At247Test extends \PHPUnit_Framework_TestCase
 
         try {
             $at247->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', At247::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }

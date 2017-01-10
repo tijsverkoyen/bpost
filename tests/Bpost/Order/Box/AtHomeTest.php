@@ -1,13 +1,10 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\AtHome;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Option\Messaging;
-use TijsVerkoyen\Bpost\Bpost\Order\Receiver;
-use TijsVerkoyen\Bpost\Bpost\Order\Box\Openinghour\Day as OpeninghourDay;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Box\AtHome;
+use Bpost\BpostApiClient\Bpost\Order\Receiver;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
 
 class AtHomeTest extends \PHPUnit_Framework_TestCase
 {
@@ -16,11 +13,48 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
      *
      * @return \DOMDocument
      */
-    private static function createDomDocument()
+    private function createDomDocument()
     {
-        $document = new \DOMDocument('1.0', 'utf-8');
+        $document = new \DOMDocument('1.0', 'UTF-8');
         $document->preserveWhiteSpace = false;
         $document->formatOutput = true;
+
+        return $document;
+    }
+
+    /**
+     * @param \DOMDocument $document
+     * @param \DOMElement  $element
+     * @return \DOMDocument
+     */
+    private function generateDomDocument(\DOMDocument $document, \DOMElement $element)
+    {
+        $element->setAttribute(
+            'xmlns:common',
+            'http://schema.post.be/shm/deepintegration/v3/common'
+        );
+        $element->setAttribute(
+            'xmlns:tns',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+        $element->setAttribute(
+            'xmlns',
+            'http://schema.post.be/shm/deepintegration/v3/national'
+        );
+        $element->setAttribute(
+            'xmlns:international',
+            'http://schema.post.be/shm/deepintegration/v3/international'
+        );
+        $element->setAttribute(
+            'xmlns:xsi',
+            'http://www.w3.org/2001/XMLSchema-instance'
+        );
+        $element->setAttribute(
+            'xsi:schemaLocation',
+            'http://schema.post.be/shm/deepintegration/v3/'
+        );
+
+        $document->appendChild($element);
 
         return $document;
     }
@@ -30,144 +64,45 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
      */
     public function testToXML()
     {
-        $data = array(
-            'atHome' => array(
-                'product' => 'bpack 24h Pro',
-                'options' => array(
-                    array(
-                        'common:infoNextDay' => array(
-                            '@attributes' => array(
-                                'language' => 'NL',
-                            ),
-                            'common:emailAddress' => 'bpost@verkoyen.eu',
-                        )
-                    )
-                ),
-                'weight' => 2000,
-                'openingHours' => array(
-                    'Monday' => '10:00-17:00',
-                ),
-                'desiredDeliveryPlace' => 1234,
-                'receiver' => array(
-                    'name' => 'Tijs Verkoyen',
-                    'company' => 'Sumo Coders',
-                    'address' => array(
-                        'streetName' => 'Afrikalaan',
-                        'number' => '289',
-                        'box' => '3',
-                        'postalCode' => '9000',
-                        'locality' => 'Gent',
-                        'countryCode' => 'BE',
-                    ),
-                    'emailAddress' => 'bpost@verkoyen.eu',
-                    'phoneNumber' => '+32 9 395 02 51',
-                ),
-            ),
-        );
-
-        $expectedDocument = self::createDomDocument();
-        $nationalBox = $expectedDocument->createElement('nationalBox');
-        $expectedDocument->appendChild($nationalBox);
-        $atHome = $expectedDocument->createElement('atHome');
-        $nationalBox->appendChild($atHome);
-        $atHome->appendChild($expectedDocument->createElement('product', $data['atHome']['product']));
-        $options = $expectedDocument->createElement('options');
-        foreach ($data['atHome']['options'] as $value) {
-            foreach ($value as $key2 => $value2) {
-                $element = $expectedDocument->createElement($key2);
-                foreach ($value2 as $key3 => $value3) {
-                    if ($key3 == '@attributes') {
-                        foreach ($value3 as $key4 => $value4) {
-                            $element->setAttribute($key4, $value4);
-                        }
-                    } else {
-                        $element->appendChild(
-                            $expectedDocument->createElement($key3, $value3)
-                        );
-                    }
-                }
-
-                $options->appendChild($element);
-            }
-        }
-        $atHome->appendChild($options);
-        $atHome->appendChild($expectedDocument->createElement('weight', $data['atHome']['weight']));
-        $openingHours = $expectedDocument->createElement('openingHours');
-        foreach ($data['atHome']['openingHours'] as $key => $value) {
-            $openingHours->appendChild(
-                $expectedDocument->createElement($key, $value)
-            );
-        }
-        $atHome->appendChild($openingHours);
-        $atHome->appendChild(
-            $expectedDocument->createElement('desiredDeliveryPlace', $data['atHome']['desiredDeliveryPlace'])
-        );
-        $receiver = $expectedDocument->createElement('receiver');
-        $atHome->appendChild($receiver);
-        foreach ($data['atHome']['receiver'] as $key => $value) {
-            $key = 'common:' . $key;
-            if ($key == 'common:address') {
-                $address = $expectedDocument->createElement($key);
-                foreach ($value as $key2 => $value2) {
-                    $key2 = 'common:' . $key2;
-                    $address->appendChild(
-                        $expectedDocument->createElement($key2, $value2)
-                    );
-                }
-                $receiver->appendChild($address);
-            } else {
-                $receiver->appendChild(
-                    $expectedDocument->createElement($key, $value)
-                );
-            }
-        }
-
-        $actualDocument = self::createDomDocument();
-        $address = new Address(
-            $data['atHome']['receiver']['address']['streetName'],
-            $data['atHome']['receiver']['address']['number'],
-            $data['atHome']['receiver']['address']['box'],
-            $data['atHome']['receiver']['address']['postalCode'],
-            $data['atHome']['receiver']['address']['locality'],
-            $data['atHome']['receiver']['address']['countryCode']
-        );
+        $address = new Address();
+        $address->setCountryCode('BE');
+        $address->setPostalCode('1040');
+        $address->setLocality('Brussels');
+        $address->setStreetName('Rue du Grand Duc');
+        $address->setNumber('13');
 
         $receiver = new Receiver();
-        $receiver->setName($data['atHome']['receiver']['name']);
-        $receiver->setCompany($data['atHome']['receiver']['company']);
+        $receiver->setName('La Pomme');
+        $receiver->setEmailAddress('dev.null@antidot.com');
+        $receiver->setCompany('Antidot');
         $receiver->setAddress($address);
-        $receiver->setEmailAddress($data['atHome']['receiver']['emailAddress']);
-        $receiver->setPhoneNumber($data['atHome']['receiver']['phoneNumber']);
+        $receiver->setPhoneNumber('0032475123456');
 
-        $openingHourDay = new OpeninghourDay('Monday', $data['atHome']['openingHours']['Monday']);
+        $self = new AtHome();
+        $self->setProduct('bpack 24h Pro');
+        $self->setRequestedDeliveryDate('2016-03-16');
+        $self->setReceiver($receiver);
 
-        $messaging = new Messaging(
-            'infoNextDay',
-            $data['atHome']['options'][0]['common:infoNextDay']['@attributes']['language'],
-            $data['atHome']['options'][0]['common:infoNextDay']['common:emailAddress']
-        );
+        // Normal
+        $rootDom = $this->createDomDocument();
+        $document = $this->generateDomDocument($rootDom, $self->toXML($rootDom, 'tns'));
 
-        $atHome = new AtHome();
-        $atHome->setProduct($data['atHome']['product']);
-        $atHome->setWeight($data['atHome']['weight']);
-        $atHome->setReceiver($receiver);
-        $atHome->setDesiredDeliveryPlace($data['atHome']['desiredDeliveryPlace']);
+        $this->assertSame($this->getXml(), $document->saveXML());
+    }
 
-        $atHome->addOpeningHour($openingHourDay);
+    public function testCreateFromNormalXml() {
 
-        // I know, the line below is kinda bogus, but it will make sure all code is tested
-        $atHome->setOpeningHours(array($openingHourDay));
+        $self = AtHome::createFromXML(new \SimpleXMLElement($this->getXml()));
 
-        $atHome->addOption($messaging);
+        $this->assertSame('2016-03-16', $self->getRequestedDeliveryDate());
 
-        // I know, the line below is kinda bogus, but it will make sure all code is tested
-        $atHome->setOptions(array($messaging));
+        $this->assertNotNull($self->getReceiver());
+        $this->assertSame('Antidot', $self->getReceiver()->getCompany());
+    }
 
-        $actualDocument->appendChild(
-            $atHome->toXML($actualDocument)
-        );
-
-        $this->assertEquals($expectedDocument, $actualDocument);
+    public function testCreateFromBadXml() {
+        $this->setExpectedException('Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException');
+        AtHome::createFromXML(new \SimpleXMLElement($this->getNotAtHomeXml()));
     }
 
     /**
@@ -179,15 +114,52 @@ class AtHomeTest extends \PHPUnit_Framework_TestCase
 
         try {
             $atHome->setProduct(str_repeat('a', 10));
+            $this->fail('BpostInvalidValueException not launched');
+        } catch (BpostInvalidValueException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals(
-                sprintf(
-                    'Invalid value, possible values are: %1$s.',
-                    implode(', ', AtHome::getPossibleProductValues())
-                ),
-                $e->getMessage()
-            );
+            $this->fail('BpostInvalidValueException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
+    }
+
+    private function getXml() {
+        return <<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:nationalBox xmlns="http://schema.post.be/shm/deepintegration/v3/national" xmlns:common="http://schema.post.be/shm/deepintegration/v3/common" xmlns:tns="http://schema.post.be/shm/deepintegration/v3/" xmlns:international="http://schema.post.be/shm/deepintegration/v3/international" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.post.be/shm/deepintegration/v3/">
+  <atHome>
+    <product>bpack 24h Pro</product>
+    <receiver>
+      <common:name>La Pomme</common:name>
+      <common:company>Antidot</common:company>
+      <common:address>
+        <common:streetName>Rue du Grand Duc</common:streetName>
+        <common:number>13</common:number>
+        <common:postalCode>1040</common:postalCode>
+        <common:locality>Brussels</common:locality>
+        <common:countryCode>BE</common:countryCode>
+      </common:address>
+      <common:emailAddress>dev.null@antidot.com</common:emailAddress>
+      <common:phoneNumber>0032475123456</common:phoneNumber>
+    </receiver>
+    <requestedDeliveryDate>2016-03-16</requestedDeliveryDate>
+  </atHome>
+</tns:nationalBox>
+
+EOF;
+    }
+
+    private function getNotAtHomeXml() {
+        return <<<EOF
+<?xml version="1.0" encoding="UTF-8"?>
+<tns:nationalBox xmlns="http://schema.post.be/shm/deepintegration/v3/national" xmlns:common="http://schema.post.be/shm/deepintegration/v3/common" xmlns:tns="http://schema.post.be/shm/deepintegration/v3/" xmlns:international="http://schema.post.be/shm/deepintegration/v3/international" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schema.post.be/shm/deepintegration/v3/">
+  <notAtHome>
+    <product>bpack 24h Pro</product>
+  </notAtHome>
+</tns:nationalBox>
+
+EOF;
     }
 }

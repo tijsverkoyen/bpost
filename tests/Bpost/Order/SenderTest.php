@@ -1,10 +1,9 @@
 <?php
 namespace Bpost;
 
-require_once __DIR__ . '/../../../../../autoload.php';
-
-use TijsVerkoyen\Bpost\Bpost\Order\Address;
-use TijsVerkoyen\Bpost\Bpost\Order\Sender;
+use Bpost\BpostApiClient\Bpost\Order\Address;
+use Bpost\BpostApiClient\Bpost\Order\Sender;
+use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthException;
 
 class SenderTest extends \PHPUnit_Framework_TestCase
 {
@@ -82,7 +81,7 @@ class SenderTest extends \PHPUnit_Framework_TestCase
             $sender->toXML($actualDocument, null)
         );
 
-        $this->assertEquals($expectedDocument, $actualDocument);
+        $this->assertSame($expectedDocument->saveXML(), $actualDocument->saveXML());
     }
 
     /**
@@ -94,16 +93,23 @@ class SenderTest extends \PHPUnit_Framework_TestCase
 
         try {
             $sender->setEmailAddress(str_repeat('a', 51));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 50.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
 
         try {
             $sender->setPhoneNumber(str_repeat('a', 21));
+            $this->fail('BpostInvalidLengthException not launched');
+        } catch (BpostInvalidLengthException $e) {
+            // Nothing, the exception is good
         } catch (\Exception $e) {
-            $this->assertInstanceOf('TijsVerkoyen\Bpost\Exception', $e);
-            $this->assertEquals('Invalid length, maximum is 20.', $e->getMessage());
+            $this->fail('BpostInvalidLengthException not caught');
         }
+
+        // Exceptions were caught,
+        $this->assertTrue(true);
     }
 }
