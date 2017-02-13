@@ -1,12 +1,12 @@
 <?php
-namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker;
 
 use Bpost\BpostApiClient\Common\BasicAttribute\EmailAddressCharacteristic;
 use Bpost\BpostApiClient\Common\BasicAttribute\Language;
 use Bpost\BpostApiClient\Common\BasicAttribute\PhoneNumber;
 use Bpost\BpostApiClient\Common\ComplexAttribute;
 
-class UnregisteredParcelLockerMember extends ComplexAttribute
+class Unregistered extends ComplexAttribute
 {
 
     /** @var Language */
@@ -18,8 +18,8 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
     /** @var EmailAddressCharacteristic */
     private $emailAddress;
 
-    /** @var ParcelLockerReducedMobilityZone */
-    private $parcelLockerReducedMobilityZone;
+    /** @var ReducedMobilityZone */
+    private $reducedMobilityZone;
 
     /**
      * @return bool
@@ -96,25 +96,25 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
     /**
      * @return bool
      */
-    public function hasParcelLockerReducedMobilityZone()
+    public function hasReducedMobilityZone()
     {
-        return $this->parcelLockerReducedMobilityZone !== null;
+        return $this->reducedMobilityZone !== null;
     }
 
     /**
-     * @return ParcelLockerReducedMobilityZone
+     * @return ReducedMobilityZone
      */
-    public function getParcelLockerReducedMobilityZone()
+    public function getReducedMobilityZone()
     {
-        return $this->parcelLockerReducedMobilityZone;
+        return $this->reducedMobilityZone;
     }
 
     /**
-     * @param ParcelLockerReducedMobilityZone $parcelLockerReducedMobilityZone
+     * @param ReducedMobilityZone $reducedMobilityZone
      */
-    public function setParcelLockerReducedMobilityZone(ParcelLockerReducedMobilityZone $parcelLockerReducedMobilityZone)
+    public function setReducedMobilityZone(ReducedMobilityZone $reducedMobilityZone)
     {
-        $this->parcelLockerReducedMobilityZone = $parcelLockerReducedMobilityZone;
+        $this->reducedMobilityZone = $reducedMobilityZone;
     }
 
     /**
@@ -125,7 +125,7 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
      */
     function toXml(\DOMDocument $document, $prefix = null, $type = null)
     {
-        $tagName = $this->getPrefixedTagName('unregisteredParcelLockerMember', $prefix);
+        $tagName = $this->getPrefixedTagName('unregistered', $prefix);
 
         $xml = $document->createElement($tagName);
 
@@ -144,9 +144,9 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
             $xml->appendChild($document->createElement($tagName, $this->getEmailAddress()));
         }
 
-        if ($this->hasParcelLockerReducedMobilityZone()) {
+        if ($this->hasReducedMobilityZone()) {
             $xml->appendChild(
-                $this->getParcelLockerReducedMobilityZone()->toXML($document, $prefix, $type)
+                $this->getReducedMobilityZone()->toXML($document, $prefix, $type)
             );
         }
 
@@ -155,7 +155,8 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
 
     /**
      * @param \SimpleXMLElement $xml
-     * @return UnregisteredParcelLockerMember
+     *
+     * @return Unregistered
      */
     static function createFromXml(\SimpleXMLElement $xml)
     {
@@ -174,8 +175,8 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
         }
 
         if (isset($xml->parcelLockerReducedMobilityZone)) {
-            $self->setParcelLockerReducedMobilityZone(
-                parcelLockerReducedMobilityZone::createFromXml($xml->parcelLockerReducedMobilityZone)
+            $self->setReducedMobilityZone(
+                ReducedMobilityZone::createFromXml($xml->reducedMobilityZone)
             );
         }
 

@@ -1,7 +1,8 @@
 <?php
-namespace Bpost\BpostApiClient\Bpost\Order\Box\National;
 
-class ParcelLockerReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
+namespace Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker;
+
+class ReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -27,12 +28,12 @@ class ParcelLockerReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
         // Without prefix
 
         $expectedDocument = self::createDomDocument();
-        $xml = $expectedDocument->createElement('parcelLockerReducedMobilityZone');
+        $xml = $expectedDocument->createElement('reducedMobilityZone');
 
         $expectedDocument->appendChild($xml);
 
         $actualDocument = self::createDomDocument();
-        $self = new ParcelLockerReducedMobilityZone();
+        $self = new ReducedMobilityZone();
         $actualDocument->appendChild(
             $self->toXML($actualDocument)
         );
@@ -42,11 +43,11 @@ class ParcelLockerReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
         // With prefix
 
         $expectedDocument = self::createDomDocument();
-        $xml = $expectedDocument->createElement('foo:parcelLockerReducedMobilityZone');
+        $xml = $expectedDocument->createElement('foo:reducedMobilityZone');
         $expectedDocument->appendChild($xml);
 
         $actualDocument = self::createDomDocument();
-        $self = new ParcelLockerReducedMobilityZone();
+        $self = new ReducedMobilityZone();
         $actualDocument->appendChild(
             $self->toXML($actualDocument, 'foo')
         );
@@ -56,11 +57,11 @@ class ParcelLockerReducedMobilityZoneTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromXml()
     {
-        $xml = new \SimpleXMLElement('<parcelLockerReducedMobilityZone/>');
+        $xml = new \SimpleXMLElement('<reducedMobilityZone/>');
 
         $this->assertInstanceOf(
-            'Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLockerReducedMobilityZone',
-            ParcelLockerReducedMobilityZone::createFromXml($xml)
+            'Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker\ReducedMobilityZone',
+            ReducedMobilityZone::createFromXml($xml)
         );
     }
 }

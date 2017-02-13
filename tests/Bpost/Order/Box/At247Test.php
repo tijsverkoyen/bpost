@@ -2,7 +2,7 @@
 namespace Bpost;
 
 use Bpost\BpostApiClient\Bpost\Order\Box\At247;
-use Bpost\BpostApiClient\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker\Unregistered;
 use Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress;
 use Bpost\BpostApiClient\Common\BasicAttribute\Language;
 use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueException;
@@ -27,8 +27,8 @@ class At247Test extends \PHPUnit_Framework_TestCase
      * Tests At247->toXML
      *
      * @warning
-     * That is a bad test, we cannot have a memberId AND an unregisteredParcelLockerMember
-     * We must to have a XML with memberId, another one with unregisteredParcelLockerMember and another one without (to see comportment)
+     * That is a bad test, we cannot have a memberId AND an unregistered
+     * We must to have a XML with memberId, another one with unregistered and another one without (to see comportment)
      */
     public function testToXML()
     {
@@ -47,11 +47,11 @@ class At247Test extends \PHPUnit_Framework_TestCase
                     'countryCode' => 'BE',
                 ),
                 'memberId' => '188565346',
-                'unregisteredParcelLockerMember' => array(
+                'unregistered' => array(
                     'language' => 'EN',
                     'mobilePhone' => '0471000000',
                     'emailAddress' => 'pomme@antidot.com'
-                ), // Bad test: We cannot have a memberId AND an unregisteredParcelLockerMember
+                ), // Bad test: We cannot have a memberId AND an unregistered
                 'receiverName' => 'Tijs Verkoyen',
                 'receiverCompany' => 'Sumo Coders',
                 'requestedDeliveryDate' => '2016-03-16',
@@ -73,7 +73,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
                     );
                 }
                 $at247->appendChild($address);
-            } elseif ($key == 'unregisteredParcelLockerMember') {
+            } elseif ($key == 'unregistered') {
                 $child = $expectedDocument->createElement($key);
                 foreach ($value as $key2 => $value2) {
                     $child->appendChild(
@@ -97,10 +97,10 @@ class At247Test extends \PHPUnit_Framework_TestCase
             $data['at24-7']['parcelsDepotAddress']['locality'],
             $data['at24-7']['parcelsDepotAddress']['countryCode']
         );
-        $unregisteredParcelLockerMember = new UnregisteredParcelLockerMember();
-        $unregisteredParcelLockerMember->setLanguage($data['at24-7']['unregisteredParcelLockerMember']['language']);
-        $unregisteredParcelLockerMember->setMobilePhone($data['at24-7']['unregisteredParcelLockerMember']['mobilePhone']);
-        $unregisteredParcelLockerMember->setEmailAddress($data['at24-7']['unregisteredParcelLockerMember']['emailAddress']);
+        $unregistered = new Unregistered();
+        $unregistered->setLanguage($data['at24-7']['unregistered']['language']);
+        $unregistered->setMobilePhone($data['at24-7']['unregistered']['mobilePhone']);
+        $unregistered->setEmailAddress($data['at24-7']['unregistered']['emailAddress']);
 
         $at247 = new At247();
         $at247->setProduct($data['at24-7']['product']);
@@ -110,7 +110,7 @@ class At247Test extends \PHPUnit_Framework_TestCase
         $at247->setParcelsDepotName($data['at24-7']['parcelsDepotName']);
         $at247->setParcelsDepotAddress($parcelsDepotAddress);
         $at247->setMemberId($data['at24-7']['memberId']);
-        $at247->setUnregisteredParcelLockerMember($unregisteredParcelLockerMember);
+        $at247->setUnregistered($unregistered);
         $at247->setReceiverName($data['at24-7']['receiverName']);
         $at247->setReceiverCompany($data['at24-7']['receiverCompany']);
         $actualDocument->appendChild(
