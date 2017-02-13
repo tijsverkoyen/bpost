@@ -45,7 +45,6 @@ class PoiTest extends \PHPUnit_Framework_TestCase
             'https://taxipost.geo6.be/Locator?Function=page&Partner=999999&Id=220000&Type=1&Language=NL',
             $poi->getPage()
         );
-
     }
 
     /**
@@ -121,6 +120,5 @@ class PoiTest extends \PHPUnit_Framework_TestCase
   <Page ServiceRef="https://taxipost.geo6.be/Locator?Function=page&amp;Partner=999999&amp;Id=220000&amp;Type=1&amp;Language=NL"/>
 </Poi>
 XML;
-
     }
 }

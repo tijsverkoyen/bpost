@@ -188,7 +188,6 @@ class CustomerTest extends \PHPUnit_Framework_TestCase
         $this->assertSame($data['PackStations'][0]['OrderNumber'], $packStations[0]->getOrderNumber());
         $this->assertSame($data['PackStations'][0]['PackStationId'], $packStations[0]->getPackStationId());
 
-
         try {
             $xml = simplexml_load_string('<Customer></Customer>');
             Customer::createFromXML($xml);

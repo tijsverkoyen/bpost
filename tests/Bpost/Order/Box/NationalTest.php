@@ -10,7 +10,6 @@ use Bpost\BpostApiClient\Bpost\ProductConfiguration\Option;
 class NationalFake extends National
 {
 
-
     /**
      * Return the object as an array for usage in the XML
      *
@@ -186,5 +185,4 @@ EOF;
 
         return $document;
     }
-
 }

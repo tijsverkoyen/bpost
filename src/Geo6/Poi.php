@@ -354,7 +354,6 @@ class Poi
         $this->page = (string)$page;
     }
 
-
     /**
      * Create a POI based on an XML-object
      *

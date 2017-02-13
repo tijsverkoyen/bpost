@@ -14,7 +14,6 @@ use Bpost\BpostApiClient\Bpost\Order\Sender;
 
 class OrderTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testToXml()
     {
         $self = new Order('bpack@bpost VAS 038 - COD+SAT+iD');
@@ -346,5 +345,4 @@ XML;
 
         return $document;
     }
-
 }

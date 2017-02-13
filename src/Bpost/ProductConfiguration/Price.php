@@ -54,7 +54,8 @@ class Price
      * @return int
      * @throws BpostInvalidWeightException
      */
-    public function getPriceByWeight($weight) {
+    public function getPriceByWeight($weight)
+    {
         if ($weight <= 2000) {
             return $this->getPriceLessThan2();
         } elseif ($weight <= 5000) {

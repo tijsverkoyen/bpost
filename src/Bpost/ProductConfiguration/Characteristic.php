@@ -84,5 +84,4 @@ class Characteristic
     {
         $this->name = (string) $name;
     }
-
 }

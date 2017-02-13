@@ -12,7 +12,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueExceptio
  */
 class Label
 {
-
     const LABEL_MIME_TYPE_IMAGE_PNG = 'image/png';
     const LABEL_MIME_TYPE_IMAGE_PDF = 'image/pdf';
     const LABEL_MIME_TYPE_APPLICATION_PDF = 'application/pdf';

@@ -110,6 +110,4 @@ class DeliveryMethod
     {
         $this->products[] = $product;
     }
-
-
 }

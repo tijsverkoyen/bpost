@@ -22,7 +22,6 @@ class ValidatedValueFake extends ValidatedValue
 
 class ValidatedValueTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetValue()
     {
         $fake = new ValidatedValueFake('qsd');
@@ -51,7 +50,6 @@ class ValidatedValueTest extends \PHPUnit_Framework_TestCase
         } catch (BpostInvalidLengthException $e) {
             $this->assertTrue(true);
         }
-
     }
 
     public function testValidateChoice()
@@ -70,7 +68,6 @@ class ValidatedValueTest extends \PHPUnit_Framework_TestCase
         } catch (BpostInvalidValueException $e) {
             $this->assertTrue(true);
         }
-
     }
 
     public function testValidatePattern()
@@ -89,7 +86,5 @@ class ValidatedValueTest extends \PHPUnit_Framework_TestCase
         } catch (BpostInvalidPatternException $e) {
             $this->assertTrue(true);
         }
-
     }
-
 }

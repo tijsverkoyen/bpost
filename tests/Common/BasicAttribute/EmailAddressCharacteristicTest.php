@@ -7,7 +7,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternExcept
 
 class EmailAddressCharacteristicTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidate()
     {
         $value = 'pomme2016@antidot.com';
@@ -34,5 +33,4 @@ class EmailAddressCharacteristicTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(true);
         }
     }
-
 }

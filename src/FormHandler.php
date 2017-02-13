@@ -58,7 +58,7 @@ class FormHandler
 
         foreach ($keysToHash as $key) {
             if (isset($this->parameters[$key])) {
-                 if (! is_array($this->parameters[$key])) {
+                if (! is_array($this->parameters[$key])) {
                     $base .= $key.'='.$this->parameters[$key].'&';
                 } else {
                     foreach ($this->parameters[$key] as $entry) {

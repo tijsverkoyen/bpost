@@ -123,7 +123,7 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
      * @param string       $type
      * @return \DOMElement
      */
-    function toXml(\DOMDocument $document, $prefix = null, $type = null)
+    public function toXml(\DOMDocument $document, $prefix = null, $type = null)
     {
         $tagName = $this->getPrefixedTagName('unregisteredParcelLockerMember', $prefix);
 
@@ -157,7 +157,7 @@ class UnregisteredParcelLockerMember extends ComplexAttribute
      * @param \SimpleXMLElement $xml
      * @return UnregisteredParcelLockerMember
      */
-    static function createFromXml(\SimpleXMLElement $xml)
+    public static function createFromXml(\SimpleXMLElement $xml)
     {
         $self = new self();
 

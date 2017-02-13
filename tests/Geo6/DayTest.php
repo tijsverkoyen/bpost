@@ -66,6 +66,5 @@ class DayTest extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->fail('BpostInvalidDayException not caught');
         }
-
     }
 }

@@ -94,7 +94,6 @@ class Geo6Test extends \PHPUnit_Framework_TestCase
         } catch (\Exception $e) {
             $this->fail('BpostTaxipostLocatorException not caught');
         }
-
     }
 
     /**
