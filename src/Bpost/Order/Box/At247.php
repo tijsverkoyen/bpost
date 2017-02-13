@@ -1,7 +1,7 @@
 <?php
 namespace Bpost\BpostApiClient\Bpost\Order\Box;
 
-use Bpost\BpostApiClient\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker\Unregistered;
 use Bpost\BpostApiClient\Bpost\Order\Box\Option\Messaging;
 use Bpost\BpostApiClient\Bpost\Order\ParcelsDepotAddress;
 use Bpost\BpostApiClient\Bpost\ProductConfiguration\Product;
@@ -33,8 +33,8 @@ class At247 extends National
     /** @var string */
     private $memberId;
 
-    /** @var UnregisteredParcelLockerMember */
-    private $unregisteredParcelLockerMember;
+    /** @var Unregistered */
+    private $unregistered;
 
     /** @var string */
     private $receiverName;
@@ -110,19 +110,19 @@ class At247 extends National
     }
 
     /**
-     * @return UnregisteredParcelLockerMember
+     * @return Unregistered
      */
-    public function getUnregisteredParcelLockerMember()
+    public function getUnregistered()
     {
-        return $this->unregisteredParcelLockerMember;
+        return $this->unregistered;
     }
 
     /**
-     * @param UnregisteredParcelLockerMember $unregisteredParcelLockerMember
+     * @param Unregistered $unregistered
      */
-    public function setUnregisteredParcelLockerMember(UnregisteredParcelLockerMember $unregisteredParcelLockerMember)
+    public function setUnregistered(Unregistered $unregistered)
     {
-        $this->unregisteredParcelLockerMember = $unregisteredParcelLockerMember;
+        $this->unregistered = $unregistered;
     }
 
     /**
@@ -243,7 +243,7 @@ class At247 extends National
                 )
             );
         }
-        $this->addToXmlUnregisteredParcelLockerMember($document, $boxElement, $prefix);
+        $this->addToXmlUnregistered($document, $boxElement, $prefix);
         if ($this->getReceiverName() !== null) {
             $boxElement->appendChild(
                 $document->createElement(
@@ -287,11 +287,11 @@ class At247 extends National
      * @param \DOMElement  $typeElement
      * @param string       $prefix
      */
-    protected function addToXmlUnregisteredParcelLockerMember(\DOMDocument $document, \DOMElement $typeElement, $prefix)
+    protected function addToXmlUnregistered(\DOMDocument $document, \DOMElement $typeElement, $prefix)
     {
-        if ($this->getUnregisteredParcelLockerMember() !== null) {
+        if ($this->getUnregistered() !== null) {
             $typeElement->appendChild(
-                $this->getUnregisteredParcelLockerMember()->toXml($document)
+                $this->getUnregistered()->toXml($document)
             );
         }
     }

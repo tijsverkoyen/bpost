@@ -1,9 +1,8 @@
 <?php
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker\ReducedMobilityZone;
+use Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLocker\Unregistered;
 
-use Bpost\BpostApiClient\Bpost\Order\Box\National\ParcelLockerReducedMobilityZone;
-use Bpost\BpostApiClient\Bpost\Order\Box\National\UnregisteredParcelLockerMember;
-
-class UnregisteredParcelLockerMemberTest extends \PHPUnit_Framework_TestCase
+class Unregistered extends \PHPUnit_Framework_TestCase
 {
 
     /**
@@ -25,11 +24,11 @@ class UnregisteredParcelLockerMemberTest extends \PHPUnit_Framework_TestCase
      */
     public function testToXML()
     {
-        $self = new UnregisteredParcelLockerMember();
+        $self = new Unregistered();
         $self->setLanguage('EN');
         $self->setEmailAddress('pomme@antidot.com');
         $self->setMobilePhone('0123456789');
-        $self->setParcelLockerReducedMobilityZone(new ParcelLockerReducedMobilityZone());
+        $self->setReducedMobilityZone(new ReducedMobilityZone());
 
         // Without prefix
         $rootDom = $this->createDomDocument();
@@ -48,7 +47,7 @@ class UnregisteredParcelLockerMemberTest extends \PHPUnit_Framework_TestCase
 
     public function testCreateFromXml()
     {
-        $self = UnregisteredParcelLockerMember::createFromXml(new \SimpleXMLElement($this->getXmlWithoutPrefix()));
+        $self = Unregistered::createFromXml(new \SimpleXMLElement($this->getXmlWithoutPrefix()));
 
         $this->assertTrue($self->hasLanguage());
         $this->assertSame('EN', $self->getLanguage());
@@ -59,19 +58,19 @@ class UnregisteredParcelLockerMemberTest extends \PHPUnit_Framework_TestCase
         $this->assertTrue($self->hasMobilePhone());
         $this->assertSame('0123456789', $self->getMobilePhone());
 
-        $this->assertTrue($self->hasParcelLockerReducedMobilityZone());
+        $this->assertTrue($self->hasReducedMobilityZone());
     }
 
     private function getXmlWithoutPrefix()
     {
         return <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
-<unregisteredParcelLockerMember>
+<unregistered>
   <language>EN</language>
   <mobilePhone>0123456789</mobilePhone>
   <emailAddress>pomme@antidot.com</emailAddress>
-  <parcelLockerReducedMobilityZone/>
-</unregisteredParcelLockerMember>
+  <reducedMobilityZone/>
+</unregistered>
 
 EOF;
     }
@@ -80,12 +79,12 @@ EOF;
     {
         return <<<EOF
 <?xml version="1.0" encoding="utf-8"?>
-<test:unregisteredParcelLockerMember>
+<test:unregistered>
   <test:language>EN</test:language>
   <test:mobilePhone>0123456789</test:mobilePhone>
   <test:emailAddress>pomme@antidot.com</test:emailAddress>
-  <test:parcelLockerReducedMobilityZone/>
-</test:unregisteredParcelLockerMember>
+  <test:reducedMobilityZone/>
+</test:unregistered>
 
 EOF;
     }
