@@ -30,7 +30,6 @@ class BasicAttributeFake extends BasicAttribute
 
 class BasicAttributeTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testSetKey()
     {
         $fake = new BasicAttributeFake('qsd');
@@ -68,7 +67,6 @@ class BasicAttributeTest extends \PHPUnit_Framework_TestCase
         } catch (BpostInvalidLengthException $e) {
             $this->assertTrue(true);
         }
-
     }
 
     public function testValidateChoice()
@@ -87,7 +85,6 @@ class BasicAttributeTest extends \PHPUnit_Framework_TestCase
         } catch (BpostInvalidValueException $e) {
             $this->assertTrue(true);
         }
-
     }
 
     public function testValidatePattern()
@@ -106,7 +103,5 @@ class BasicAttributeTest extends \PHPUnit_Framework_TestCase
         } catch (BpostInvalidPatternException $e) {
             $this->assertTrue(true);
         }
-
     }
-
 }

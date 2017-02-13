@@ -63,7 +63,6 @@ class ApiCaller
         return $this->responseContentType;
     }
 
-
     /**
      * @param array $options
      * @return bool

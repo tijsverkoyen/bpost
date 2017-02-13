@@ -6,7 +6,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthExcepti
 
 class ShopHandlingInstructionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidate()
     {
         $value = str_repeat('a', 50);
@@ -25,5 +24,4 @@ class ShopHandlingInstructionTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(true);
         }
     }
-
 }

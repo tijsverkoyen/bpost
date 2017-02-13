@@ -9,3 +9,4 @@
 /tests/reports
 /tests/phpunit-credentials.php
 
+/.php_cs.cache

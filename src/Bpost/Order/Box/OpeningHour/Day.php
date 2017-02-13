@@ -14,7 +14,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueExceptio
  */
 class Day
 {
-
     const DAY_MONDAY = 'Monday';
     const DAY_TUESDAY = 'Tuesday';
     const DAY_WEDNESDAY = 'Wednesday';

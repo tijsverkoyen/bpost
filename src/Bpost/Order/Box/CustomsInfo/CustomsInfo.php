@@ -15,7 +15,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueExceptio
  */
 class CustomsInfo
 {
-
     const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTA = 'RTA';
     const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_RTS = 'RTS';
     const CUSTOM_INFO_PARCEL_RETURN_INSTRUCTION_ABANDONED = 'ABANDONED';

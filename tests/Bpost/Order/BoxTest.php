@@ -174,7 +174,6 @@ class BoxTest extends \PHPUnit_Framework_TestCase
      */
     public function testInternationalToXML()
     {
-
         $data = array(
             'sender' => array(
                 'name' => 'Tijs Verkoyen',

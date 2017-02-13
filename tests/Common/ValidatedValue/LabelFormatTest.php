@@ -7,7 +7,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueExceptio
 
 class LabelFormatTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidate()
     {
         $value = 'a4';

@@ -132,7 +132,7 @@ class At247 extends National
      */
     public function setProduct($product)
     {
-        if ( ! in_array($product, self::getPossibleProductValues())) {
+        if (! in_array($product, self::getPossibleProductValues())) {
             throw new BpostInvalidValueException('product', $product, self::getPossibleProductValues());
         }
 
@@ -321,7 +321,7 @@ class At247 extends National
                     $option = Messaging::createFromXML($optionData);
                 } else {
                     $className = '\\Bpost\\BpostApiClient\\Bpost\\Order\\Box\\Option\\' . ucfirst($optionData->getName());
-                    if ( ! method_exists($className, 'createFromXML')) {
+                    if (! method_exists($className, 'createFromXML')) {
                         throw new BpostNotImplementedException();
                     }
                     $option = call_user_func(

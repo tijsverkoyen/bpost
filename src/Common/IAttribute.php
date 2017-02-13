@@ -10,11 +10,11 @@ interface IAttribute
      * @param string       $type
      * @return \DOMElement
      */
-    function toXml(\DOMDocument $document, $prefix = null, $type = null);
+    public function toXml(\DOMDocument $document, $prefix = null, $type = null);
 
     /**
      * @param \SimpleXMLElement $xml
      * @return IAttribute
      */
-    static function createFromXml(\SimpleXMLElement $xml);
+    public static function createFromXml(\SimpleXMLElement $xml);
 }

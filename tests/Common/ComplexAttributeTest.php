@@ -13,7 +13,7 @@ class ComplexAttributeFake extends ComplexAttribute
      * @param string       $type
      * @return \DOMElement
      */
-    function toXml(\DOMDocument $document, $prefix = null, $type = null)
+    public function toXml(\DOMDocument $document, $prefix = null, $type = null)
     {
     }
 
@@ -21,14 +21,13 @@ class ComplexAttributeFake extends ComplexAttribute
      * @param \SimpleXMLElement $xml
      * @return IComplexAttribute
      */
-    static function createFromXml(\SimpleXMLElement $xml)
+    public static function createFromXml(\SimpleXMLElement $xml)
     {
     }
 }
 
 class ComplexAttributeTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetPrefixedTagName()
     {
         $fake = new ComplexAttributeFake();
@@ -36,5 +35,4 @@ class ComplexAttributeTest extends \PHPUnit_Framework_TestCase
         $this->assertSame('name', $fake->getPrefixedTagName('name', ''));
         $this->assertSame('name', $fake->getPrefixedTagName('name'));
     }
-
 }

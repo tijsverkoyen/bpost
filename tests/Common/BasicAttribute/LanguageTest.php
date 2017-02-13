@@ -6,7 +6,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidValueExceptio
 
 class LanguageTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidate()
     {
         $value = 'FR';
@@ -25,5 +24,4 @@ class LanguageTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(true);
         }
     }
-
 }

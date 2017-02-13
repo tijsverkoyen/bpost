@@ -6,7 +6,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidPatternExcept
 
 class BpostInvalidPatternExceptionTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetMessage()
     {
         $ex = new BpostInvalidPatternException('error', 'OOPS', '([A-Z]{3})');

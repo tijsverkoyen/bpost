@@ -11,7 +11,6 @@ use Bpost\BpostApiClient\Exception\BpostNotImplementedException;
  */
 class Box
 {
-
     const BOX_STATUS_OPEN = 'OPEN';
     const BOX_STATUS_PENDING = 'PENDING';
     const BOX_STATUS_PRINTED = 'PRINTED';

@@ -109,11 +109,10 @@ abstract class BasicAttribute
     /**
      * @return string
      */
-    protected abstract function getDefaultKey();
+    abstract protected function getDefaultKey();
 
     /**
      * @throws BpostLogicException
      */
-    public abstract function validate();
-
+    abstract public function validate();
 }

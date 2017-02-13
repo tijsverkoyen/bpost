@@ -6,7 +6,6 @@ use Bpost\BpostApiClient\Common\ValidatedValue\LabelFormat;
 
 class CreateLabelInBulkForOrdersTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testGetXml()
     {
         $self = new CreateLabelInBulkForOrders();
@@ -54,7 +53,6 @@ class CreateLabelInBulkForOrdersTest extends \PHPUnit_Framework_TestCase
             ),
             $self->getHeaders(false)
         );
-
     }
 
     private function getExpectedXml()
@@ -67,6 +65,5 @@ class CreateLabelInBulkForOrdersTest extends \PHPUnit_Framework_TestCase
 </batchLabels>
 
 XML;
-
     }
 }

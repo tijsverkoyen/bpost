@@ -2,7 +2,6 @@
 
 namespace Bpost\BpostApiClient;
 
-
 use Psr\Log\LoggerInterface;
 
 /**
@@ -32,5 +31,4 @@ class Logger
             $this->logger->debug($message, $context);
         }
     }
-
 }

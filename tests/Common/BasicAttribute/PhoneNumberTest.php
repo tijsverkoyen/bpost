@@ -6,7 +6,6 @@ use Bpost\BpostApiClient\Exception\BpostLogicException\BpostInvalidLengthExcepti
 
 class PhoneNumberTest extends \PHPUnit_Framework_TestCase
 {
-
     public function testValidate()
     {
         $value = str_repeat('a', 20);
@@ -25,5 +24,4 @@ class PhoneNumberTest extends \PHPUnit_Framework_TestCase
             $this->assertTrue(true);
         }
     }
-
 }

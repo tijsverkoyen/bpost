@@ -26,7 +26,6 @@ use Bpost\BpostApiClient\Exception\XmlException\BpostXmlInvalidItemException;
  */
 class Bpost
 {
-
     const LABEL_FORMAT_A4 = 'A4';
     const LABEL_FORMAT_A6 = 'A6';
 
