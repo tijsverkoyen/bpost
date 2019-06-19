@@ -18,7 +18,7 @@ use Bpost\BpostApiClient\Geo6\Poi;
 class Geo6
 {
     // URL for the api
-    const API_URL = 'https://taxipost.geo6.be/Locator';
+    const API_URL = 'https://pudo.bpost.be/Locator';
 
     // current version
     const VERSION = '3';
