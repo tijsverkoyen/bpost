@@ -189,7 +189,7 @@ class Bpost
         $errorMessage = curl_error($this->curl);
 
         // error?
-        if ($errorNumber != '') {
+        if ($errorNumber != 0) {
             throw new Exception($errorMessage, $errorNumber);
         }
 
