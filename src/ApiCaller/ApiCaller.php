@@ -97,7 +97,7 @@ class ApiCaller
         ));
 
         // error?
-        if ($errorNumber != '') {
+        if ($errorNumber != 0) {
             throw new BpostCurlException($errorMessage, $errorNumber);
         }
 
